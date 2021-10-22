@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import util.enumeration.RoomStatusEnum;
 
 /**
@@ -25,7 +27,10 @@ public class RoomEntity implements Serializable {
     private Long RoomEntityId;
     private Integer roomNumber;
     private RoomStatusEnum roomStatus;
-    //private RoomTypeEntity roomType;
+    
+    @ManyToOne(optional = false)
+    @JoinColumn(nullable = false)
+    private RoomTypeEntity roomType;
 
     public RoomEntity() {
     }
@@ -67,6 +72,30 @@ public class RoomEntity implements Serializable {
     @Override
     public String toString() {
         return "entity.RoomEntity[ id=" + RoomEntityId + " ]";
+    }
+
+    public Integer getRoomNumber() {
+        return roomNumber;
+    }
+
+    public void setRoomNumber(Integer roomNumber) {
+        this.roomNumber = roomNumber;
+    }
+
+    public RoomStatusEnum getRoomStatus() {
+        return roomStatus;
+    }
+
+    public void setRoomStatus(RoomStatusEnum roomStatus) {
+        this.roomStatus = roomStatus;
+    }
+
+    public RoomTypeEntity getRoomType() {
+        return roomType;
+    }
+
+    public void setRoomType(RoomTypeEntity roomType) {
+        this.roomType = roomType;
     }
     
 }
