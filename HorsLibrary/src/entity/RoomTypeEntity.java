@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,7 +39,22 @@ public class RoomTypeEntity implements Serializable {
     @OneToMany(mappedBy = "roomType")
     private List<RoomTypeAvailability> roomTypeAvailabilities;
             
+    public RoomTypeEntity() {
+        roomEntities = new ArrayList<>();
+        roomTypeAvailabilities = new ArrayList<>();
+    }
 
+    public RoomTypeEntity(String name, String description, String size, Integer bed, Integer capacity, String amenities, Integer rank) {
+        super();
+        this.name = name;
+        this.description = description;
+        this.size = size;
+        this.bed = bed;
+        this.capacity = capacity;
+        this.amenities = amenities;
+        this.rank = rank;
+    }
+    
     public Long getRoomTypeId() {
         return RoomTypeId;
     }
