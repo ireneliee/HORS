@@ -34,7 +34,9 @@ public class RoomTypeEntity implements Serializable {
     
     @OneToMany(mappedBy="roomType")
     private List<RoomEntity> roomEntities;
-    //private List<RoomTypeAvailability> roomTypeAvailabilities;
+    
+    @OneToMany(mappedBy = "roomType")
+    private List<RoomTypeAvailability> roomTypeAvailabilities;
             
 
     public Long getRoomTypeId() {
@@ -68,6 +70,78 @@ public class RoomTypeEntity implements Serializable {
     @Override
     public String toString() {
         return "entity.RoomTypeEntity[ id=" + RoomTypeId + " ]";
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public Integer getBed() {
+        return bed;
+    }
+
+    public void setBed(Integer bed) {
+        this.bed = bed;
+    }
+
+    public Integer getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(Integer capacity) {
+        this.capacity = capacity;
+    }
+
+    public String getAmenities() {
+        return amenities;
+    }
+
+    public void setAmenities(String amenities) {
+        this.amenities = amenities;
+    }
+
+    public Integer getRank() {
+        return rank;
+    }
+
+    public void setRank(Integer rank) {
+        this.rank = rank;
+    }
+
+    public List<RoomEntity> getRoomEntities() {
+        return roomEntities;
+    }
+
+    public void setRoomEntities(List<RoomEntity> roomEntities) {
+        this.roomEntities = roomEntities;
+    }
+
+    public List<RoomTypeAvailability> getRoomTypeAvailabilities() {
+        return roomTypeAvailabilities;
+    }
+
+    public void setRoomTypeAvailabilities(List<RoomTypeAvailability> roomTypeAvailabilities) {
+        this.roomTypeAvailabilities = roomTypeAvailabilities;
     }
     
 }
