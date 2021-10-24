@@ -14,6 +14,11 @@
     <class>entity.RoomReservationEntity</class>
     <class>entity.RoomReservationLineItemEntity</class>
     <class>entity.RoomAllocationExceptionEntity</class>
+    <class>entity.EmployeeEntity</class>
+    <class>entity.GuestEntity</class>
+    <class>entity.PartnerEntity</class>
+    <class>entity.UserEntity</class>
+    <class>entity.VisitorEntity</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.schema-generation.database.action" value="create"/>
