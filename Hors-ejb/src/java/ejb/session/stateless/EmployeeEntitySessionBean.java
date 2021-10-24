@@ -19,10 +19,6 @@ import util.exception.InvalidLoginCredentialException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UsernameExistException;
 
-/**
- *
- * @author irene
- */
 @Stateless
 public class EmployeeEntitySessionBean implements EmployeeEntitySessionBeanRemote,
         EmployeeEntitySessionBeanLocal {

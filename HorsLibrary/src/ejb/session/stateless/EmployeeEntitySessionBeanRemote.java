@@ -13,10 +13,7 @@ import util.exception.InvalidLoginCredentialException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UsernameExistException;
 
-/**
- *
- * @author irene
- */
+
 @Remote
 public interface EmployeeEntitySessionBeanRemote {
     

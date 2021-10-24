@@ -13,14 +13,11 @@ import util.exception.InvalidLoginCredentialException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UsernameExistException;
 
-/**
- *
- * @author irene
- */
 @Local
 public interface EmployeeEntitySessionBeanLocal {
 
-    public Long createNewEmployee(EmployeeEntity newEmployeeEntity) throws UsernameExistException, UnknownPersistenceException;
+    public Long createNewEmployee(EmployeeEntity newEmployeeEntity) throws UsernameExistException,
+            UnknownPersistenceException;
 
     public List<EmployeeEntity> retrieveAllEmployees();
 

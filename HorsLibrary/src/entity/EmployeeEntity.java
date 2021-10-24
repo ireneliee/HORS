@@ -7,13 +7,9 @@ package entity;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
-import static jdk.nashorn.internal.runtime.Debug.id;
 import util.enumeration.AccessRightEnum;
 
-/**
- *
- * @author irene
- */
+
 @Entity
 public class EmployeeEntity extends UserEntity implements Serializable {
 

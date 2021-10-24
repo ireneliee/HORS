@@ -5,10 +5,6 @@
  */
 package util.exception;
 
-/**
- *
- * @author irene
- */
 public class InvalidLoginCredentialException extends Exception {
     
     public InvalidLoginCredentialException(){}
