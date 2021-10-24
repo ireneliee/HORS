@@ -8,6 +8,8 @@ package ejb.session.stateless;
 import entity.EmployeeEntity;
 import java.util.List;
 import javax.ejb.Remote;
+import util.exception.EmployeeNotFoundException;
+import util.exception.InvalidLoginCredentialException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UsernameExistException;
 
@@ -18,8 +20,17 @@ import util.exception.UsernameExistException;
 @Remote
 public interface EmployeeEntitySessionBeanRemote {
     
-    public Long createNewEmployee(EmployeeEntity newEmployeeEntity) throws UsernameExistException, UnknownPersistenceException;
+    public Long createNewEmployee(EmployeeEntity newEmployeeEntity) throws UsernameExistException, 
+            UnknownPersistenceException;
     
     public List<EmployeeEntity> retrieveAllEmployees();
+    
+    public EmployeeEntity retrieveEmployeeByEmployeeId(Long employeeId) throws EmployeeNotFoundException;
+    
+    public EmployeeEntity retrieveEmployeeByUsername(String username) throws EmployeeNotFoundException;
+    
+    public EmployeeEntity employeeLogin(String username, String password) throws InvalidLoginCredentialException;
+    
+    
     
 }
