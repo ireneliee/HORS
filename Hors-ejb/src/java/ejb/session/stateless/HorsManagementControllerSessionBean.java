@@ -6,8 +6,10 @@
 package ejb.session.stateless;
 
 import entity.EmployeeEntity;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import util.exception.EmployeeNotFoundException;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UsernameExistException;
@@ -35,6 +37,21 @@ public class HorsManagementControllerSessionBean implements HorsManagementContro
     public EmployeeEntity employeeLogin(String username, String password) 
             throws InvalidLoginCredentialException {
         return employeeEntitySessionBean.employeeLogin(username, password);
+    }
+    
+    public boolean EmployeeUsernameAlreadyExist(String username){
+        try {
+            employeeEntitySessionBean.retrieveEmployeeByUsername(username);
+        } catch (EmployeeNotFoundException ex) {
+            return true;
+        }
+        
+        return false;
+        
+    }
+    
+    public List<EmployeeEntity> retrieveAllEmployees() {
+        return employeeEntitySessionBean.retrieveAllEmployees();
     }
     
   
