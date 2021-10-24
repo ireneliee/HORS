@@ -42,9 +42,13 @@ public class RoomReservationLineItemEntity implements Serializable {
     
     @OneToOne
     private RoomEntity roomAllocation;
+    private Boolean checkedIn;
+    private Boolean checkedOut;
     
     public RoomReservationLineItemEntity(){
         this.roomRatesPerNight = new ArrayList<>();
+        this.checkedIn = false;
+        this.checkedOut = false;
     }
 
     public RoomReservationLineItemEntity(RoomTypeEntity roomTypeEntity, BigDecimal subTotal, 

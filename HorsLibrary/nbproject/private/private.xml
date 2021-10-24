@@ -3,7 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/irene/Desktop/IS2103/HORS/Hors/HorsLibrary/src/util/enumeration/AccessRightEnum.java</file>
+            <file>file:/C:/Users/irene/Desktop/IS2103/HORS/Hors/HorsLibrary/src/entity/RoomRateEntity.java</file>
+            <file>file:/C:/Users/irene/Desktop/IS2103/HORS/Hors/HorsLibrary/src/util/enumeration/PaymentMethodEnum.java</file>
+            <file>file:/C:/Users/irene/Desktop/IS2103/HORS/Hors/HorsLibrary/src/entity/PeakRateEntity.java</file>
+            <file>file:/C:/Users/irene/Desktop/IS2103/HORS/Hors/HorsLibrary/src/entity/PromotionRateEntity.java</file>
+            <file>file:/C:/Users/irene/Desktop/IS2103/HORS/Hors/HorsLibrary/src/entity/RoomReservationLineItemEntity.java</file>
+            <file>file:/C:/Users/irene/Desktop/IS2103/HORS/Hors/HorsLibrary/src/entity/RoomReservationEntity.java</file>
+            <file>file:/C:/Users/irene/Desktop/IS2103/HORS/Hors/HorsLibrary/src/entity/PublishedRateEntity.java</file>
+            <file>file:/C:/Users/irene/Desktop/IS2103/HORS/Hors/HorsLibrary/src/entity/PaymentEntity.java</file>
+            <file>file:/C:/Users/irene/Desktop/IS2103/HORS/Hors/HorsLibrary/src/entity/NormalRate.java</file>
         </group>
     </open-files>
 </project-private>
