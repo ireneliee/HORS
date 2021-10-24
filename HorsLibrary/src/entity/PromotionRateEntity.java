@@ -22,7 +22,9 @@ public class PromotionRateEntity extends RoomRateEntity implements Serializable 
 
     private static final long serialVersionUID = 1L;
    
-    public PromotionRateEntity(){}
+    public PromotionRateEntity(){
+        super();
+    }
     
     public PromotionRateEntity (String name, LocalDate startValidityDate, LocalDate endValidityDate,
             BigDecimal rate, RoomTypeEntity roomType) {

@@ -19,6 +19,9 @@ public class PublishedRateEntity extends RoomRateEntity implements Serializable 
 
     private static final long serialVersionUID = 1L;
 
+    public PublishedRateEntity(){
+        super();
+    }
     
     public PublishedRateEntity(String name, BigDecimal rate, RoomTypeEntity roomType) {
         super(name, rate, roomType, LocalDate.now(), LocalDate.of(2100, 01, 01));
