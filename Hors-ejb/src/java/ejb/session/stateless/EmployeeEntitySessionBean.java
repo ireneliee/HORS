@@ -46,12 +46,15 @@ public class EmployeeEntitySessionBean implements EmployeeEntitySessionBeanRemot
             String similarUsernameError = "java.sql.SQLIntegrityConstraintViolationException";
             if(databaseExceptionChecker(ex, databaseExceptionError)) {
                  if(sameUsernameExceptionChecker(ex, similarUsernameError)) {
-                     throw new UsernameExistException("Username exists within the system.");
+                     String usernameExistError = "Username exists within the system.";
+                     throw new UsernameExistException(usernameExistError);
                  } else {
-                     throw new UnknownPersistenceException("Unknown persistence exception.");
+                     String unknownPersistenceError = "Unknown persistence exception.";
+                     throw new UnknownPersistenceException(unknownPersistenceError);
                  }
             } else {
-                throw new UnknownPersistenceException("Unknown persistence exception.");
+                String unknownPersistenceError = "Unknown persistence exception.";
+                throw new UnknownPersistenceException(unknownPersistenceError);
             }
         }
     }
