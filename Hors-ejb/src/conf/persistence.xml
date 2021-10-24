@@ -11,9 +11,9 @@
     <class>entity.PublishedRateEntity</class>
     <class>entity.RoomRateEntity</class>
     <class>entity.PaymentEntity</class>
-    <class>entity.RoomAllocationInADayEntity</class>
     <class>entity.RoomReservationEntity</class>
     <class>entity.RoomReservationLineItemEntity</class>
+    <class>entity.RoomAllocationExceptionEntity</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.schema-generation.database.action" value="create"/>

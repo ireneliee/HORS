@@ -19,7 +19,9 @@ public class PeakRateEntity extends RoomRateEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-    public PeakRateEntity(){}
+    public PeakRateEntity(){
+        super();
+    }
     
     public PeakRateEntity(String name, LocalDate startValidityDate, LocalDate endValidityDate,
             BigDecimal rate, RoomTypeEntity roomType) {

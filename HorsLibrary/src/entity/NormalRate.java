@@ -20,7 +20,9 @@ public class NormalRate extends RoomRateEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-    public NormalRate(){}
+    public NormalRate(){
+        super();
+    }
     
     public NormalRate(String name, BigDecimal rate, RoomTypeEntity roomType) {
         super(name, rate, roomType, LocalDate.now(), LocalDate.of(2100, 01, 01));
