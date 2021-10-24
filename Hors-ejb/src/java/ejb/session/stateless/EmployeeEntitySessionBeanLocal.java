@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.EmployeeEntity;
+import java.util.List;
 import javax.ejb.Local;
 import util.exception.UnknownPersistenceException;
 import util.exception.UsernameExistException;
@@ -18,5 +19,7 @@ import util.exception.UsernameExistException;
 public interface EmployeeEntitySessionBeanLocal {
 
     public Long createNewEmployee(EmployeeEntity newEmployeeEntity) throws UsernameExistException, UnknownPersistenceException;
+
+    public List<EmployeeEntity> retrieveAllEmployees();
     
 }

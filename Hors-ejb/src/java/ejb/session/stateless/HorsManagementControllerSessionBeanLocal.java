@@ -6,8 +6,7 @@
 package ejb.session.stateless;
 
 import entity.EmployeeEntity;
-import java.util.List;
-import javax.ejb.Remote;
+import javax.ejb.Local;
 import util.exception.UnknownPersistenceException;
 import util.exception.UsernameExistException;
 
@@ -15,11 +14,9 @@ import util.exception.UsernameExistException;
  *
  * @author irene
  */
-@Remote
-public interface EmployeeEntitySessionBeanRemote {
-    
-    public Long createNewEmployee(EmployeeEntity newEmployeeEntity) throws UsernameExistException, UnknownPersistenceException;
-    
-    public List<EmployeeEntity> retrieveAllEmployees();
+@Local
+public interface HorsManagementControllerSessionBeanLocal {
+
+    public Long createNewEmployee(EmployeeEntity newEmployeeEntity) throws UnknownPersistenceException, UsernameExistException;
     
 }
