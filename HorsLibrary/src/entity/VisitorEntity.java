@@ -37,7 +37,7 @@ public class VisitorEntity extends UserEntity implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (userId != null ? userId.hashCode() : 0);
+        hash += (getUserId() != null ? getUserId().hashCode() : 0);
         return hash;
     }
 
@@ -48,7 +48,8 @@ public class VisitorEntity extends UserEntity implements Serializable {
             return false;
         }
         VisitorEntity other = (VisitorEntity) object;
-        if ((this.userId == null && other.userId!= null) || (this.userId != null && !this.userId.equals(other.userId))) {
+        if ((this.getUserId() == null && other.getUserId()!= null) || (this.getUserId() != null && 
+                !this.getUserId().equals(other.getUserId()))) {
             return false;
         }
         return true;
@@ -56,7 +57,7 @@ public class VisitorEntity extends UserEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.VisitorEntity[ id=" + userId + " ]";
+        return "entity.VisitorEntity[ id=" + getUserId() + " ]";
     }
 
     public String getFirstName() {
@@ -90,5 +91,7 @@ public class VisitorEntity extends UserEntity implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
+
+
     
 }

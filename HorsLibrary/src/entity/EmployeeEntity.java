@@ -37,7 +37,7 @@ public class EmployeeEntity extends UserEntity implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (this.userId != null ? this.userId.hashCode() : 0);
+        hash += (this.getUserId() != null ? this.getUserId().hashCode() : 0);
         return hash;
     }
 
@@ -48,7 +48,7 @@ public class EmployeeEntity extends UserEntity implements Serializable {
             return false;
         }
         EmployeeEntity other = (EmployeeEntity) object;
-        if ((this.userId == null && other.userId != null) || (this.userId != null && !this.userId.equals(other.userId))) {
+        if ((this.getUserId() == null && other.getUserId() != null) || (this.getUserId() != null && !this.userId.equals(other.userId))) {
             return false;
         }
         return true;
@@ -56,7 +56,7 @@ public class EmployeeEntity extends UserEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.EmployeeEntity[ id=" + userId + " ]";
+        return "entity.EmployeeEntity[ id=" + getUserId() + " ]";
     }
 
     public String getFirstName() {

@@ -9,10 +9,7 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 
 
-/**
- *
- * @author irene
- */
+
 @Entity
 public class GuestEntity extends UserEntity implements Serializable {
 
@@ -21,12 +18,17 @@ public class GuestEntity extends UserEntity implements Serializable {
     public GuestEntity(){
         super();
     }
-
-   
+    
+    public GuestEntity(String email) {
+        super(email);
+        
+    }
 
     @Override
     public String toString() {
-        return "entity.GuestEntity[ id=" + userId + " ]";
+        return "entity.GuestEntity[ id=" + getUserId() + " ]";
     }
+
+   
     
 }

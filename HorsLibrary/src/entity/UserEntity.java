@@ -38,11 +38,10 @@ public abstract class UserEntity implements Serializable {
         roomReservations = new ArrayList<>();
     }
     
-    public UserEntity(String email) {
-        this();
+    public UserEntity(String email){
         this.email = email;
     }
-
+    
     public Long getUserId() {
         return userId;
     }
@@ -76,20 +75,20 @@ public abstract class UserEntity implements Serializable {
         return "entity.UserEntity[ id=" + userId + " ]";
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public List<RoomReservationEntity> getRoomReservations() {
         return roomReservations;
     }
 
     public void setRoomReservations(List<RoomReservationEntity> roomReservations) {
         this.roomReservations = roomReservations;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
     
 }

@@ -36,7 +36,7 @@ public class PartnerEntity extends UserEntity implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (userId != null ? userId.hashCode() : 0);
+        hash += (getUserId() != null ? getUserId().hashCode() : 0);
         return hash;
     }
 
@@ -47,7 +47,7 @@ public class PartnerEntity extends UserEntity implements Serializable {
             return false;
         }
         PartnerEntity other = (PartnerEntity) object;
-        if ((this.userId== null && other.userId != null) || (this.userId!= null && !this.userId.equals(other.userId))) {
+        if ((this.getUserId()== null && other.getUserId() != null) || (this.getUserId()!= null && !this.userId.equals(other.userId))) {
             return false;
         }
         return true;
@@ -55,7 +55,7 @@ public class PartnerEntity extends UserEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.PartnerEntity[ id=" + userId + " ]";
+        return "entity.PartnerEntity[ id=" + getUserId() + " ]";
     }
 
     public String getPartnerName() {

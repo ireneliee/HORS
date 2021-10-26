@@ -7,6 +7,7 @@ package ejb.session.stateless;
 
 import entity.EmployeeEntity;
 import entity.PartnerEntity;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -42,12 +43,15 @@ public class PartnerEntitySessionBean implements PartnerEntitySessionBeanRemote,
             return newPartnerEntity.getUserId();
             
         } catch(PersistenceException ex){
+            
         String databaseExceptionError = "org.eclipse.persistence.exceptions.DatabaseException";
             String similarUsernameError = "java.sql.SQLIntegrityConstraintViolationException";
+            
             if(databaseExceptionChecker(ex, databaseExceptionError)) {
-                 if(sameUsernameExceptionChecker(ex, similarUsernameError)) {
+                if(sameUsernameExceptionChecker(ex, similarUsernameError)) {
                      String usernameExistError = "Username exists within the system.";
                      throw new UsernameExistException(usernameExistError);
+                     
                  } else {
                      String unknownPersistenceError = "Unknown persistence exception.";
                      throw new UnknownPersistenceException(unknownPersistenceError);
@@ -57,6 +61,14 @@ public class PartnerEntitySessionBean implements PartnerEntitySessionBeanRemote,
                 throw new UnknownPersistenceException(unknownPersistenceError);
             }
         }
+    }
+    
+    @Override
+     public List<PartnerEntity> retrieveAllPartner() {
+        String databaseQueryString = "SELECT s FROM PartnerEntity s";
+        Query databaseQuery = em.createQuery(databaseQueryString);
+        return databaseQuery.getResultList();
+        
     }
     
     @Override

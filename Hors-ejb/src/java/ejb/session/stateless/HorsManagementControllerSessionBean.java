@@ -77,6 +77,10 @@ public class HorsManagementControllerSessionBean implements HorsManagementContro
     public PartnerEntity partnerLogin(String username, String password) throws InvalidLoginCredentialException {
         return partnerEntitySessionBean.partnerLogin(username, password);
     }
+    
+    public List<PartnerEntity> retrieveAllPartner() {
+        return partnerEntitySessionBean.retrieveAllPartner();
+    }
         
             
     

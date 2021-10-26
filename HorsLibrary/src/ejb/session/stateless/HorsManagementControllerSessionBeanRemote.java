@@ -31,4 +31,6 @@ public interface HorsManagementControllerSessionBeanRemote {
        public PartnerEntity retrievePartnerByUsername(String username) throws PartnerNotFoundException;
        
        public PartnerEntity partnerLogin(String username, String password) throws InvalidLoginCredentialException;
+       
+       public List<PartnerEntity> retrieveAllPartner();
 }
