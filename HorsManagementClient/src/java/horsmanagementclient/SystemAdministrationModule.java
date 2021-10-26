@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Scanner;
 import util.enumeration.AccessRightEnum;
 import util.exception.InvalidAccessRightException;
+import util.exception.UnknownPersistenceException;
+import util.exception.UsernameExistException;
 
 
 public class SystemAdministrationModule {
@@ -77,6 +79,7 @@ public class SystemAdministrationModule {
         String username = scanner.nextLine().trim();
         
         while(horsManagementControllerSessionBeanRemote.EmployeeUsernameAlreadyExist(username)){
+            System.out.println("Username has already existed. Please choose another username.");
             System.out.print("Enter username>");
             username = scanner.nextLine().trim();
         }
@@ -84,6 +87,7 @@ public class SystemAdministrationModule {
         newEmployeeEntity.setUsername(username);
         System.out.print("Enter password>");
         newEmployeeEntity.setPassword(scanner.nextLine());
+        System.out.println();
         
          while(true)
         {
@@ -92,11 +96,20 @@ public class SystemAdministrationModule {
             System.out.println("2: Operation Manager");
             System.out.println("3: Sales Manager");
             System.out.println("4. Guest Relation Officer\n");
+            System.out.print(">");
             Integer accessRightInt = scanner.nextInt();
             
             if(accessRightInt >= 1 && accessRightInt <= 4)
             {
                 newEmployeeEntity.setAccessRight(AccessRightEnum.values()[accessRightInt-1]);
+                Long newEmployeeId = 0L;
+                try{
+                    newEmployeeId = horsManagementControllerSessionBeanRemote.createNewEmployee(newEmployeeEntity);
+                } catch (UsernameExistException | UnknownPersistenceException ex) {
+                    System.out.println(ex.getMessage());
+                }
+                System.out.println("A new employee with employeeId " + newEmployeeId + " is created");
+                
                 break;
             }
             else

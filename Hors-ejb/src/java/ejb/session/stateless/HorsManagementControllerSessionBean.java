@@ -43,10 +43,10 @@ public class HorsManagementControllerSessionBean implements HorsManagementContro
         try {
             employeeEntitySessionBean.retrieveEmployeeByUsername(username);
         } catch (EmployeeNotFoundException ex) {
-            return true;
+            return false;
         }
         
-        return false;
+        return true;
         
     }
     
