@@ -23,11 +23,8 @@ public class MainApp {
     
     public MainApp(){}
 
-    public MainApp(HorsManagementControllerSessionBeanRemote horsManagementControllerSessionBeanRemote,
-            EmployeeEntity currentEmployeeEntity, SystemAdministrationModule systemAdministrationModule) {
-        this.horsManagementControllerSessionBeanRemote = horsManagementControllerSessionBeanRemote;
-        this.currentEmployeeEntity = currentEmployeeEntity;
-        this.systemAdministrationModule = systemAdministrationModule;
+    public MainApp(HorsManagementControllerSessionBeanRemote horsManagementControllerSessionBeanRemote) {
+            this.horsManagementControllerSessionBeanRemote = horsManagementControllerSessionBeanRemote;
     }
     
     public void runApp()

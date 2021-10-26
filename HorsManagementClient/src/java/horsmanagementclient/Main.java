@@ -5,17 +5,25 @@
  */
 package horsmanagementclient;
 
+import ejb.session.stateless.HorsManagementControllerSessionBeanRemote;
+import javax.ejb.EJB;
+
 /**
  *
  * @author irene
  */
 public class Main {
 
+    @EJB
+    private static HorsManagementControllerSessionBeanRemote horsManagementControllerSessionBeanRemote;
+
     /**
      * @param args the command line arguments
      */
+    
     public static void main(String[] args) {
-        // TODO code application logic here
+       MainApp mainApp = new MainApp(horsManagementControllerSessionBeanRemote);
+       mainApp.runApp();
     }
     
 }
