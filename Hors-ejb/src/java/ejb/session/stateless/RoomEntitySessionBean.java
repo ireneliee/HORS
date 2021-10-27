@@ -31,134 +31,130 @@ import util.exception.RoomNumberExistException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UpdateRoomException;
 
-
 @Stateless
 public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomEntitySessionBeanLocal {
 
     @PersistenceContext(unitName = "Hors-ejbPU")
     private EntityManager em;
-    private final ValidatorFactory validatorFactory;
-    private final Validator validator;
-    
-    public RoomEntitySessionBean(){
-        validatorFactory = Validation.buildDefaultValidatorFactory();
-        validator = validatorFactory.getValidator();
+    //private final ValidatorFactory validatorFactory;
+    //private final Validator validator;
+
+    public RoomEntitySessionBean() {
+        //validatorFactory = Validation.buildDefaultValidatorFactory();
+        //validator = validatorFactory.getValidator();
     }
 
     @Override
-    public Long createNewRoom(RoomEntity newRoomEntity) throws RoomNumberExistException, 
-            UnknownPersistenceException, InputDataValidationException
-    {
-        Set<ConstraintViolation<RoomEntity>>constraintViolations = validator.validate(newRoomEntity);
-        
-        if(constraintViolations.isEmpty())
-        {
-            try
-            {
-                em.persist(newRoomEntity);
-                em.flush();
+    public Long createNewRoom(RoomEntity newRoomEntity) throws RoomNumberExistException,
+            UnknownPersistenceException, InputDataValidationException {
 
-                return newRoomEntity.getRoomEntityId();
-            }
-            catch(PersistenceException ex)
-            {
-                if(ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException"))
-                {
-                    if(ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException"))
-                    {
-                        throw new RoomNumberExistException("Room number existed! ");
-                    }
-                    else
-                    {
-                        throw new UnknownPersistenceException(ex.getMessage());
-                    }
-                }
-                else
-                {
+        try {
+            
+            newRoomEntity.getRoomType().getRoomEntities().add(newRoomEntity);
+            newRoomEntity.getRoomType().getRoomTypeAvailabilities()
+                    .stream()
+                    .forEach(x -> x.incrementNoOfAvailableRoomByOne());
+            
+            em.persist(newRoomEntity);
+            em.flush();
+
+            return newRoomEntity.getRoomEntityId();
+        } catch (PersistenceException ex) {
+            if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
+                if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
+                    throw new RoomNumberExistException("Room number existed! ");
+                } else {
                     throw new UnknownPersistenceException(ex.getMessage());
                 }
+            } else {
+                throw new UnknownPersistenceException(ex.getMessage());
             }
         }
-        else
-        {
-            throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
-        }
     }
-    
+
     @Override
     public RoomEntity retrieveRoomByRoomNumber(Integer roomNumber) throws RoomNotFoundException {
         try {
-        String databaseQuery = "SELECT s FROM RoomEntity s WHERE s.roomNumber =:iRoomNumber";
-        Query query = em.createQuery(databaseQuery);
-        query.setParameter("iRoomNumber", roomNumber);
-        
-        return (RoomEntity) query.getSingleResult();
-        } catch(NoResultException | NonUniqueResultException ex) {
+            String databaseQuery = "SELECT s FROM RoomEntity s WHERE s.roomNumber =:iRoomNumber";
+            Query query = em.createQuery(databaseQuery);
+            query.setParameter("iRoomNumber", roomNumber);
+
+            return (RoomEntity) query.getSingleResult();
+        } catch (NoResultException | NonUniqueResultException ex) {
             throw new RoomNotFoundException("Room with room number " + roomNumber + " does not exist!");
         }
     }
-    
+
     @Override
-    public void updateRoom(RoomEntity roomEntity) throws RoomNotFoundException, 
-            UpdateRoomException, InputDataValidationException
-    {
+    public void updateRoom(RoomEntity roomEntity) throws RoomNotFoundException,
+            UpdateRoomException, InputDataValidationException {
+        /*
         if(roomEntity != null && roomEntity.getRoomEntityId() != null)
         {
             Set<ConstraintViolation<RoomEntity>>constraintViolations = validator.validate(roomEntity);
         
             if(constraintViolations.isEmpty())
             {
-                RoomEntity roomEntityToUpdate = retrieveRoomByRoomNumber(roomEntity.getRoomNumber());
+         */ try {
+            RoomEntity roomEntityToUpdate = retrieveRoomByRoomNumber(roomEntity.getRoomNumber());
 
-                if(roomEntityToUpdate.getRoomNumber().equals(roomEntity.getRoomNumber()))
-                {
-                    roomEntityToUpdate.setRoomStatus(roomEntity.getRoomStatus());          
-                    
+            if (roomEntityToUpdate.getRoomNumber().equals(roomEntity.getRoomNumber())) {
+                RoomStatusEnum currentStatus = roomEntityToUpdate.getRoomStatus();
+                RoomStatusEnum statusToBeChanged = roomEntity.getRoomStatus();
+                
+                roomEntityToUpdate.setRoomStatus(roomEntity.getRoomStatus());
+                
+                if(currentStatus.equals(RoomStatusEnum.AVAILABLE) &&
+                        statusToBeChanged.equals(RoomStatusEnum.NOTAVAILABLE)) {
+                roomEntityToUpdate
+                        .getRoomType()
+                        .getRoomTypeAvailabilities()
+                        .forEach(x -> x.decreaseNoOfAvailableRoomByOne());
                 }
-                else
-                {
-                    throw new UpdateRoomException("Room record to be updated does not match the existing record");
+                
+                if(currentStatus.equals(RoomStatusEnum.NOTAVAILABLE) &&
+                        statusToBeChanged.equals(RoomStatusEnum.AVAILABLE)) {
+                roomEntityToUpdate
+                        .getRoomType()
+                        .getRoomTypeAvailabilities()
+                        .forEach(x -> x.incrementNoOfAvailableRoomByOne());
                 }
+
+            } else {
+                throw new UpdateRoomException("Room record to be updated does not match the existing record");
             }
-            else
-            {
-                throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
-            }
-        }
-        else
-        {
+        } catch (RoomNotFoundException ex) {
             throw new RoomNotFoundException("Room ID not provided for staff to be updated");
         }
     }
-    
+
     @Override
     public List<RoomEntity> retrieveAllRooms() {
         String queryDatabase = "SELECT s FROM RoomEntity s";
         Query query = em.createQuery(queryDatabase);
         return query.getResultList();
     }
-    
+
     @Override
-    public Boolean checkIfTheRoomIsUsed(Integer roomNumber){
+    public Boolean checkIfTheRoomIsUsed(Integer roomNumber) {
         LocalDate now = LocalDate.now();
         String databaseQuery = "SELECT s FROM RoomReservationLineItemEntity"
                 + "WHERE s.roomAllocation.roomNumber = :iRoomNumber ";
         Query query = em.createQuery(databaseQuery);
         query.setParameter("iRoomNumber", roomNumber);
         List<RoomReservationLineItemEntity> listOfReservationsUsingThatRoom = query.getResultList();
-        
+
         // checking if the checkout date of each roomReservationLineItemEntity is before today
-        List<RoomReservationLineItemEntity> listOfReservationUsingThatRoomAfterToday = 
-                listOfReservationsUsingThatRoom
-                .stream()
-                .filter(x -> x.getCheckoutDate().isAfter(now))
-                .collect(Collectors.toCollection(ArrayList::new));
-        
+        List<RoomReservationLineItemEntity> listOfReservationUsingThatRoomAfterToday
+                = listOfReservationsUsingThatRoom
+                        .stream()
+                        .filter(x -> x.getCheckoutDate().isAfter(now))
+                        .collect(Collectors.toCollection(ArrayList::new));
+
         return !listOfReservationUsingThatRoomAfterToday.isEmpty();
-        
-        
+
     }
-    
+
     private List<RoomReservationLineItemEntity> findReservationUsingRoom(Integer roomNumber) {
         String databaseQuery = "SELECT s FROM RoomReservationLineItemEntity"
                 + "WHERE s.roomAllocation.roomNumber = :iRoomNumber ";
@@ -166,8 +162,9 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
         query.setParameter("iRoomNumber", roomNumber);
         return query.getResultList();
     }
-    
-    public void deleteRoom(Integer roomNumber) throws RoomNotFoundException{
+
+    @Override
+    public void deleteRoom(Integer roomNumber) throws RoomNotFoundException {
         try {
             deleteUnusedRoom(roomNumber);
         } catch (RoomIsCurrentlyUsedException ex) {
@@ -177,49 +174,40 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
             throw new RoomNotFoundException(ex.getMessage());
         }
     }
-    
+
     private void deleteUnusedRoom(Integer roomNumber) throws RoomIsCurrentlyUsedException,
-        RoomNotFoundException{
+            RoomNotFoundException {
         RoomEntity roomToBeDeleted;
         try {
             roomToBeDeleted = retrieveRoomByRoomNumber(roomNumber);
-        } catch(RoomNotFoundException ex) {
+        } catch (RoomNotFoundException ex) {
             throw new RoomNotFoundException(ex.getMessage());
         }
-        if(checkIfTheRoomIsUsed(roomNumber)) {
-            throw new RoomIsCurrentlyUsedException("Room is currently allocated to a reservation. " + 
-                    " Hence, it can't be deleted.");
+        if (checkIfTheRoomIsUsed(roomNumber)) {
+            throw new RoomIsCurrentlyUsedException("Room is currently allocated to a reservation. "
+                    + " Hence, it can't be deleted.");
         }
-        
+
         roomToBeDeleted.getRoomType().getRoomEntities().remove(roomToBeDeleted);
-        
-        List<RoomReservationLineItemEntity> listOfReservationsUsingThatRoom = 
-                findReservationUsingRoom(roomNumber);
-        
+
+        List<RoomReservationLineItemEntity> listOfReservationsUsingThatRoom
+                = findReservationUsingRoom(roomNumber);
+
         listOfReservationsUsingThatRoom
                 .stream()
                 .forEach(x -> x.setRoomAllocation(null));
         em.remove(roomToBeDeleted);
     }
-    
-    
-    
-    
-    
-    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<RoomEntity>>constraintViolations)
-    {
+
+    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<RoomEntity>> constraintViolations) {
         String msg = "Input data validation error!:";
-            
-        for(ConstraintViolation constraintViolation:constraintViolations)
-        {
-            msg += "\n\t" + constraintViolation.getPropertyPath() + " - " + constraintViolation.getInvalidValue() + "; " +
-                    constraintViolation.getMessage();
+
+        for (ConstraintViolation constraintViolation : constraintViolations) {
+            msg += "\n\t" + constraintViolation.getPropertyPath() + " - " + constraintViolation.getInvalidValue() + "; "
+                    + constraintViolation.getMessage();
         }
-        
+
         return msg;
     }
-    
-    
 
-    
 }

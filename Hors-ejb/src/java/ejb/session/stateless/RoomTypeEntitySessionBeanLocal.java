@@ -27,5 +27,7 @@ public interface RoomTypeEntitySessionBeanLocal {
     public RoomTypeEntity retrieveRoomType(String name) throws RoomTypeNotFoundException;
 
     public void deleteRoomType(String name) throws RoomTypeNotFoundException;
+
+    public void updateRoomType(RoomTypeEntity roomType) throws RoomTypeNotFoundException;
     
 }

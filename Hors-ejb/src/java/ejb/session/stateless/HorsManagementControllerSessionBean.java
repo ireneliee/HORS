@@ -7,23 +7,30 @@ package ejb.session.stateless;
 
 import entity.EmployeeEntity;
 import entity.PartnerEntity;
+import entity.RoomEntity;
 import entity.RoomTypeEntity;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import util.exception.EmployeeNotFoundException;
+import util.exception.InputDataValidationException;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.PartnerNotFoundException;
 import util.exception.RoomNotFoundException;
+import util.exception.RoomNumberExistException;
 import util.exception.RoomTypeExistException;
 import util.exception.RoomTypeNotFoundException;
 import util.exception.UnknownPersistenceException;
+import util.exception.UpdateRoomException;
 import util.exception.UsernameExistException;
 
 
 @Stateless
 public class HorsManagementControllerSessionBean implements HorsManagementControllerSessionBeanRemote, 
         HorsManagementControllerSessionBeanLocal {
+
+    @EJB
+    private RoomEntitySessionBeanLocal roomEntitySessionBean;
 
     @EJB
     private RoomTypeEntitySessionBeanLocal roomTypeEntitySessionBean;
@@ -85,10 +92,12 @@ public class HorsManagementControllerSessionBean implements HorsManagementContro
         return partnerEntitySessionBean.partnerLogin(username, password);
     }
     
+    @Override
     public List<PartnerEntity> retrieveAllPartner() {
         return partnerEntitySessionBean.retrieveAllPartner();
     }
     
+    @Override
     public Long createRoomType(RoomTypeEntity newRoomType) throws RoomTypeExistException, 
             UnknownPersistenceException {
         return roomTypeEntitySessionBean.createRoomType(newRoomType);
@@ -99,9 +108,37 @@ public class HorsManagementControllerSessionBean implements HorsManagementContro
         return roomTypeEntitySessionBean.retrieveRoomType(name);
     }
     
+    @Override
     public void deleteRoomType(String name) throws RoomTypeNotFoundException{
          roomTypeEntitySessionBean.deleteRoomType(name);
     }
+    
+    @Override
+    public void updateRoomType(RoomTypeEntity roomType) throws RoomTypeNotFoundException{
+        roomTypeEntitySessionBean.updateRoomType(roomType);
+    }
+    
+    @Override
+    public List<RoomTypeEntity> retrieveAllRoomType(){
+        return roomTypeEntitySessionBean.retrieveAllRoomType();
+    }
+    
+    @Override
+    public Long createNewRoom(RoomEntity newRoomEntity) throws RoomNumberExistException,
+            UnknownPersistenceException, InputDataValidationException{
+        return roomEntitySessionBean.createNewRoom(newRoomEntity);
+    }
+    
+    @Override
+     public RoomEntity retrieveRoomByRoomNumber(Integer roomNumber) throws RoomNotFoundException{
+         return roomEntitySessionBean.retrieveRoomByRoomNumber(roomNumber);
+     }
+     
+    @Override
+      public void updateRoom(RoomEntity roomEntity) throws RoomNotFoundException,
+            UpdateRoomException, InputDataValidationException {
+          roomEntitySessionBean.updateRoom(roomEntity);
+      }
    
         
             

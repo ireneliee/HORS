@@ -36,6 +36,11 @@ public class RoomTypeEntitySessionBean implements RoomTypeEntitySessionBeanRemot
             UnknownPersistenceException {
         try {
             em.persist(newRoomType);
+            newRoomType
+                    .getRoomTypeAvailabilities()
+                    .stream()
+                    .forEach(x -> em.persist(x));
+            
             em.flush();
             return newRoomType.getRoomTypeId();
             
@@ -85,15 +90,39 @@ public class RoomTypeEntitySessionBean implements RoomTypeEntitySessionBeanRemot
     public void deleteRoomType(String name) throws RoomTypeNotFoundException {
         RoomTypeEntity roomTypeToBeDeleted;
         try{
-        roomTypeToBeDeleted = retrieveRoomType(name);
+            roomTypeToBeDeleted = retrieveRoomType(name);
         } catch(RoomTypeNotFoundException ex) {
             throw new RoomTypeNotFoundException(ex.getMessage());
         }
-        em.remove(roomTypeToBeDeleted);
         
-
-        
-        
+        if(roomTypeEntityIsNotUsed(roomTypeToBeDeleted)) {
+            em.remove(roomTypeToBeDeleted);
+        } else {
+            roomTypeToBeDeleted.setDisabled(Boolean.TRUE);
+        }
+ 
+    }
+    
+    @Override
+    public void updateRoomType(RoomTypeEntity roomType) throws RoomTypeNotFoundException {
+        try{
+            RoomTypeEntity roomTypeToUpdate = retrieveRoomType(roomType.getName());
+            
+            roomTypeToUpdate.setDescription(roomType.getDescription());
+            roomTypeToUpdate.setSize(roomType.getSize());
+            roomTypeToUpdate.setBed(roomType.getBed());
+            roomTypeToUpdate.setCapacity(roomType.getCapacity());
+            roomTypeToUpdate.setAmenities(roomType.getAmenities());
+            roomTypeToUpdate.setDisabled(roomType.getDisabled());
+            
+        } catch (RoomTypeNotFoundException ex) {
+            throw new RoomTypeNotFoundException(ex.getMessage());
+        }
+    }
+    
+    
+    private boolean roomTypeEntityIsNotUsed(RoomTypeEntity roomType) {
+        return roomType.getRoomEntities().isEmpty();
     }
 
 }

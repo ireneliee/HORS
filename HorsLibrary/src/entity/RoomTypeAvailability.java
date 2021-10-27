@@ -25,11 +25,8 @@ public class RoomTypeAvailability implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roomTypeAvailabilityId;
-    @NotNull
     private LocalDate dateOfAvailability;
-    @NotNull
     private Integer noOfAvailableRoom;
-    @ManyToOne
     private RoomTypeEntity roomType;
 
     
@@ -79,6 +76,14 @@ public class RoomTypeAvailability implements Serializable {
 
     public void setNoOfAvailableRoom(Integer noOfAvailableRoom) {
         this.noOfAvailableRoom = noOfAvailableRoom;
+    }
+    
+    public void incrementNoOfAvailableRoomByOne() {
+        this.noOfAvailableRoom = this.noOfAvailableRoom + 1;
+    }
+    
+    public void decreaseNoOfAvailableRoomByOne() {
+        this.noOfAvailableRoom = this.noOfAvailableRoom - 1;
     }
 
     public RoomTypeEntity getRoomType() {

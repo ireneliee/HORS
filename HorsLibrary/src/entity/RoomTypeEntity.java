@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,6 +27,8 @@ public class RoomTypeEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long RoomTypeId;
+    
+    @Column(unique = true)
     private String name;
     private String description;
     private String size;
@@ -36,10 +38,10 @@ public class RoomTypeEntity implements Serializable {
     private Integer rank;
     private Boolean disabled;
     
-    @OneToMany(mappedBy="roomType", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy="roomType")
     private List<RoomEntity> roomEntities;
     
-    @OneToMany(mappedBy="roomType", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="roomType")
     private List<RoomTypeAvailability> roomTypeAvailabilities;
             
     public RoomTypeEntity() {
@@ -61,7 +63,7 @@ public class RoomTypeEntity implements Serializable {
         LocalDate dateOfCreation = LocalDate.now();
         LocalDate availabilityPeriod = dateOfCreation.plusDays(720);
         for(LocalDate date = dateOfCreation; date.isBefore(availabilityPeriod); date.plusDays(1)) {
-            roomTypeAvailabilities.add(new RoomTypeAvailability(date, 100, this));
+            roomTypeAvailabilities.add(new RoomTypeAvailability(date, 0, this));
         }
     }
     
@@ -93,11 +95,6 @@ public class RoomTypeEntity implements Serializable {
             return false;
         }
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return "entity.RoomTypeEntity[ id=" + RoomTypeId + " ]";
     }
 
     public String getName() {
@@ -178,6 +175,14 @@ public class RoomTypeEntity implements Serializable {
 
     public void setDisabled(Boolean disabled) {
         this.disabled = disabled;
+    }
+    
+    
+    @Override
+    public String toString() {
+        return "Name: " + this.getName() +"\n" + "Description: " + this.getDescription() + "\n" + 
+                "Size: " + this.getSize() + "\n" + "Bed: " + this.getBed() + "\n" + "Capacity: " + this.getCapacity() + "\n" + 
+                "Amenities: " + this.getAmenities() + "\n" + "Rank: " + this.getRank() + "\n";
     }
     
 }

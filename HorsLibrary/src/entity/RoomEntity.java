@@ -26,12 +26,13 @@ public class RoomEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long RoomEntityId;
     
+    
+    //@NotNull
+    //@Size(min = 4, max = 4)
     @Column(nullable = false, unique = true, length = 4)
-    @NotNull
-    @Size(min = 4, max = 4)
     private Integer roomNumber;
     
-    @NotNull
+    //@NotNull
     private RoomStatusEnum roomStatus;
     
     @ManyToOne(optional = false)
