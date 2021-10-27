@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,11 +25,19 @@ public class RoomTypeAvailability implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roomTypeAvailabilityId;
-    private Date date;
+    private LocalDate dateOfAvailability;
     private Integer noOfAvailableRoom;
     @ManyToOne
     private RoomTypeEntity roomType;
 
+    
+    public RoomTypeAvailability(){}
+    
+    public RoomTypeAvailability(LocalDate dateOfAvailability, Integer noOfAvailableRoom, RoomTypeEntity roomType) {
+        this.dateOfAvailability = dateOfAvailability;
+        this.noOfAvailableRoom = noOfAvailableRoom;
+        this.roomType = roomType;
+    }
     public Long getRoomTypeAvailabilityId() {
         return roomTypeAvailabilityId;
     }
@@ -62,14 +71,6 @@ public class RoomTypeAvailability implements Serializable {
         return "entity.RoomTypeAvailability[ id=" + roomTypeAvailabilityId + " ]";
     }
 
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
     public Integer getNoOfAvailableRoom() {
         return noOfAvailableRoom;
     }
@@ -84,6 +85,14 @@ public class RoomTypeAvailability implements Serializable {
 
     public void setRoomType(RoomTypeEntity roomType) {
         this.roomType = roomType;
+    }
+
+    public LocalDate getDateOfAvailability() {
+        return dateOfAvailability;
+    }
+
+    public void setDateOfAvailability(LocalDate dateOfAvailability) {
+        this.dateOfAvailability = dateOfAvailability;
     }
     
 }

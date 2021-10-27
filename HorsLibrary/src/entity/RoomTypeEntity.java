@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
@@ -55,6 +56,24 @@ public class RoomTypeEntity implements Serializable {
         this.capacity = capacity;
         this.amenities = amenities;
         this.rank = rank;
+    }
+    
+    public RoomTypeEntity(String name, String description, String size, Integer bed, Integer capacity, String amenities, 
+            Integer rank, Integer noOfRooms) {
+        super();
+        this.name = name;
+        this.description = description;
+        this.size = size;
+        this.bed = bed;
+        this.capacity = capacity;
+        this.amenities = amenities;
+        this.rank = rank;
+        
+        LocalDate dateOfCreation = LocalDate.now();
+        LocalDate availabilityPeriod = dateOfCreation.plusDays(720);
+        for(LocalDate date = dateOfCreation; date.isBefore(availabilityPeriod); date.plusDays(1)) {
+            roomTypeAvailabilities.add(new RoomTypeAvailability(date, 500, this));
+        }
     }
     
     public Long getRoomTypeId() {
