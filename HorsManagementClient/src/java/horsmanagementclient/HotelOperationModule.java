@@ -12,6 +12,8 @@ import java.util.Scanner;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import util.enumeration.AccessRightEnum;
+import util.exception.InvalidAccessRightException;
 import util.exception.RoomTypeExistException;
 import util.exception.UnknownPersistenceException;
 
@@ -34,7 +36,13 @@ public class HotelOperationModule {
         this.currentEmployee = currentEmployee;
     }
     
-    public void operationManagerMenu() {
+    public void operationManagerMenu() throws InvalidAccessRightException {
+        
+        if(currentEmployee.getAccessRight() != AccessRightEnum.OPERATIONMANAGER) {
+            String errorMessage = "You don't have SYSTEMADMINISTRATOR rights to access the system"
+                    + " administration module. ";
+            throw new InvalidAccessRightException(errorMessage);
+        }
         Scanner scanner = new Scanner(System.in);
         Integer response = 0;
         

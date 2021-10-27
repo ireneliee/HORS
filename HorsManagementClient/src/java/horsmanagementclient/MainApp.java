@@ -20,6 +20,7 @@ public class MainApp {
     private HorsManagementControllerSessionBeanRemote horsManagementControllerSessionBeanRemote;
     private EmployeeEntity currentEmployeeEntity;
     private SystemAdministrationModule systemAdministrationModule;
+    private HotelOperationModule hotelOperationModule;
     
     public MainApp(){}
 
@@ -51,6 +52,8 @@ public class MainApp {
                     {
                         doLogin();
                         System.out.println("Login successful!\n");
+                        hotelOperationModule = new HotelOperationModule(horsManagementControllerSessionBeanRemote, 
+                                currentEmployeeEntity);
                         systemAdministrationModule = new SystemAdministrationModule(horsManagementControllerSessionBeanRemote, 
                                 currentEmployeeEntity);
                         menuMain();
@@ -134,16 +137,16 @@ public class MainApp {
                 }
                 else if(response == 2)
                 {
-                    /*
+
                     try
                     {
-                        systemAdministrationModule.menuSystemAdministration();
+                        hotelOperationModule.operationManagerMenu();
                     }
                     catch (InvalidAccessRightException ex)
                     {
                         System.out.println("Invalid option, please try again!: " + ex.getMessage() + "\n");
                     }
-                    */
+
                 }
                 else if (response == 6)
                 {
