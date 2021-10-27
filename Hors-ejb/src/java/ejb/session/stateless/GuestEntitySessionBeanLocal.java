@@ -9,6 +9,8 @@ import entity.GuestEntity;
 import javax.ejb.Local;
 import util.exception.GuestNotFoundException;
 import util.exception.InvalidLoginCredentialException;
+import util.exception.UnknownPersistenceException;
+import util.exception.UsernameExistException;
 
 /**
  *
@@ -20,5 +22,7 @@ public interface GuestEntitySessionBeanLocal {
     public GuestEntity guestLogin(String username, String password) throws InvalidLoginCredentialException;
     
     public GuestEntity retrieveGuestByUsername(String username) throws GuestNotFoundException;
+    
+    public Long guestRegister(GuestEntity newGuestEntity) throws UsernameExistException, UnknownPersistenceException;
     
 }
