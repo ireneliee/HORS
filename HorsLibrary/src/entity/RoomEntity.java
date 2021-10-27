@@ -6,18 +6,18 @@
 package entity;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import util.enumeration.RoomStatusEnum;
 
-/**
- *
- * @author irene
- */
+
 @Entity
 public class RoomEntity implements Serializable {
 
@@ -25,7 +25,13 @@ public class RoomEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long RoomEntityId;
+    
+    @Column(nullable = false, unique = true, length = 4)
+    @NotNull
+    @Size(min = 4, max = 4)
     private Integer roomNumber;
+    
+    @NotNull
     private RoomStatusEnum roomStatus;
     
     @ManyToOne(optional = false)
