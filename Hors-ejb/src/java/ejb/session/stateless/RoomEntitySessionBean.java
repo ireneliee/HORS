@@ -148,13 +148,13 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
         List<RoomReservationLineItemEntity> listOfReservationsUsingThatRoom = query.getResultList();
         
         // checking if the checkout date of each roomReservationLineItemEntity is before today
-        List<RoomReservationLineItemEntity> listOfReservationUsingThatRoomBeforeToday = 
+        List<RoomReservationLineItemEntity> listOfReservationUsingThatRoomAfterToday = 
                 listOfReservationsUsingThatRoom
                 .stream()
                 .filter(x -> x.getCheckoutDate().isAfter(now))
                 .collect(Collectors.toCollection(ArrayList::new));
         
-        return !listOfReservationUsingThatRoomBeforeToday.isEmpty();
+        return !listOfReservationUsingThatRoomAfterToday.isEmpty();
         
         
     }
