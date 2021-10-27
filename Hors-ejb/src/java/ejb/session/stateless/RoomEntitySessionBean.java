@@ -165,11 +165,16 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
 
     @Override
     public void deleteRoom(Integer roomNumber) throws RoomNotFoundException {
+         
         try {
             deleteUnusedRoom(roomNumber);
         } catch (RoomIsCurrentlyUsedException ex) {
             RoomEntity roomToBeDeleted = retrieveRoomByRoomNumber(roomNumber);
             roomToBeDeleted.setRoomStatus(RoomStatusEnum.NOTAVAILABLE);
+            roomToBeDeleted
+                        .getRoomType()
+                        .getRoomTypeAvailabilities()
+                        .forEach(x -> x.decreaseNoOfAvailableRoomByOne());
         } catch (RoomNotFoundException ex) {
             throw new RoomNotFoundException(ex.getMessage());
         }
@@ -180,6 +185,12 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
         RoomEntity roomToBeDeleted;
         try {
             roomToBeDeleted = retrieveRoomByRoomNumber(roomNumber);
+            if(roomToBeDeleted.getRoomStatus().equals(RoomStatusEnum.AVAILABLE)) {
+                 roomToBeDeleted
+                        .getRoomType()
+                        .getRoomTypeAvailabilities()
+                        .forEach(x -> x.decreaseNoOfAvailableRoomByOne());
+            }
         } catch (RoomNotFoundException ex) {
             throw new RoomNotFoundException(ex.getMessage());
         }

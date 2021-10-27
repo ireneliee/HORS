@@ -139,6 +139,11 @@ public class HorsManagementControllerSessionBean implements HorsManagementContro
             UpdateRoomException, InputDataValidationException {
           roomEntitySessionBean.updateRoom(roomEntity);
       }
+      
+    @Override
+      public void deleteRoom(Integer roomNumber) throws RoomNotFoundException{
+          roomEntitySessionBean.deleteRoom(roomNumber);
+      }
    
         
             

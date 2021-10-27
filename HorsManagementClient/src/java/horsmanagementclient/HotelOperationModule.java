@@ -12,11 +12,10 @@ import entity.RoomTypeEntity;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
-import javax.validation.Validation;
-import javax.validation.ValidatorFactory;
 import util.enumeration.AccessRightEnum;
 import util.enumeration.RoomStatusEnum;
 import util.exception.InvalidAccessRightException;
+import util.exception.RoomNotFoundException;
 import util.exception.RoomTypeExistException;
 import util.exception.RoomTypeNotFoundException;
 import util.exception.UnknownPersistenceException;
@@ -95,6 +94,23 @@ public class HotelOperationModule {
     }
 
     public void salesManagerMenu() {
+    }
+    
+    public void doDeleteRoom(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("*** HORS Management System :: Hotel Operation :: Operation Manager :: Delete a room ***\n");
+         try {
+            System.out.print("Enter the 4 digits room number that you want to update>");
+            Integer roomNumber = scanner.nextInt();
+            try{
+            horsManagementControllerSessionBeanRemote.deleteRoom(roomNumber);
+            System.out.println("Room with room number " + roomNumber + " has been deleted");
+            } catch (RoomNotFoundException ex) {
+                System.out.println("Deletetion is cancelled: " + "room number is not found.");
+            }
+         } catch(InputMismatchException ex) {
+             System.out.println("Deletion is cancelled: " + "input format is wrong.");
+         }
     }
 
     public void doUpdateRoom() {
