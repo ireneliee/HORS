@@ -114,13 +114,13 @@ public class MainApp {
                     currentEmployeeEntity.getLastName() + " with " + currentEmployeeEntity.getAccessRight().toString() + " rights\n");
             System.out.println("1: System Administration");
             System.out.println("2: Operation Manager");
-            System.out.println("3: Operation Manager");
-            System.out.println("4: Sales Manager");
-            System.out.println("5: Guest Relation Officer");
-            System.out.println("6: Logout\n");
+            System.out.println("3: Sales Manager");
+            System.out.println("4: Guest Relation Officerr");
+            System.out.println("5: Logout\n");
+
             response = 0;
             
-            while(response < 1 || response > 6)
+            while(response < 1 || response > 5)
             {
                 System.out.print("> ");
 
@@ -148,7 +148,7 @@ public class MainApp {
                     }
 
                 }
-                else if (response == 6)
+                else if (response == 5)
                 {
                     break;
                 }
@@ -158,7 +158,7 @@ public class MainApp {
                 }
             }
             
-            if(response == 6)
+            if(response == 5)
             {
                 break;
             }

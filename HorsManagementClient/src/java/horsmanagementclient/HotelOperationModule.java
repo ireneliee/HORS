@@ -39,7 +39,7 @@ public class HotelOperationModule {
     public void operationManagerMenu() throws InvalidAccessRightException {
         
         if(currentEmployee.getAccessRight() != AccessRightEnum.OPERATIONMANAGER) {
-            String errorMessage = "You don't have SYSTEMADMINISTRATOR rights to access the system"
+            String errorMessage = "You don't have OPERATIONMANAGER rights to access the system"
                     + " administration module. ";
             throw new InvalidAccessRightException(errorMessage);
         }
@@ -109,7 +109,6 @@ public class HotelOperationModule {
         
         System.out.print("Enter the number of bed>");
         newRoomType.setBed(scanner.nextInt());
-        System.out.println();
         
         System.out.print("Enter capacity of the room (number of people the room can fit) >");
         newRoomType.setCapacity(scanner.nextInt());

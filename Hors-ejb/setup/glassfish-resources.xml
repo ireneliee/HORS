@@ -11,5 +11,6 @@
     <property name="autoConnect" value="true"/>
     <property name="useSSL" value="false"/>
     <property name="allowPublicKeyRetrieval" value="true"/>
+    <property name="eclipselink.logging.parameters" value="true"/>
   </jdbc-connection-pool>
 </resources>
