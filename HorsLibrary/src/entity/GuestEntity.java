@@ -14,9 +14,21 @@ import javax.persistence.Entity;
 public class GuestEntity extends UserEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    private String firstName;
+    private String lastName;
+    private String username;
+    private String password;
+
+    public GuestEntity() {
+    }
     
-    public GuestEntity(){
-        super();
+    
+    public GuestEntity(String firstName, String lastName, String username, String password, String email){
+        super(email);
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.password = password;
     }
     
     public GuestEntity(String email) {
@@ -27,6 +39,76 @@ public class GuestEntity extends UserEntity implements Serializable {
     @Override
     public String toString() {
         return "entity.GuestEntity[ id=" + getUserId() + " ]";
+    }
+
+    /**
+     * @return the firstName
+     */
+    public String getFirstName() {
+        return firstName;
+    }
+
+    /**
+     * @param firstName the firstName to set
+     */
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    /**
+     * @return the lastName
+     */
+    public String getLastName() {
+        return lastName;
+    }
+
+    /**
+     * @param lastName the lastName to set
+     */
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    /**
+     * @return the username
+     */
+    public String getUsername() {
+        return username;
+    }
+
+    /**
+     * @param username the username to set
+     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * @param password the password to set
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof GuestEntity)) {
+            return false;
+        }
+        GuestEntity other = (GuestEntity) object;
+        if ((this.getUserId() == null && other.getUserId()!= null) || (this.getUserId() != null && 
+                !this.getUserId().equals(other.getUserId()))) {
+            return false;
+        }
+        return true;
     }
 
    
