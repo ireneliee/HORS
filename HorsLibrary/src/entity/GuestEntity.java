@@ -18,17 +18,21 @@ public class GuestEntity extends UserEntity implements Serializable {
     private String lastName;
     private String username;
     private String password;
+    private int mobileNo;
+    private String passportNo;
 
     public GuestEntity() {
     }
     
     
-    public GuestEntity(String firstName, String lastName, String username, String password, String email){
+    public GuestEntity(String firstName, String lastName, String username, String password, String email, int mobileNo, String passportNo){
         super(email);
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.password = password;
+        this.mobileNo = mobileNo;
+        this.passportNo = passportNo;
     }
     
     public GuestEntity(String email) {
@@ -109,6 +113,34 @@ public class GuestEntity extends UserEntity implements Serializable {
             return false;
         }
         return true;
+    }
+
+    /**
+     * @return the mobileNo
+     */
+    public int getMobileNo() {
+        return mobileNo;
+    }
+
+    /**
+     * @param mobileNo the mobileNo to set
+     */
+    public void setMobileNo(int mobileNo) {
+        this.mobileNo = mobileNo;
+    }
+
+    /**
+     * @return the passportNo
+     */
+    public String getPassportNo() {
+        return passportNo;
+    }
+
+    /**
+     * @param passportNo the passportNo to set
+     */
+    public void setPassportNo(String passportNo) {
+        this.passportNo = passportNo;
     }
 
    
