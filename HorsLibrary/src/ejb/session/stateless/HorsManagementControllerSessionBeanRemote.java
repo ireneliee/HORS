@@ -12,7 +12,9 @@ import java.util.List;
 import javax.ejb.Remote;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.PartnerNotFoundException;
+import util.exception.RoomNotFoundException;
 import util.exception.RoomTypeExistException;
+import util.exception.RoomTypeNotFoundException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UsernameExistException;
 
@@ -37,4 +39,8 @@ public interface HorsManagementControllerSessionBeanRemote {
        public List<PartnerEntity> retrieveAllPartner();
        
        public Long createRoomType(RoomTypeEntity newRoomType) throws RoomTypeExistException, UnknownPersistenceException;
+       
+       public RoomTypeEntity retrieveRoomType(String name) throws RoomTypeNotFoundException;
+       
+       public void deleteRoomType(String name) throws RoomTypeNotFoundException;
 }

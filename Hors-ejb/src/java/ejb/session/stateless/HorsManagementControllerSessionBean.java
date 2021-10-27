@@ -14,7 +14,9 @@ import javax.ejb.Stateless;
 import util.exception.EmployeeNotFoundException;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.PartnerNotFoundException;
+import util.exception.RoomNotFoundException;
 import util.exception.RoomTypeExistException;
+import util.exception.RoomTypeNotFoundException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UsernameExistException;
 
@@ -91,6 +93,16 @@ public class HorsManagementControllerSessionBean implements HorsManagementContro
             UnknownPersistenceException {
         return roomTypeEntitySessionBean.createRoomType(newRoomType);
     }
+    
+    @Override
+    public RoomTypeEntity retrieveRoomType(String name) throws RoomTypeNotFoundException{
+        return roomTypeEntitySessionBean.retrieveRoomType(name);
+    }
+    
+    public void deleteRoomType(String name) throws RoomTypeNotFoundException{
+         roomTypeEntitySessionBean.deleteRoomType(name);
+    }
+   
         
             
     

@@ -8,6 +8,7 @@ package horsmanagementclient;
 import ejb.session.stateless.HorsManagementControllerSessionBeanRemote;
 import javax.ejb.EJB;
 
+
 /**
  *
  * @author irene
@@ -22,8 +23,10 @@ public class Main {
      */
     
     public static void main(String[] args) {
+
        MainApp mainApp = new MainApp(horsManagementControllerSessionBeanRemote);
        mainApp.runApp();
+
     }
     
 }

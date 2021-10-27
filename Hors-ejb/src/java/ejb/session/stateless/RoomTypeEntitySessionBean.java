@@ -16,6 +16,7 @@ import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import util.exception.RoomNotFoundException;
 import util.exception.RoomTypeExistException;
+import util.exception.RoomTypeNotFoundException;
 import util.exception.UnknownPersistenceException;
 
 /**
@@ -66,7 +67,8 @@ public class RoomTypeEntitySessionBean implements RoomTypeEntitySessionBeanRemot
         
     }
     
-    public RoomTypeEntity retrieveRoomType(String name) throws RoomNotFoundException {
+    @Override
+    public RoomTypeEntity retrieveRoomType(String name) throws RoomTypeNotFoundException {
         String databaseQueryString = "SELECT s FROM RoomTypeEntity s WHERE s.name = :iName";
         Query query = em.createQuery(databaseQueryString);
         query.setParameter("iName", name);
@@ -74,8 +76,23 @@ public class RoomTypeEntitySessionBean implements RoomTypeEntitySessionBeanRemot
         try{
             return (RoomTypeEntity)query.getSingleResult();
         } catch(NoResultException | NonUniqueResultException ex) {
-            throw new RoomNotFoundException("Room name " + name + " does not exist!");
+            throw new RoomTypeNotFoundException("Room name " + name + " does not exist!");
         }
+        
+    }
+    
+    @Override
+    public void deleteRoomType(String name) throws RoomTypeNotFoundException {
+        RoomTypeEntity roomTypeToBeDeleted;
+        try{
+        roomTypeToBeDeleted = retrieveRoomType(name);
+        } catch(RoomTypeNotFoundException ex) {
+            throw new RoomTypeNotFoundException(ex.getMessage());
+        }
+        em.remove(roomTypeToBeDeleted);
+        
+
+        
         
     }
 

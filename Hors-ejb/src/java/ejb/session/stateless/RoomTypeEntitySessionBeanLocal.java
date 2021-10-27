@@ -8,7 +8,9 @@ package ejb.session.stateless;
 import entity.RoomTypeEntity;
 import java.util.List;
 import javax.ejb.Local;
+import util.exception.RoomNotFoundException;
 import util.exception.RoomTypeExistException;
+import util.exception.RoomTypeNotFoundException;
 import util.exception.UnknownPersistenceException;
 
 /**
@@ -21,5 +23,9 @@ public interface RoomTypeEntitySessionBeanLocal {
     public List<RoomTypeEntity> retrieveAllRoomType();
 
     public Long createRoomType(RoomTypeEntity newRoomType) throws RoomTypeExistException, UnknownPersistenceException;
+
+    public RoomTypeEntity retrieveRoomType(String name) throws RoomTypeNotFoundException;
+
+    public void deleteRoomType(String name) throws RoomTypeNotFoundException;
     
 }
