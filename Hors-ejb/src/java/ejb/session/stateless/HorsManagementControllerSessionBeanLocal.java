@@ -56,5 +56,7 @@ public interface HorsManagementControllerSessionBeanLocal {
             UpdateRoomException, InputDataValidationException;
      
      public void deleteRoom(Integer roomNumber) throws RoomNotFoundException;
+
+    public List<RoomEntity> retrieveAllRooms();
     
 }

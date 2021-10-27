@@ -56,6 +56,7 @@ public class HotelOperationModule {
             System.out.println("3: View all room types");
             System.out.println("4: Create new room");
             System.out.println("5: Update a room");
+            System.out.println("6: View all rooms");
 
             System.out.println("9: Back\n");
             response = 0;
@@ -66,12 +67,15 @@ public class HotelOperationModule {
                 response = scanner.nextInt();
 
                 if (response == 1) {
+                    
                     doCreateNewRoomType();
+                    
                 } else if (response == 2) {
 
                     doViewRoomTypeDetails();
 
                 } else if (response == 3) {
+                    
                     doViewAllRoomTypes();
 
                 } else if (response == 4) {
@@ -79,6 +83,8 @@ public class HotelOperationModule {
                     doCreateNewRoom();
 
                 } else if (response == 5) {
+                    
+                    doRetrieveAllRooms();
 
                 } else if (response == 9) {
                     break;
@@ -239,6 +245,13 @@ public class HotelOperationModule {
             }
         }
 
+    }
+    
+    public void doRetrieveAllRooms() {
+        horsManagementControllerSessionBeanRemote
+                .retrieveAllRooms()
+                .stream()
+                .forEach(System.out::println);
     }
 
     private void doDeleteRoomType(String roomTypeName) {

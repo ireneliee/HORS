@@ -78,7 +78,8 @@ public class RoomEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.RoomEntity[ id=" + RoomEntityId + " ]";
+        return "Room number: " + this.getRoomNumber() + "\n" + "Room Type: " + this.getRoomType() + "\n" +
+                "Availability: " + this.getRoomStatus().toString() + "\n";
     }
 
     public Integer getRoomNumber() {

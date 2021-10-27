@@ -144,6 +144,11 @@ public class HorsManagementControllerSessionBean implements HorsManagementContro
       public void deleteRoom(Integer roomNumber) throws RoomNotFoundException{
           roomEntitySessionBean.deleteRoom(roomNumber);
       }
+      
+    @Override
+      public List<RoomEntity> retrieveAllRooms() {
+          return roomEntitySessionBean.retrieveAllRooms();
+      }
    
         
             
