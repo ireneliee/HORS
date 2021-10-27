@@ -7,12 +7,14 @@ package ejb.session.stateless;
 
 import entity.EmployeeEntity;
 import entity.PartnerEntity;
+import entity.RoomTypeEntity;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import util.exception.EmployeeNotFoundException;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.PartnerNotFoundException;
+import util.exception.RoomTypeExistException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UsernameExistException;
 
@@ -20,6 +22,9 @@ import util.exception.UsernameExistException;
 @Stateless
 public class HorsManagementControllerSessionBean implements HorsManagementControllerSessionBeanRemote, 
         HorsManagementControllerSessionBeanLocal {
+
+    @EJB
+    private RoomTypeEntitySessionBeanLocal roomTypeEntitySessionBean;
 
     @EJB
     private final PartnerEntitySessionBeanLocal partnerEntitySessionBean;
@@ -80,6 +85,11 @@ public class HorsManagementControllerSessionBean implements HorsManagementContro
     
     public List<PartnerEntity> retrieveAllPartner() {
         return partnerEntitySessionBean.retrieveAllPartner();
+    }
+    
+    public Long createRoomType(RoomTypeEntity newRoomType) throws RoomTypeExistException, 
+            UnknownPersistenceException {
+        return roomTypeEntitySessionBean.createRoomType(newRoomType);
     }
         
             

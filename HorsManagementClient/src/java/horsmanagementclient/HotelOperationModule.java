@@ -7,11 +7,13 @@ package horsmanagementclient;
 
 import ejb.session.stateless.HorsManagementControllerSessionBeanRemote;
 import entity.EmployeeEntity;
+import entity.RoomTypeEntity;
 import java.util.Scanner;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import util.enumeration.AccessRightEnum;
+import util.exception.RoomTypeExistException;
+import util.exception.UnknownPersistenceException;
 
 
 public class HotelOperationModule {
@@ -30,22 +32,6 @@ public class HotelOperationModule {
         this();
         this.horsManagementControllerSessionBeanRemote = horsManagementControllerSessionBeanRemote;
         this.currentEmployee = currentEmployee;
-    }
-    
-    public void menuHotelOperation(){
-        System.out.println("*** HORS Management System :: Hotel Operation ***\n");
-         
-        AccessRightEnum currentEmployeeAccessRight = currentEmployee.getAccessRight();
-        
-        if(currentEmployeeAccessRight.equals(AccessRightEnum.OPERATIONMANAGER)) {
-            
-            operationManagerMenu();
-            
-        } else if (currentEmployeeAccessRight.equals(AccessRightEnum.SALESMANAGER)) {
-            
-            salesManagerMenu();
-            
-        }
     }
     
     public void operationManagerMenu() {
@@ -68,7 +54,7 @@ public class HotelOperationModule {
 
                 if(response == 1)
                 {
-
+                    doCreateNewRoomType();
                 }
                 else if(response == 2)
                 {
@@ -97,10 +83,52 @@ public class HotelOperationModule {
     
     public void salesManagerMenu(){}
     
+    public  void doCreateNewRoomType() {
+        
+        Scanner scanner = new Scanner(System.in);
+        RoomTypeEntity newRoomType = new RoomTypeEntity();
+        System.out.println("*** HORS Management System :: Hotel Operation :: Operation Manager :: Create New Room Type ***\n");
+        
+        
+        System.out.print("Enter the name of the room type> ");
+        newRoomType.setName(scanner.nextLine().trim());
+        
+        System.out.print("Enter any description about the room> ");
+        newRoomType.setDescription(scanner.nextLine());
+        
+        System.out.print("Enter the size of the room (eg. 10x8) > ");
+        newRoomType.setSize(scanner.nextLine().trim());
+        
+        System.out.print("Enter the number of bed>");
+        newRoomType.setBed(scanner.nextInt());
+        System.out.println();
+        
+        System.out.print("Enter capacity of the room (number of people the room can fit) >");
+        newRoomType.setCapacity(scanner.nextInt());
+        System.out.println();
+        
+        System.out.print("Enter the amenities in the room> ");
+        newRoomType.setAmenities(scanner.nextLine());
+        
+        System.out.print("Enter the rank of the room (1 to 5) >");
+        int rank = scanner.nextInt();
+        while(rank < 1 || rank > 5) {
+            System.out.println("Rank is outside of the bound (1 - 5). Please enter another rank.");
+            rank = scanner.nextInt();
+        }
+        newRoomType.setRank(rank);
+        
+        try {
+            Long newRoomTypeId = horsManagementControllerSessionBeanRemote.createRoomType(newRoomType);
+            System.out.println("Room type with roomTypeId " + newRoomTypeId + " is created. ");
+        } catch(RoomTypeExistException | UnknownPersistenceException ex) {
+            System.out.println("Creation of room type failed: " + ex.getMessage());
+        }
+    }
+        
+        
+    }
+    
     
  
     
-    
-    
-    
-}

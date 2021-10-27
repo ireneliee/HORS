@@ -3,10 +3,12 @@ package ejb.session.stateless;
 
 import entity.EmployeeEntity;
 import entity.PartnerEntity;
+import entity.RoomTypeEntity;
 import java.util.List;
 import javax.ejb.Local;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.PartnerNotFoundException;
+import util.exception.RoomTypeExistException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UsernameExistException;
 
@@ -29,5 +31,7 @@ public interface HorsManagementControllerSessionBeanLocal {
     public PartnerEntity partnerLogin(String username, String password) throws InvalidLoginCredentialException;
 
     public List<PartnerEntity> retrieveAllPartner();
+
+    public Long createRoomType(RoomTypeEntity newRoomType) throws RoomTypeExistException, UnknownPersistenceException;
     
 }
