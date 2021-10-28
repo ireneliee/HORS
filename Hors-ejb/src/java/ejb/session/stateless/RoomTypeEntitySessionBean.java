@@ -36,10 +36,12 @@ public class RoomTypeEntitySessionBean implements RoomTypeEntitySessionBeanRemot
             UnknownPersistenceException {
         try {
             em.persist(newRoomType);
+            /*
             newRoomType
                     .getRoomTypeAvailabilities()
                     .stream()
                     .forEach(x -> em.persist(x));
+            */
             
             em.flush();
             return newRoomType.getRoomTypeId();

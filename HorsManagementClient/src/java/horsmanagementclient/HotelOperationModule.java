@@ -14,8 +14,10 @@ import java.util.List;
 import java.util.Scanner;
 import util.enumeration.AccessRightEnum;
 import util.enumeration.RoomStatusEnum;
+import util.exception.InputDataValidationException;
 import util.exception.InvalidAccessRightException;
 import util.exception.RoomNotFoundException;
+import util.exception.RoomNumberExistException;
 import util.exception.RoomTypeExistException;
 import util.exception.RoomTypeNotFoundException;
 import util.exception.UnknownPersistenceException;
@@ -67,15 +69,15 @@ public class HotelOperationModule {
                 response = scanner.nextInt();
 
                 if (response == 1) {
-                    
+
                     doCreateNewRoomType();
-                    
+
                 } else if (response == 2) {
 
                     doViewRoomTypeDetails();
 
                 } else if (response == 3) {
-                    
+
                     doViewAllRoomTypes();
 
                 } else if (response == 4) {
@@ -83,7 +85,7 @@ public class HotelOperationModule {
                     doCreateNewRoom();
 
                 } else if (response == 5) {
-                    
+
                     doRetrieveAllRooms();
 
                 } else if (response == 9) {
@@ -101,22 +103,22 @@ public class HotelOperationModule {
 
     public void salesManagerMenu() {
     }
-    
-    public void doDeleteRoom(){
+
+    public void doDeleteRoom() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("*** HORS Management System :: Hotel Operation :: Operation Manager :: Delete a room ***\n");
-         try {
+        try {
             System.out.print("Enter the 4 digits room number that you want to update>");
             Integer roomNumber = scanner.nextInt();
-            try{
-            horsManagementControllerSessionBeanRemote.deleteRoom(roomNumber);
-            System.out.println("Room with room number " + roomNumber + " has been deleted");
+            try {
+                horsManagementControllerSessionBeanRemote.deleteRoom(roomNumber);
+                System.out.println("Room with room number " + roomNumber + " has been deleted");
             } catch (RoomNotFoundException ex) {
                 System.out.println("Deletetion is cancelled: " + "room number is not found.");
             }
-         } catch(InputMismatchException ex) {
-             System.out.println("Deletion is cancelled: " + "input format is wrong.");
-         }
+        } catch (InputMismatchException ex) {
+            System.out.println("Deletion is cancelled: " + "input format is wrong.");
+        }
     }
 
     public void doUpdateRoom() {
@@ -176,7 +178,15 @@ public class HotelOperationModule {
 
                 if (availability >= 1 && availability <= 2) {
                     newRoomEntity.setRoomStatus(RoomStatusEnum.values()[availability - 1]);
-                    break;
+                    try {
+
+                        horsManagementControllerSessionBeanRemote.createNewRoom(newRoomEntity);
+                        System.out.println("Room with room number of " + newRoomEntity.getRoomNumber() +
+                                " is successfully created");
+                        break;
+                    } catch (RoomNumberExistException | UnknownPersistenceException | InputDataValidationException ex) {
+                        System.out.println("Error occurs in the creation of room: " + ex.getMessage());
+                    }
                 } else {
                     System.out.println("Invalid option, please try again!\n");
                 }
@@ -198,7 +208,7 @@ public class HotelOperationModule {
     public void doViewRoomTypeDetails() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("*** HORS Management System :: Hotel Operation :: Operation Manager :: View Room Type Details ***\n");
-        System.out.println("Enter the name of the room type you wish to delete> ");
+        System.out.println("Enter the name of the room type you wish to view> ");
         String nameOfRoomType = scanner.nextLine();
 
         try {
@@ -246,7 +256,7 @@ public class HotelOperationModule {
         }
 
     }
-    
+
     public void doRetrieveAllRooms() {
         horsManagementControllerSessionBeanRemote
                 .retrieveAllRooms()
@@ -272,9 +282,7 @@ public class HotelOperationModule {
         Scanner scanner = new Scanner(System.in);
 
         RoomTypeEntity newRoomType = new RoomTypeEntity();
-        System.out.println("*** HORS Management System :: Hotel Operation :: Operation Manager :: Create New Room Type ***\n");
 
-        System.out.print("Enter the name of the room you wish to change type> ");
         newRoomType.setName(roomTypeName);
 
         System.out.print("Enter the description about the room> ");

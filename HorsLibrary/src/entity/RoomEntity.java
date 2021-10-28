@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,7 +37,7 @@ public class RoomEntity implements Serializable {
     //@NotNull
     private RoomStatusEnum roomStatus;
     
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private RoomTypeEntity roomType;
     
@@ -47,8 +48,9 @@ public class RoomEntity implements Serializable {
         datesOnWhichTheRoomIsUsed = new ArrayList<>();
     }
 
-    public RoomEntity(Integer roomNumber, RoomStatusEnum roomStatus) {
+    public RoomEntity(Integer roomNumber, RoomStatusEnum roomStatus, RoomTypeEntity roomType) {
         this();
+        this.roomType = roomType;
         this.roomNumber = roomNumber;
         this.roomStatus = roomStatus;
         
