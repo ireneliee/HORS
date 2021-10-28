@@ -61,12 +61,6 @@ public class RoomTypeEntity implements Serializable {
         this.capacity = capacity;
         this.amenities = amenities;
         this.roomRanking = rank;
-        
-        LocalDate dateOfCreation = LocalDate.now();
-        LocalDate availabilityPeriod = dateOfCreation.plusDays(720);
-        for(LocalDate date = dateOfCreation; date.isBefore(availabilityPeriod); date.plusDays(1)) {
-            roomTypeAvailabilities.add(new RoomTypeAvailability(date, 0, this));
-        }
     }
     
 

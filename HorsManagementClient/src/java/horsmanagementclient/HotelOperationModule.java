@@ -344,8 +344,11 @@ public class HotelOperationModule {
         newRoomType.setRoomRanking(rank);
 
         try {
+            System.out.println("This will take some time. Please wait for a while.");
             Long newRoomTypeId = horsManagementControllerSessionBeanRemote.createRoomType(newRoomType);
             System.out.println("Room type with roomTypeId " + newRoomTypeId + " is created. ");
+            System.out.println("Please take note that the room type will only be available for 6 months. ");
+            System.out.println("After which, you will have to recreate the room type.");
         } catch (RoomTypeExistException | UnknownPersistenceException ex) {
             System.out.println("Creation of room type failed: " + ex.getMessage());
         }

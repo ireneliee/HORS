@@ -5,7 +5,9 @@
  */
 package ejb.session.stateless;
 
+import entity.RoomTypeAvailability;
 import entity.RoomTypeEntity;
+import java.time.LocalDate;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -34,6 +36,12 @@ public class RoomTypeEntitySessionBean implements RoomTypeEntitySessionBeanRemot
     @Override
     public Long createRoomType(RoomTypeEntity newRoomType) throws RoomTypeExistException, 
             UnknownPersistenceException {
+        
+        LocalDate dateOfCreation = LocalDate.now();
+        LocalDate availabilityPeriod = dateOfCreation.plusDays(10);
+        for(LocalDate date = dateOfCreation; date.isBefore(availabilityPeriod); date.plusDays(1)) {
+            newRoomType.getRoomTypeAvailabilities().add(new RoomTypeAvailability(date, 0, newRoomType));
+        }
         try {
             em.persist(newRoomType);
             /*
