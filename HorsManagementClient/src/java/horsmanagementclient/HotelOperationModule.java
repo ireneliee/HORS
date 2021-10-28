@@ -241,6 +241,7 @@ public class HotelOperationModule {
                         PeakRateEntity newPeakRate = new PeakRateEntity();
                         newPeakRate.setRoomType(roomType);
                         newPeakRate.setRate(rate);
+                        System.out.println("Now, enter the validity date: ");
                         System.out.print("Enter the starting validity date in the form of M/d/yyyy >");
                         LocalDate dateToPutStart = dateInput(scanner.nextLine().trim());
 
@@ -272,7 +273,7 @@ public class HotelOperationModule {
     }
 
     public LocalDate dateInput(String userInput) {
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("M/d/yyyy");
         LocalDate date = LocalDate.parse(userInput, dateFormat);
 
         return date;
