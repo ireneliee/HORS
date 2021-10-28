@@ -16,15 +16,15 @@ import static jdk.nashorn.internal.runtime.Debug.id;
  * @author irene
  */
 @Entity
-public class NormalRate extends RoomRateEntity implements Serializable {
+public class NormalRateEntity extends RoomRateEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-    public NormalRate(){
+    public NormalRateEntity(){
         super();
     }
     
-    public NormalRate(String name, BigDecimal rate, RoomTypeEntity roomType) {
+    public NormalRateEntity(String name, BigDecimal rate, RoomTypeEntity roomType) {
         super(name, rate, roomType, LocalDate.now(), LocalDate.of(2100, 01, 01));
     }
 
@@ -38,10 +38,10 @@ public class NormalRate extends RoomRateEntity implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof NormalRate)) {
+        if (!(object instanceof NormalRateEntity)) {
             return false;
         }
-        NormalRate other = (NormalRate) object;
+        NormalRateEntity other = (NormalRateEntity) object;
         if ((this.getRoomRateId() == null && other.getRoomRateId() != null) ||
                 (this.getRoomRateId() != null && !this.getRoomRateId().equals(other.getRoomRateId()))) {
             return false;

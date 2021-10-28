@@ -7,8 +7,15 @@ package horsmanagementclient;
 
 import ejb.session.stateless.HorsManagementControllerSessionBeanRemote;
 import entity.EmployeeEntity;
+import entity.NormalRateEntity;
+import entity.PeakRateEntity;
+import entity.PromotionRateEntity;
+import entity.PublishedRateEntity;
 import entity.RoomEntity;
 import entity.RoomTypeEntity;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -16,6 +23,10 @@ import util.enumeration.AccessRightEnum;
 import util.enumeration.RoomStatusEnum;
 import util.exception.InputDataValidationException;
 import util.exception.InvalidAccessRightException;
+import util.exception.NormalRateHasAlreadyExistedException;
+import util.exception.PeakRateHasAlreadyExistedException;
+import util.exception.PromotionRateHasAlreadyExistedException;
+import util.exception.PublishedRateHasAlreadyExistedException;
 import util.exception.RoomNotFoundException;
 import util.exception.RoomNumberExistException;
 import util.exception.RoomTypeExistException;
@@ -46,7 +57,7 @@ public class HotelOperationModule {
 
         if (currentEmployee.getAccessRight() != AccessRightEnum.OPERATIONMANAGER) {
             String errorMessage = "You don't have OPERATIONMANAGER rights to access the system"
-                    + " administration module. ";
+                    + " hotel operation module. ";
             throw new InvalidAccessRightException(errorMessage);
         }
         Scanner scanner = new Scanner(System.in);
@@ -61,7 +72,7 @@ public class HotelOperationModule {
             System.out.println("5: Update room");
             System.out.println("6: Delete room");
             System.out.println("7: View all rooms");
-
+            System.out.println("8: View room allocation exception report");
             System.out.println("9: Back\n");
             response = 0;
 
@@ -98,6 +109,8 @@ public class HotelOperationModule {
 
                     doRetrieveAllRooms();
 
+                } else if (response == 8) {
+
                 } else if (response == 9) {
                     break;
                 } else {
@@ -111,7 +124,158 @@ public class HotelOperationModule {
         }
     }
 
-    public void salesManagerMenu() {
+    public void salesManagerMenu() throws InvalidAccessRightException {
+
+        if (currentEmployee.getAccessRight() != AccessRightEnum.SALESMANAGER) {
+            String errorMessage = "You don't have SALESMANGER rights to access the system"
+                    + " hotel operation module. ";
+            throw new InvalidAccessRightException(errorMessage);
+        }
+        Scanner scanner = new Scanner(System.in);
+        Integer response = 0;
+
+        while (true) {
+            System.out.println("*** HORS Management System :: Hotel Operation :: Sales Manager ***\n");
+            System.out.println("1: Create new room rate");
+            System.out.println("2: View room rate details");
+            System.out.println("3: View all room types");
+            System.out.println("4: Back\n");
+            response = 0;
+
+            while (response < 1 || response > 4) {
+                System.out.print("> ");
+
+                response = scanner.nextInt();
+
+                if (response == 1) {
+                    
+                   doCreateNewRoomRate();
+                   
+                } else if (response == 2) {
+
+                } else if (response == 3) {
+
+                } else if (response == 4) {
+
+                    break;
+
+                } else {
+                    System.out.println("Invalid option, please try again!\n");
+                }
+            }
+
+            if (response == 4) {
+                break;
+            }
+        }
+    }
+
+    public void doCreateNewRoomRate() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("*** HORS Management System :: Hotel Operation :: Sales Manager :: Create a new room rate ***\n");
+
+        while (true) {
+            System.out.println("1: Published rate");
+            System.out.println("2: Normal rate");
+            System.out.println("3: Promotion rate");
+            System.out.println("4: Peak rate");
+            System.out.print(">");
+            Integer roomRateType = Integer.parseInt(scanner.nextLine());
+
+            if (roomRateType >= 1 && roomRateType <= 4) {
+                // rmbr the break
+                System.out.print("Enter the room type you would like to attach the new room rate to>");
+                String roomTypeName = scanner.nextLine().trim();
+                try {
+                    RoomTypeEntity roomType = horsManagementControllerSessionBeanRemote.retrieveRoomType(roomTypeName);
+                    System.out.print("Enter the rate>");
+                    BigDecimal rate = new BigDecimal(scanner.nextDouble());
+                    System.out.println();
+                    if (roomRateType == 1) {
+                        PublishedRateEntity newPublishedRate = new PublishedRateEntity();
+                        newPublishedRate.setRoomType(roomType);
+                        newPublishedRate.setRate(rate);
+                        try {
+                            Long roomRateId = horsManagementControllerSessionBeanRemote
+                                    .createNewPublishedRateEntity(newPublishedRate);
+                            System.out.println("A published room rate of " + roomRateId + " has been created");
+                            break;
+                        } catch (PublishedRateHasAlreadyExistedException | UnknownPersistenceException ex) {
+                            System.out.println("An error has occured in the creation of new room rate: " + ex.getMessage());
+                        }
+                    } else if (roomRateType == 2) {
+                        NormalRateEntity newNormalRate = new NormalRateEntity();
+                        newNormalRate.setRoomType(roomType);
+                        newNormalRate.setRate(rate);
+                        try {
+                            Long roomRateId = horsManagementControllerSessionBeanRemote
+                                    .createNewNormalRateEntity(newNormalRate);
+                            System.out.println("A published room rate of " + roomRateId + " has been created");
+                            break;
+                        } catch (UnknownPersistenceException | NormalRateHasAlreadyExistedException ex) {
+                            System.out.println("An error has occured in the creation of new room rate: " + ex.getMessage());
+                        }
+                    } else if (roomRateType == 3) {
+                        PromotionRateEntity newPromotionRate = new PromotionRateEntity();
+                        newPromotionRate.setRoomType(roomType);
+                        newPromotionRate.setRate(rate);
+                        System.out.print("Enter the starting validity date in the form of M/d/yyyy >");
+                        LocalDate dateToPutStart = dateInput(scanner.nextLine().trim());
+
+                        System.out.print("Enter the ending validity date in the form of M/d/yyyy >");
+                        LocalDate dateToPutEnd = dateInput(scanner.nextLine().trim());
+
+                        newPromotionRate.setStartValidityDate(dateToPutStart);
+                        newPromotionRate.setEndValidityDate(dateToPutEnd);
+
+                        try {
+                            Long roomRateId = horsManagementControllerSessionBeanRemote
+                                    .createNewPromotionRateEntity(newPromotionRate);
+                            System.out.println("A published room rate of " + roomRateId + " has been created");
+                            break;
+                        } catch (UnknownPersistenceException | PromotionRateHasAlreadyExistedException ex) {
+                            System.out.println("An error has occured in the creation of new room rate: " + ex.getMessage());
+                        }
+
+                    } else if (roomRateType == 4) {
+                        PeakRateEntity newPeakRate = new PeakRateEntity();
+                        newPeakRate.setRoomType(roomType);
+                        newPeakRate.setRate(rate);
+                        System.out.print("Enter the starting validity date in the form of M/d/yyyy >");
+                        LocalDate dateToPutStart = dateInput(scanner.nextLine().trim());
+
+                        System.out.print("Enter the ending validity date in the form of M/d/yyyy >");
+                        LocalDate dateToPutEnd = dateInput(scanner.nextLine().trim());
+
+                        newPeakRate.setStartValidityDate(dateToPutStart);
+                        newPeakRate.setEndValidityDate(dateToPutEnd);
+
+                        try {
+                            Long roomRateId = horsManagementControllerSessionBeanRemote
+                                    .createNewPeakRateEntity(newPeakRate);
+                            System.out.println("A published room rate of " + roomRateId + " has been created");
+                            break;
+                        } catch (UnknownPersistenceException | PeakRateHasAlreadyExistedException ex) {
+                            System.out.println("An error has occured in the creation of new room rate: " + ex.getMessage());
+                        }
+
+                    }
+                } catch (RoomTypeNotFoundException ex) {
+                    System.out.println("New room rate creation is cancelled: " + ex.getMessage());
+                }
+
+            } else {
+                System.out.println("Invalid option, please try again!\n");
+            }
+        }
+
+    }
+
+    public LocalDate dateInput(String userInput) {
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        LocalDate date = LocalDate.parse(userInput, dateFormat);
+
+        return date;
     }
 
     public void doDeleteRoom() {
@@ -119,7 +283,7 @@ public class HotelOperationModule {
         System.out.println("*** HORS Management System :: Hotel Operation :: Operation Manager :: Delete a room ***\n");
         try {
             System.out.print("Enter the 4 digits room number that you want to update>");
-            Integer roomNumber = scanner.nextInt();
+            Integer roomNumber = Integer.parseInt(scanner.nextLine());
             try {
                 horsManagementControllerSessionBeanRemote.deleteRoom(roomNumber);
                 System.out.println("Room with room number " + roomNumber + " has been deleted");

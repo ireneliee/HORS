@@ -40,7 +40,7 @@ public class RoomTypeEntitySessionBean implements RoomTypeEntitySessionBeanRemot
         try {
             em.persist(newRoomType);
             LocalDate dateOfCreation = LocalDate.now();
-            LocalDate availabilityPeriod = dateOfCreation.plusDays(185);
+            LocalDate availabilityPeriod = dateOfCreation.plusDays(370);
             for (LocalDate date = dateOfCreation; date.isBefore(availabilityPeriod); date = date.plusDays(1)) {
                 RoomTypeAvailability newRoomTypeAvailability = new RoomTypeAvailability(date, 0, newRoomType);
                 //em.persist(newRoomTypeAvailability);

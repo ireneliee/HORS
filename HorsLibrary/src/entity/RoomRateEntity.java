@@ -22,7 +22,7 @@ import javax.persistence.InheritanceType;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class RoomRateEntity implements Serializable {
+public class RoomRateEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id

@@ -6,7 +6,11 @@
 package ejb.session.stateless;
 
 import entity.EmployeeEntity;
+import entity.NormalRateEntity;
 import entity.PartnerEntity;
+import entity.PeakRateEntity;
+import entity.PromotionRateEntity;
+import entity.PublishedRateEntity;
 import entity.RoomEntity;
 import entity.RoomTypeEntity;
 import java.util.List;
@@ -15,7 +19,11 @@ import javax.ejb.Stateless;
 import util.exception.EmployeeNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.InvalidLoginCredentialException;
+import util.exception.NormalRateHasAlreadyExistedException;
 import util.exception.PartnerNotFoundException;
+import util.exception.PeakRateHasAlreadyExistedException;
+import util.exception.PromotionRateHasAlreadyExistedException;
+import util.exception.PublishedRateHasAlreadyExistedException;
 import util.exception.RoomNotFoundException;
 import util.exception.RoomNumberExistException;
 import util.exception.RoomTypeExistException;
@@ -30,6 +38,9 @@ public class HorsManagementControllerSessionBean implements HorsManagementContro
         HorsManagementControllerSessionBeanLocal {
 
     @EJB
+    private RoomRateEntitySessionBeanLocal roomRateEntitySessionBean;
+
+    @EJB
     private RoomEntitySessionBeanLocal roomEntitySessionBean;
 
     @EJB
@@ -40,6 +51,8 @@ public class HorsManagementControllerSessionBean implements HorsManagementContro
 
     @EJB
     private final EmployeeEntitySessionBeanLocal employeeEntitySessionBean;
+    
+    
     
     public HorsManagementControllerSessionBean(){
         employeeEntitySessionBean = new EmployeeEntitySessionBean();
@@ -149,6 +162,30 @@ public class HorsManagementControllerSessionBean implements HorsManagementContro
       public List<RoomEntity> retrieveAllRooms() {
           return roomEntitySessionBean.retrieveAllRooms();
       }
+      
+      @Override
+      public Long createNewPublishedRateEntity(PublishedRateEntity newPublishedRateEntity) throws PublishedRateHasAlreadyExistedException,
+            UnknownPersistenceException{
+          return roomRateEntitySessionBean.createNewPublishedRateEntity(newPublishedRateEntity);
+      }
+      
+    @Override
+      public Long createNewNormalRateEntity(NormalRateEntity newNormalRateEntity) throws NormalRateHasAlreadyExistedException,
+            UnknownPersistenceException{
+          return roomRateEntitySessionBean.createNewNormalRateEntity(newNormalRateEntity);
+      }
+      
+    @Override
+      public Long createNewPeakRateEntity(PeakRateEntity newPeakRateEntity) throws PeakRateHasAlreadyExistedException,
+            UnknownPersistenceException{
+          return roomRateEntitySessionBean.createNewPeakRateEntity(newPeakRateEntity);
+      }
+      
+    @Override
+       public Long createNewPromotionRateEntity(PromotionRateEntity newPromotionRateEntity) throws PromotionRateHasAlreadyExistedException,
+            UnknownPersistenceException{
+           return roomRateEntitySessionBean.createNewPromotionRateEntity(newPromotionRateEntity);
+       }
    
         
             

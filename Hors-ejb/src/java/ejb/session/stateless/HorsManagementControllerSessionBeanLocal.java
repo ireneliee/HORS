@@ -2,14 +2,22 @@
 package ejb.session.stateless;
 
 import entity.EmployeeEntity;
+import entity.NormalRateEntity;
 import entity.PartnerEntity;
+import entity.PeakRateEntity;
+import entity.PromotionRateEntity;
+import entity.PublishedRateEntity;
 import entity.RoomEntity;
 import entity.RoomTypeEntity;
 import java.util.List;
 import javax.ejb.Local;
 import util.exception.InputDataValidationException;
 import util.exception.InvalidLoginCredentialException;
+import util.exception.NormalRateHasAlreadyExistedException;
 import util.exception.PartnerNotFoundException;
+import util.exception.PeakRateHasAlreadyExistedException;
+import util.exception.PromotionRateHasAlreadyExistedException;
+import util.exception.PublishedRateHasAlreadyExistedException;
 import util.exception.RoomNotFoundException;
 import util.exception.RoomNumberExistException;
 import util.exception.RoomTypeExistException;
@@ -58,5 +66,13 @@ public interface HorsManagementControllerSessionBeanLocal {
      public void deleteRoom(Integer roomNumber) throws RoomNotFoundException;
 
     public List<RoomEntity> retrieveAllRooms();
+
+    public Long createNewPublishedRateEntity(PublishedRateEntity newPublishedRateEntity) throws PublishedRateHasAlreadyExistedException, UnknownPersistenceException;
+
+    public Long createNewNormalRateEntity(NormalRateEntity newNormalRateEntity) throws NormalRateHasAlreadyExistedException, UnknownPersistenceException;
+
+    public Long createNewPeakRateEntity(PeakRateEntity newPeakRateEntity) throws PeakRateHasAlreadyExistedException, UnknownPersistenceException;
+
+    public Long createNewPromotionRateEntity(PromotionRateEntity newPromotionRateEntity) throws PromotionRateHasAlreadyExistedException, UnknownPersistenceException;
     
 }
