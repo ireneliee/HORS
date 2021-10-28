@@ -189,7 +189,7 @@ public class HotelOperationModule {
                 try {
                     RoomTypeEntity roomType = horsManagementControllerSessionBeanRemote.retrieveRoomType(roomTypeName);
                     System.out.print("Enter the rate>");
-                    BigDecimal rate = new BigDecimal(scanner.nextDouble());
+                    BigDecimal rate = new BigDecimal(Double.parseDouble(scanner.nextLine()));
                     System.out.println();
                     if (roomRateType == 1) {
                         PublishedRateEntity newPublishedRate = new PublishedRateEntity();
@@ -202,6 +202,7 @@ public class HotelOperationModule {
                             break;
                         } catch (PublishedRateHasAlreadyExistedException | UnknownPersistenceException ex) {
                             System.out.println("An error has occured in the creation of new room rate: " + ex.getMessage());
+                            break;
                         }
                     } else if (roomRateType == 2) {
                         NormalRateEntity newNormalRate = new NormalRateEntity();
@@ -214,16 +215,22 @@ public class HotelOperationModule {
                             break;
                         } catch (UnknownPersistenceException | NormalRateHasAlreadyExistedException ex) {
                             System.out.println("An error has occured in the creation of new room rate: " + ex.getMessage());
+                            break;
                         }
                     } else if (roomRateType == 3) {
                         PromotionRateEntity newPromotionRate = new PromotionRateEntity();
                         newPromotionRate.setRoomType(roomType);
                         newPromotionRate.setRate(rate);
-                        System.out.print("Enter the starting validity date in the form of M/d/yyyy >");
-                        LocalDate dateToPutStart = dateInput(scanner.nextLine().trim());
+                        
+                        System.out.print("Enter the starting validity date in the form of M/d/yyyy>");
+                        String startDateInString = scanner.nextLine().trim();
 
-                        System.out.print("Enter the ending validity date in the form of M/d/yyyy >");
-                        LocalDate dateToPutEnd = dateInput(scanner.nextLine().trim());
+                        
+                        System.out.print("Enter the ending validity date in the form of M/d/yyyy>");
+                        String endDateInString = scanner.nextLine().trim();
+                        
+                        LocalDate dateToPutStart = dateInput(startDateInString);
+                        LocalDate dateToPutEnd = dateInput(endDateInString);
 
                         newPromotionRate.setStartValidityDate(dateToPutStart);
                         newPromotionRate.setEndValidityDate(dateToPutEnd);
@@ -242,11 +249,16 @@ public class HotelOperationModule {
                         newPeakRate.setRoomType(roomType);
                         newPeakRate.setRate(rate);
                         System.out.println("Now, enter the validity date: ");
-                        System.out.print("Enter the starting validity date in the form of M/d/yyyy >");
-                        LocalDate dateToPutStart = dateInput(scanner.nextLine().trim());
+                        
+                       System.out.print("Enter the starting validity date in the form of M/d/yyyy>");
+                        String startDateInString = scanner.nextLine().trim();
 
-                        System.out.print("Enter the ending validity date in the form of M/d/yyyy >");
-                        LocalDate dateToPutEnd = dateInput(scanner.nextLine().trim());
+                        
+                        System.out.print("Enter the ending validity date in the form of M/d/yyyy>");
+                        String endDateInString = scanner.nextLine().trim();
+                        
+                        LocalDate dateToPutStart = dateInput(startDateInString);
+                        LocalDate dateToPutEnd = dateInput(endDateInString);
 
                         newPeakRate.setStartValidityDate(dateToPutStart);
                         newPeakRate.setEndValidityDate(dateToPutEnd);
@@ -275,7 +287,7 @@ public class HotelOperationModule {
     public LocalDate dateInput(String userInput) {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("M/d/yyyy");
         LocalDate date = LocalDate.parse(userInput, dateFormat);
-
+        
         return date;
     }
 
