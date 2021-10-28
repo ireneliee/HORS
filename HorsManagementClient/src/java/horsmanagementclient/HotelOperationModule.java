@@ -333,7 +333,7 @@ public class HotelOperationModule {
             System.out.println("Rank is outside of the bound (1 - 5). Please enter another rank.");
             rank = Integer.parseInt(scanner.nextLine());
         }
-        newRoomType.setRank(rank);
+        newRoomType.setRoomRanking(rank);
 
         try {
             Long newRoomTypeId = horsManagementControllerSessionBeanRemote.createRoomType(newRoomType);

@@ -35,7 +35,7 @@ public class RoomTypeEntity implements Serializable {
     private Integer bed;
     private Integer capacity;
     private String amenities;
-    private Integer rank;
+    private Integer roomRanking;
     private Boolean disabled;
     
     @OneToMany(mappedBy="roomType")
@@ -59,7 +59,7 @@ public class RoomTypeEntity implements Serializable {
         this.bed = bed;
         this.capacity = capacity;
         this.amenities = amenities;
-        this.rank = rank;
+        this.roomRanking = rank;
         
         LocalDate dateOfCreation = LocalDate.now();
         LocalDate availabilityPeriod = dateOfCreation.plusDays(720);
@@ -146,12 +146,12 @@ public class RoomTypeEntity implements Serializable {
         this.amenities = amenities;
     }
 
-    public Integer getRank() {
-        return rank;
+    public Integer getRoomRanking() {
+        return roomRanking;
     }
 
-    public void setRank(Integer rank) {
-        this.rank = rank;
+    public void setRoomRanking(Integer roomRanking) {
+        this.roomRanking = roomRanking;
     }
 
     public List<RoomEntity> getRoomEntities() {
@@ -183,7 +183,7 @@ public class RoomTypeEntity implements Serializable {
     public String toString() {
         return "Name: " + this.getName() +"\n" + "Description: " + this.getDescription() + "\n" + 
                 "Size: " + this.getRoomSize() + "\n" + "Bed: " + this.getBed() + "\n" + "Capacity: " + this.getCapacity() + "\n" + 
-                "Amenities: " + this.getAmenities() + "\n" + "Rank: " + this.getRank() + "\n";
+                "Amenities: " + this.getAmenities() + "\n" + "Rank: " + this.getRoomRanking() + "\n";
     }
     
 }

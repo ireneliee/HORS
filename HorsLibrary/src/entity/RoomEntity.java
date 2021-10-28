@@ -40,7 +40,7 @@ public class RoomEntity implements Serializable {
     @JoinColumn(nullable = false)
     private RoomTypeEntity roomType;
     
-    @OneToMany(mappedBy = "RoomEntity")
+    @OneToMany
     private List<DateUsedEntity> datesOnWhichTheRoomIsUsed;
 
     public RoomEntity() {
