@@ -44,9 +44,7 @@ public class RoomTypeAvailability implements Serializable {
         return roomTypeAvailabilityId;
     }
 
-    public void setRoomTypeAvailabilityId(Long roomTypeAvailabilityId) {
-        this.roomTypeAvailabilityId = roomTypeAvailabilityId;
-    }
+    
 
     @Override
     public int hashCode() {

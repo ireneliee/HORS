@@ -7,6 +7,7 @@ package ejb.session.stateless;
 
 import entity.RoomEntity;
 import entity.RoomReservationLineItemEntity;
+import entity.RoomTypeEntity;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +21,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import util.enumeration.RoomStatusEnum;
 import util.exception.InputDataValidationException;
 import util.exception.RoomIsCurrentlyUsedException;
@@ -47,14 +45,21 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
     @Override
     public Long createNewRoom(RoomEntity newRoomEntity) throws RoomNumberExistException,
             UnknownPersistenceException, InputDataValidationException {
-
+        
+       RoomTypeEntity roomTypeOfTheNewRoom = em.find(RoomTypeEntity.class, newRoomEntity.getRoomType()
+       .getRoomTypeId());
+       /*
+       roomTypeOfTheNewRoom.getRoomEntities().size();
+       roomTypeOfTheNewRoom.getRoomTypeAvailabilities().size();
+       */
+        
         try {
-            
-            newRoomEntity.getRoomType().getRoomEntities().add(newRoomEntity);
-            newRoomEntity.getRoomType().getRoomTypeAvailabilities()
+
+            roomTypeOfTheNewRoom.getRoomEntities().add(newRoomEntity);
+            roomTypeOfTheNewRoom.getRoomTypeAvailabilities()
                     .stream()
                     .forEach(x -> x.incrementNoOfAvailableRoomByOne());
-            
+
             em.persist(newRoomEntity);
             em.flush();
 
@@ -101,23 +106,23 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
             if (roomEntityToUpdate.getRoomNumber().equals(roomEntity.getRoomNumber())) {
                 RoomStatusEnum currentStatus = roomEntityToUpdate.getRoomStatus();
                 RoomStatusEnum statusToBeChanged = roomEntity.getRoomStatus();
-                
+
                 roomEntityToUpdate.setRoomStatus(roomEntity.getRoomStatus());
-                
-                if(currentStatus.equals(RoomStatusEnum.AVAILABLE) &&
-                        statusToBeChanged.equals(RoomStatusEnum.NOTAVAILABLE)) {
-                roomEntityToUpdate
-                        .getRoomType()
-                        .getRoomTypeAvailabilities()
-                        .forEach(x -> x.decreaseNoOfAvailableRoomByOne());
+
+                if (currentStatus.equals(RoomStatusEnum.AVAILABLE)
+                        && statusToBeChanged.equals(RoomStatusEnum.NOTAVAILABLE)) {
+                    roomEntityToUpdate
+                            .getRoomType()
+                            .getRoomTypeAvailabilities()
+                            .forEach(x -> x.decreaseNoOfAvailableRoomByOne());
                 }
-                
-                if(currentStatus.equals(RoomStatusEnum.NOTAVAILABLE) &&
-                        statusToBeChanged.equals(RoomStatusEnum.AVAILABLE)) {
-                roomEntityToUpdate
-                        .getRoomType()
-                        .getRoomTypeAvailabilities()
-                        .forEach(x -> x.incrementNoOfAvailableRoomByOne());
+
+                if (currentStatus.equals(RoomStatusEnum.NOTAVAILABLE)
+                        && statusToBeChanged.equals(RoomStatusEnum.AVAILABLE)) {
+                    roomEntityToUpdate
+                            .getRoomType()
+                            .getRoomTypeAvailabilities()
+                            .forEach(x -> x.incrementNoOfAvailableRoomByOne());
                 }
 
             } else {
@@ -138,8 +143,8 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
     @Override
     public Boolean checkIfTheRoomIsUsed(Integer roomNumber) {
         LocalDate now = LocalDate.now();
-        String databaseQuery = "SELECT s FROM RoomReservationLineItemEntity"
-                + "WHERE s.roomAllocation.roomNumber = :iRoomNumber ";
+        String databaseQuery = "SELECT s FROM RoomReservationLineItemEntity s"
+                + " WHERE s.roomAllocation.roomNumber = :iRoomNumber ";
         Query query = em.createQuery(databaseQuery);
         query.setParameter("iRoomNumber", roomNumber);
         List<RoomReservationLineItemEntity> listOfReservationsUsingThatRoom = query.getResultList();
@@ -156,8 +161,8 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
     }
 
     private List<RoomReservationLineItemEntity> findReservationUsingRoom(Integer roomNumber) {
-        String databaseQuery = "SELECT s FROM RoomReservationLineItemEntity"
-                + "WHERE s.roomAllocation.roomNumber = :iRoomNumber ";
+        String databaseQuery = "SELECT s FROM RoomReservationLineItemEntity s"
+                + " WHERE s.roomAllocation.roomNumber = :iRoomNumber ";
         Query query = em.createQuery(databaseQuery);
         query.setParameter("iRoomNumber", roomNumber);
         return query.getResultList();
@@ -165,16 +170,16 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
 
     @Override
     public void deleteRoom(Integer roomNumber) throws RoomNotFoundException {
-         
+
         try {
             deleteUnusedRoom(roomNumber);
         } catch (RoomIsCurrentlyUsedException ex) {
             RoomEntity roomToBeDeleted = retrieveRoomByRoomNumber(roomNumber);
             roomToBeDeleted.setRoomStatus(RoomStatusEnum.NOTAVAILABLE);
             roomToBeDeleted
-                        .getRoomType()
-                        .getRoomTypeAvailabilities()
-                        .forEach(x -> x.decreaseNoOfAvailableRoomByOne());
+                    .getRoomType()
+                    .getRoomTypeAvailabilities()
+                    .forEach(x -> x.decreaseNoOfAvailableRoomByOne());
         } catch (RoomNotFoundException ex) {
             throw new RoomNotFoundException(ex.getMessage());
         }
@@ -185,8 +190,8 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
         RoomEntity roomToBeDeleted;
         try {
             roomToBeDeleted = retrieveRoomByRoomNumber(roomNumber);
-            if(roomToBeDeleted.getRoomStatus().equals(RoomStatusEnum.AVAILABLE)) {
-                 roomToBeDeleted
+            if (roomToBeDeleted.getRoomStatus().equals(RoomStatusEnum.AVAILABLE)) {
+                roomToBeDeleted
                         .getRoomType()
                         .getRoomTypeAvailabilities()
                         .forEach(x -> x.decreaseNoOfAvailableRoomByOne());

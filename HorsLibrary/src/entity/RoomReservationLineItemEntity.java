@@ -30,7 +30,7 @@ public class RoomReservationLineItemEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roomReservationLineItemId;
     
-    @OneToOne (fetch = FetchType.LAZY, optional = false)
+    @OneToOne (optional = false)
     private RoomTypeEntity roomTypeEntity;
     
     @OneToMany

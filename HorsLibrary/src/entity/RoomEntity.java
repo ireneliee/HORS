@@ -37,7 +37,7 @@ public class RoomEntity implements Serializable {
     //@NotNull
     private RoomStatusEnum roomStatus;
     
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private RoomTypeEntity roomType;
     

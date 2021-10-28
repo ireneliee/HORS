@@ -21,6 +21,7 @@ import util.exception.RoomNumberExistException;
 import util.exception.RoomTypeExistException;
 import util.exception.RoomTypeNotFoundException;
 import util.exception.UnknownPersistenceException;
+import util.exception.UpdateRoomException;
 
 public class HotelOperationModule {
 
@@ -57,8 +58,9 @@ public class HotelOperationModule {
             System.out.println("2: View room type details");
             System.out.println("3: View all room types");
             System.out.println("4: Create new room");
-            System.out.println("5: Update a room");
-            System.out.println("6: View all rooms");
+            System.out.println("5: Update room");
+            System.out.println("6: Delete room");
+            System.out.println("7: View all rooms");
 
             System.out.println("9: Back\n");
             response = 0;
@@ -85,6 +87,14 @@ public class HotelOperationModule {
                     doCreateNewRoom();
 
                 } else if (response == 5) {
+
+                    doUpdateRoom();
+
+                } else if (response == 6) {
+
+                    doDeleteRoom();
+
+                } else if (response == 7) {
 
                     doRetrieveAllRooms();
 
@@ -128,12 +138,13 @@ public class HotelOperationModule {
 
         try {
             System.out.print("Enter the 4 digits room number that you want to update>");
-            Integer roomNumber = scanner.nextInt();
+            Integer roomNumber = Integer.parseInt(scanner.nextLine());
             newRoomEntity.setRoomNumber(roomNumber);
+            System.out.print("Enter the new room type: ");
             String roomTypeName = scanner.nextLine();
             try {
-                RoomTypeEntity roomTypeOfTheNewRoom = horsManagementControllerSessionBeanRemote.retrieveRoomType(roomTypeName);
-                newRoomEntity.setRoomType(roomTypeOfTheNewRoom);
+                RoomTypeEntity newRoomTypeEntity = horsManagementControllerSessionBeanRemote.retrieveRoomType(roomTypeName);
+                newRoomEntity.setRoomType(newRoomTypeEntity);
             } catch (RoomTypeNotFoundException ex) {
                 System.out.println("Error in creating a new room: " + "room type not found.");
             }
@@ -144,7 +155,13 @@ public class HotelOperationModule {
 
                 if (availability >= 1 && availability <= 2) {
                     newRoomEntity.setRoomStatus(RoomStatusEnum.values()[availability - 1]);
-                    break;
+                    try {
+                        horsManagementControllerSessionBeanRemote.updateRoom(newRoomEntity);
+                        System.out.println("Room is successfully updated!");
+                        break;
+                    } catch (RoomNotFoundException | UpdateRoomException | InputDataValidationException ex) {
+                        System.out.println("Update failed: " + ex.getMessage());
+                    }
                 } else {
                     System.out.println("Invalid option, please try again!\n");
                 }
@@ -181,8 +198,8 @@ public class HotelOperationModule {
                     try {
 
                         horsManagementControllerSessionBeanRemote.createNewRoom(newRoomEntity);
-                        System.out.println("Room with room number of " + newRoomEntity.getRoomNumber() +
-                                " is successfully created");
+                        System.out.println("Room with room number of " + newRoomEntity.getRoomNumber()
+                                + " is successfully created");
                         break;
                     } catch (RoomNumberExistException | UnknownPersistenceException | InputDataValidationException ex) {
                         System.out.println("Error occurs in the creation of room: " + ex.getMessage());
@@ -213,6 +230,7 @@ public class HotelOperationModule {
 
         try {
             RoomTypeEntity currentRoomType = horsManagementControllerSessionBeanRemote.retrieveRoomType(nameOfRoomType);
+            System.out.println(currentRoomType);
             updateOrDeleteRoomType(currentRoomType.getName());
         } catch (RoomTypeNotFoundException ex) {
             System.out.print("Error in retrieving room details: " + ex.getMessage());

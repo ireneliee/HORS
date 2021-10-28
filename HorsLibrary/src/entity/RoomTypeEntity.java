@@ -6,12 +6,12 @@
 package entity;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -39,10 +39,10 @@ public class RoomTypeEntity implements Serializable {
     private Integer roomRanking;
     private Boolean disabled;
     
-    @OneToMany(mappedBy="roomType")
+    @OneToMany(mappedBy="roomType", fetch = FetchType.EAGER)
     private List<RoomEntity> roomEntities;
     
-    @OneToMany(mappedBy="roomType")
+    @OneToMany(mappedBy="roomType", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<RoomTypeAvailability> roomTypeAvailabilities;
    
             
