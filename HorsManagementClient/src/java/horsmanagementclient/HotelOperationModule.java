@@ -281,7 +281,7 @@ public class HotelOperationModule {
         newRoomType.setDescription(scanner.nextLine());
 
         System.out.print("Enter the size of the room (eg. 10x8) > ");
-        newRoomType.setSize(scanner.nextLine().trim());
+        newRoomType.setRoomSize(scanner.nextLine().trim());
 
         System.out.print("Enter the number of bed>");
         newRoomType.setBed(Integer.parseInt(scanner.nextLine()));
@@ -315,7 +315,7 @@ public class HotelOperationModule {
         newRoomType.setDescription(scanner.nextLine());
 
         System.out.print("Enter the size of the room (eg. 10x8) > ");
-        newRoomType.setSize(scanner.nextLine().trim());
+        newRoomType.setRoomSize(scanner.nextLine().trim());
 
         System.out.print("Enter the number of bed>");
         newRoomType.setBed(Integer.parseInt(scanner.nextLine()));

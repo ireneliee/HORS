@@ -109,7 +109,7 @@ public class RoomTypeEntitySessionBean implements RoomTypeEntitySessionBeanRemot
             RoomTypeEntity roomTypeToUpdate = retrieveRoomType(roomType.getName());
             
             roomTypeToUpdate.setDescription(roomType.getDescription());
-            roomTypeToUpdate.setSize(roomType.getSize());
+            roomTypeToUpdate.setRoomSize(roomType.getRoomSize());
             roomTypeToUpdate.setBed(roomType.getBed());
             roomTypeToUpdate.setCapacity(roomType.getCapacity());
             roomTypeToUpdate.setAmenities(roomType.getAmenities());

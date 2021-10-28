@@ -31,7 +31,7 @@ public class RoomTypeEntity implements Serializable {
     @Column(unique = true)
     private String name;
     private String description;
-    private String size;
+    private String roomSize;
     private Integer bed;
     private Integer capacity;
     private String amenities;
@@ -43,6 +43,7 @@ public class RoomTypeEntity implements Serializable {
     
     @OneToMany(mappedBy="roomType")
     private List<RoomTypeAvailability> roomTypeAvailabilities;
+   
             
     public RoomTypeEntity() {
         roomEntities = new ArrayList<>();
@@ -54,7 +55,7 @@ public class RoomTypeEntity implements Serializable {
         super();
         this.name = name;
         this.description = description;
-        this.size = size;
+        this.roomSize = size;
         this.bed = bed;
         this.capacity = capacity;
         this.amenities = amenities;
@@ -113,12 +114,12 @@ public class RoomTypeEntity implements Serializable {
         this.description = description;
     }
 
-    public String getSize() {
-        return size;
+    public String getRoomSize() {
+        return roomSize;
     }
 
-    public void setSize(String size) {
-        this.size = size;
+    public void setRoomSize(String roomSize) {
+        this.roomSize = roomSize;
     }
 
     public Integer getBed() {
@@ -181,7 +182,7 @@ public class RoomTypeEntity implements Serializable {
     @Override
     public String toString() {
         return "Name: " + this.getName() +"\n" + "Description: " + this.getDescription() + "\n" + 
-                "Size: " + this.getSize() + "\n" + "Bed: " + this.getBed() + "\n" + "Capacity: " + this.getCapacity() + "\n" + 
+                "Size: " + this.getRoomSize() + "\n" + "Bed: " + this.getBed() + "\n" + "Capacity: " + this.getCapacity() + "\n" + 
                 "Amenities: " + this.getAmenities() + "\n" + "Rank: " + this.getRank() + "\n";
     }
     

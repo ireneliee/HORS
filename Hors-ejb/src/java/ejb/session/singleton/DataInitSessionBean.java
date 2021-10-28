@@ -19,7 +19,7 @@ import util.exception.UnknownPersistenceException;
 import util.exception.UsernameExistException;
 
 /**
-dummy files for testing - loading data
+ * dummy files for testing - loading data
  */
 @Singleton
 @LocalBean
@@ -32,27 +32,29 @@ public class DataInitSessionBean {
     @PersistenceContext(unitName = "Hors-ejbPU")
     private EntityManager em;
 
-   @PostConstruct
-   public void postConstruct() {
-       if(em.find(EmployeeEntity.class, 1L) == null) {
-           doDataInitialisation();
-       }
-   }
-   
-   private void doDataInitialisation(){
-       try{
-       EmployeeEntity employeeOne = new EmployeeEntity("Employee", "One", "employeeOne", "password",
-       AccessRightEnum.SYSTEMADMINISTRATOR);
-       employeeEntitySessionBean.createNewEmployee(employeeOne);
-       
-       EmployeeEntity employeeTwo = new EmployeeEntity("Employee", "Two", "employeeTwo", "password",
-       AccessRightEnum.SYSTEMADMINISTRATOR);
-       employeeEntitySessionBean.createNewEmployee(employeeTwo);
-       } catch (UsernameExistException | UnknownPersistenceException ex) {
-           System.out.println(ex.getMessage());
-       }
-       
-   }
+    @PostConstruct
+    public void postConstruct() {
+        if (em.find(EmployeeEntity.class, 1L) == null) {
+            doDataInitialisation();
+        }
+    }
 
-    
+    private void doDataInitialisation() {
+        try {
+            EmployeeEntity employeeOne = new EmployeeEntity("Employee", "One", "employeeOne", "password",
+                    AccessRightEnum.SYSTEMADMINISTRATOR);
+            employeeEntitySessionBean.createNewEmployee(employeeOne);
+
+            EmployeeEntity employeeTwo = new EmployeeEntity("Employee", "Two", "employeeTwo", "password",
+                    AccessRightEnum.SYSTEMADMINISTRATOR);
+            employeeEntitySessionBean.createNewEmployee(employeeTwo);
+            
+            EmployeeEntity employeeThree = new EmployeeEntity("Employee", "Three", "employeeThree", "password",
+                    AccessRightEnum.OPERATIONMANAGER);
+            employeeEntitySessionBean.createNewEmployee(employeeThree);
+        } catch (UsernameExistException | UnknownPersistenceException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
 }
+        
