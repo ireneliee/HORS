@@ -42,7 +42,7 @@ public class RoomTypeEntity implements Serializable {
     @OneToMany(mappedBy="roomType")
     private List<RoomEntity> roomEntities;
     
-    @OneToMany(mappedBy="roomType", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="roomType")
     private List<RoomTypeAvailability> roomTypeAvailabilities;
    
             

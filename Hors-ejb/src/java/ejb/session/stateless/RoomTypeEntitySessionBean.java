@@ -31,106 +31,95 @@ public class RoomTypeEntitySessionBean implements RoomTypeEntitySessionBeanRemot
     @PersistenceContext(unitName = "Hors-ejbPU")
     private EntityManager em;
 
-    public RoomTypeEntitySessionBean(){}
-    
+    public RoomTypeEntitySessionBean() {
+    }
+
     @Override
-    public Long createRoomType(RoomTypeEntity newRoomType) throws RoomTypeExistException, 
+    public Long createRoomType(RoomTypeEntity newRoomType) throws RoomTypeExistException,
             UnknownPersistenceException {
-        
-        LocalDate dateOfCreation = LocalDate.now();
-        LocalDate availabilityPeriod = dateOfCreation.plusDays(10);
-        for(LocalDate date = dateOfCreation; date.isBefore(availabilityPeriod); date.plusDays(1)) {
-            newRoomType.getRoomTypeAvailabilities().add(new RoomTypeAvailability(date, 0, newRoomType));
-        }
         try {
             em.persist(newRoomType);
-            /*
-            newRoomType
-                    .getRoomTypeAvailabilities()
-                    .stream()
-                    .forEach(x -> em.persist(x));
-            */
-            
-            em.flush();
-            return newRoomType.getRoomTypeId();
-            
-        } catch (PersistenceException ex) {
-            if(ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException"))
-                {
-                    if(ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException"))
-                    {
-                        throw new RoomTypeExistException("Room type has already existed.");
-                    }
-                    else
-                    {
-                        throw new UnknownPersistenceException(ex.getMessage());
-                    }
-                }
-                else
-                {
-                    throw new UnknownPersistenceException(ex.getMessage());
-                }
+            LocalDate dateOfCreation = LocalDate.now();
+            LocalDate availabilityPeriod = dateOfCreation.plusDays(10);
+            for (LocalDate date = dateOfCreation; date.isBefore(availabilityPeriod); date.plusDays(1)) {
+                RoomTypeAvailability newRoomTypeAvailability = new RoomTypeAvailability(date, 0, newRoomType);
+                em.persist(newRoomTypeAvailability);
+                newRoomType.getRoomTypeAvailabilities().add(newRoomTypeAvailability);
             }
 
+            em.flush();
+            return newRoomType.getRoomTypeId();
+
+        } catch (PersistenceException ex) {
+            if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
+                if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
+                    throw new RoomTypeExistException("Room type has already existed.");
+                } else {
+                    throw new UnknownPersistenceException(ex.getMessage());
+                }
+            } else {
+                throw new UnknownPersistenceException(ex.getMessage());
+            }
         }
-    
+
+    }
+
     @Override
     public List<RoomTypeEntity> retrieveAllRoomType() {
         String databaseQueryString = "SELECT s FROM RoomTypeEntity s";
         Query databaseQuery = em.createQuery(databaseQueryString);
         return databaseQuery.getResultList();
-        
+
     }
-    
+
     @Override
     public RoomTypeEntity retrieveRoomType(String name) throws RoomTypeNotFoundException {
         String databaseQueryString = "SELECT s FROM RoomTypeEntity s WHERE s.name = :iName";
         Query query = em.createQuery(databaseQueryString);
         query.setParameter("iName", name);
-        
-        try{
-            return (RoomTypeEntity)query.getSingleResult();
-        } catch(NoResultException | NonUniqueResultException ex) {
+
+        try {
+            return (RoomTypeEntity) query.getSingleResult();
+        } catch (NoResultException | NonUniqueResultException ex) {
             throw new RoomTypeNotFoundException("Room name " + name + " does not exist!");
         }
-        
+
     }
-    
+
     @Override
     public void deleteRoomType(String name) throws RoomTypeNotFoundException {
         RoomTypeEntity roomTypeToBeDeleted;
-        try{
+        try {
             roomTypeToBeDeleted = retrieveRoomType(name);
-        } catch(RoomTypeNotFoundException ex) {
+        } catch (RoomTypeNotFoundException ex) {
             throw new RoomTypeNotFoundException(ex.getMessage());
         }
-        
-        if(roomTypeEntityIsNotUsed(roomTypeToBeDeleted)) {
+
+        if (roomTypeEntityIsNotUsed(roomTypeToBeDeleted)) {
             em.remove(roomTypeToBeDeleted);
         } else {
             roomTypeToBeDeleted.setDisabled(Boolean.TRUE);
         }
- 
+
     }
-    
+
     @Override
     public void updateRoomType(RoomTypeEntity roomType) throws RoomTypeNotFoundException {
-        try{
+        try {
             RoomTypeEntity roomTypeToUpdate = retrieveRoomType(roomType.getName());
-            
+
             roomTypeToUpdate.setDescription(roomType.getDescription());
             roomTypeToUpdate.setRoomSize(roomType.getRoomSize());
             roomTypeToUpdate.setBed(roomType.getBed());
             roomTypeToUpdate.setCapacity(roomType.getCapacity());
             roomTypeToUpdate.setAmenities(roomType.getAmenities());
             roomTypeToUpdate.setDisabled(roomType.getDisabled());
-            
+
         } catch (RoomTypeNotFoundException ex) {
             throw new RoomTypeNotFoundException(ex.getMessage());
         }
     }
-    
-    
+
     private boolean roomTypeEntityIsNotUsed(RoomTypeEntity roomType) {
         return roomType.getRoomEntities().isEmpty();
     }
