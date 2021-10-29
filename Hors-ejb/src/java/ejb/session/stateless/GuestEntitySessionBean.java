@@ -28,6 +28,11 @@ public class GuestEntitySessionBean implements GuestEntitySessionBeanRemote, Gue
 
     @PersistenceContext(unitName = "Hors-ejbPU")
     private EntityManager em;
+
+    public GuestEntitySessionBean() {
+    }
+    
+    
   
     @Override
     public GuestEntity guestLogin(String username, String password) throws InvalidLoginCredentialException {
@@ -84,7 +89,7 @@ public class GuestEntitySessionBean implements GuestEntitySessionBeanRemote, Gue
                     else
                     {
                         throw new UnknownPersistenceException(ex.getMessage());
-                    }
+                }
                 }
                 else
                 {

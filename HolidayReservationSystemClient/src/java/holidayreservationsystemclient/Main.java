@@ -5,17 +5,26 @@
  */
 package holidayreservationsystemclient;
 
+import ejb.session.stateless.PartnerEntitySessionBeanRemote;
+import javax.ejb.EJB;
+
 /**
  *
  * @author irene
  */
 public class Main {
 
+    @EJB
+    private static PartnerEntitySessionBeanRemote partnerEntitySessionBeanRemote;
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        
+        MainApp mainApp = new MainApp(partnerEntitySessionBeanRemote);
+        mainApp.runApp();
     }
     
 }

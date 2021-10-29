@@ -3,14 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package horsreservationclient;
+package holidayreservationsystemclient;
 
-import ejb.session.stateless.GuestEntitySessionBeanRemote;
-import entity.GuestEntity;
+import ejb.session.stateless.PartnerEntitySessionBeanRemote;
+import entity.PartnerEntity;
 import java.util.Scanner;
-import util.exception.InvalidAccessRightException;
 import util.exception.InvalidLoginCredentialException;
-import util.exception.UnknownPersistenceException;
 import util.exception.UsernameExistException;
 
 /**
@@ -19,15 +17,14 @@ import util.exception.UsernameExistException;
  */
 public class MainApp {
     
-    private GuestEntitySessionBeanRemote guestEntitySessionBeanRemote;
-    private GuestEntity currentGuestEntity;
+    private static PartnerEntitySessionBeanRemote partnerEntitySessionBeanRemote;
+    private PartnerEntity currentPartnerEntity;
 
     public MainApp() {
     }
     
-   
-    public MainApp(GuestEntitySessionBeanRemote guestEntitySessionBeanRemote) {
-        this.guestEntitySessionBeanRemote = guestEntitySessionBeanRemote;
+    public MainApp(PartnerEntitySessionBeanRemote partnerEntitySessionBeanRemote) {
+        this.partnerEntitySessionBeanRemote = partnerEntitySessionBeanRemote;
     }
     
     
@@ -38,11 +35,11 @@ public class MainApp {
         
         while(true)
         {
-            System.out.println("*** Welcome Hors Reservation (v4.1) ***\n");
+            System.out.println("*** Welcome Hors Reservation System (v4.1) ***\n");
             System.out.println("1: Login");
-            System.out.println("2: Register");
-            System.out.println("3: Search Hotel Room");
-            System.out.println("4: Exit\n");
+            System.out.println("2: Search Hotel");
+            System.out.println("3: Exit\n");
+         
             response = 0;
             
             while(response < 1 || response > 3)
@@ -66,31 +63,19 @@ public class MainApp {
                 }
                 else if (response == 2)
                 {
-                    try
-                    {
-                        doRegister();
-                        System.out.println("Register successful!\n");
-                    }
-                    catch(UsernameExistException ex) 
-                    {
-                        System.out.println("Invalid login credential: " + ex.getMessage() + "\n");
-                    }
+                   //search hotel
                 }
                 else if (response == 3)
                 {
-                    //search room           
+                    break;               
                 }
-                else if (response == 4)
+                else
                 {
-                    break;
-                }
-                else 
-                {
-                    System.out.println("Invalid option, please try again!\n");
+                    System.out.println("Invalid option, please try again!\n");                
                 }
             }
             
-            if(response == 4)
+            if(response == 3)
             {
                 break;
             }
@@ -103,7 +88,7 @@ public class MainApp {
         String username = "";
         String password = "";
         
-        System.out.println("*** HORS Reservation  :: Login ***\n");
+        System.out.println("*** HORS Reservation System :: Login ***\n");
         System.out.print("Enter username> ");
         username = scanner.nextLine().trim();
         System.out.print("Enter password> ");
@@ -111,7 +96,7 @@ public class MainApp {
         
         if(username.length() > 0 && password.length() > 0)
         {
-            currentGuestEntity = guestEntitySessionBeanRemote.guestLogin(username, password);
+            currentPartnerEntity = partnerEntitySessionBeanRemote.partnerLogin(username, password);
         }
         else
         {
@@ -119,42 +104,7 @@ public class MainApp {
         }
     }
     
-    private void doRegister() throws UsernameExistException {
-        Scanner scanner = new Scanner(System.in);
-        GuestEntity newGuestEntity = new GuestEntity();
-        
-        System.out.println("*** HORS Reservation  :: Reservation***\n");
-        System.out.print("Enter First Name> ");
-        newGuestEntity.setFirstName(scanner.nextLine().trim());
-        System.out.print("Enter Last Name> ");
-        newGuestEntity.setLastName(scanner.nextLine().trim());
-        System.out.print("Enter username>");
-        String username = scanner.nextLine().trim();
-        newGuestEntity.setUsername(username);
-        System.out.print("Enter password>");
-        newGuestEntity.setPassword(scanner.nextLine());
-        System.out.print("Enter email>");
-        newGuestEntity.setEmail(scanner.nextLine());
-        System.out.print("Enter mobileNo>");
-        newGuestEntity.setMobileNo(scanner.nextLine());
-        System.out.print("Enter passportNo>");
-        newGuestEntity.setPassportNo(scanner.nextLine());
-        System.out.println();
-        
-        
-        Long newGuestId = 0L;
-            try{
-                newGuestId = guestEntitySessionBeanRemote.guestRegister(newGuestEntity);
-            } catch (UsernameExistException | UnknownPersistenceException ex) {
-                System.out.println(ex.getMessage());
-            }
-            System.out.println("A new employee with employeeId " + newGuestId + " is created");
-                
-              
-    }
-    
-    
-     private void menuMain()
+    private void menuMain()
     {
         Scanner scanner = new Scanner(System.in);
         Integer response = 0;
@@ -162,8 +112,7 @@ public class MainApp {
         while(true)
         {
             System.out.println("*** Hors Reservation System ***\n");
-            System.out.println("You are login as " + currentGuestEntity.getFirstName() + " " + 
-                    currentGuestEntity.getLastName());
+            System.out.println("You are login as " + currentPartnerEntity.getPartnerName());
             System.out.println("1: Search Hotel Room");
             System.out.println("2: View My Reservation Details");
             System.out.println("3: View All My Reservation");
@@ -204,4 +153,5 @@ public class MainApp {
             }
         }
     }
+    
 }

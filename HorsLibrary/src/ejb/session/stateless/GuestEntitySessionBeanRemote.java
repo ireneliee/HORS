@@ -24,5 +24,5 @@ public interface GuestEntitySessionBeanRemote {
     public GuestEntity retrieveGuestByUsername(String username) throws GuestNotFoundException;
     
     public Long guestRegister(GuestEntity newGuestEntity) throws UsernameExistException, UnknownPersistenceException;
-    
+
 }
