@@ -229,6 +229,7 @@ public class HotelOperationModule {
                 } else if (response == 2) {
 
                     doDeleteRoomRateEntity(currentRoomRate);
+                    break;
 
                 } else if (response == 3) {
                     
@@ -286,6 +287,7 @@ public class HotelOperationModule {
         System.out.println("*** HORS Management System :: Hotel Operation :: Sales Manager :: View room rate details :: Delete ***\n");
         try{
             horsManagementControllerSessionBeanRemote.deleteRoomRateEntity(currentRoomRate);
+            System.out.println("Room rate is successfully deleted.");
         } catch(DeleteRoomRateException ex) {
             System.out.println(ex.getMessage());
         }

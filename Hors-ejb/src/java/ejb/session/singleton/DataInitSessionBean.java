@@ -16,6 +16,8 @@ import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.LocalBean;
 import javax.ejb.Startup;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import util.enumeration.AccessRightEnum;
@@ -45,8 +47,18 @@ public class DataInitSessionBean {
 
     @PersistenceContext(unitName = "Hors-ejbPU")
     private EntityManager em;
+    
+    /*
+    private RoomTypeEntity roomTypeOne;
+    private RoomTypeEntity roomTypeTwo;
+    private RoomTypeEntity roomTypeThree;
+    private RoomTypeEntity roomTypeFour;
+    private RoomTypeEntity roomTypeFive;
+*/
+    
 
     @PostConstruct
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void postConstruct() {
         if (em.find(EmployeeEntity.class, 1L) == null) {
             doDataInitialisationEmployee();
@@ -55,51 +67,47 @@ public class DataInitSessionBean {
         if (em.find(RoomTypeEntity.class, 1L) == null) {
             doDataInitialisationRoomTypeEntity();
         }
+        /*
+        if(em.find(RoomEntity.class, 1L) == null) {
+            doDataInitialisationRoomEntity();
+        }
+        */
     }
-
+    
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     private void doDataInitialisationRoomTypeEntity() {
         try {
+            System.out.println("Reach A");
             RoomTypeEntity roomTypeOne = new RoomTypeEntity("Deluxe", "Basic room", "10x8", 2, 2, "wifi", 1);
+            System.out.println("Reach B");
             roomTypeEntitySessionBean.createRoomType(roomTypeOne);
+            System.out.println("Room type one");
 
             RoomTypeEntity roomTypeTwo = new RoomTypeEntity("Premium", "Better room", "12x8", 2, 2, "bathtub", 2);
             roomTypeEntitySessionBean.createRoomType(roomTypeTwo);
+            System.out.println("Room type two");
 
             RoomTypeEntity roomTypeThree = new RoomTypeEntity("Premium plus", "Much better room", "12x10", 2, 3, "bathtub + sofa", 3);
             roomTypeEntitySessionBean.createRoomType(roomTypeThree);
+            System.out.println("Room type three");
 
             RoomTypeEntity roomTypeFour = new RoomTypeEntity("Queen", "Much better room", "12x10", 3, 3, "bathtub + sofa", 4);
             roomTypeEntitySessionBean.createRoomType(roomTypeFour);
+            System.out.println("Room type four");
 
-            RoomTypeEntity roomTypeFive = new RoomTypeEntity("King", "Much better room", "12x14", 2, 3, "bathtub + sofa", 5);
+           RoomTypeEntity roomTypeFive = new RoomTypeEntity("King", "Much better room", "12x14", 2, 3, "bathtub + sofa", 5);
             roomTypeEntitySessionBean.createRoomType(roomTypeFive);
+            System.out.println("Room type five");
 
-            try {
-                RoomEntity roomOne = new RoomEntity(2015, RoomStatusEnum.AVAILABLE, roomTypeOne);
-                roomEntitySessionBean.createNewRoom(roomOne);
-                
-                RoomEntity roomTwo = new RoomEntity(3015, RoomStatusEnum.AVAILABLE, roomTypeTwo);
-                roomEntitySessionBean.createNewRoom(roomTwo);
-                
-                RoomEntity roomThree = new RoomEntity(4015, RoomStatusEnum.AVAILABLE, roomTypeThree);
-                roomEntitySessionBean.createNewRoom(roomThree);
-                
-                RoomEntity roomFour = new RoomEntity(5015, RoomStatusEnum.AVAILABLE, roomTypeFour);
-                roomEntitySessionBean.createNewRoom(roomFour);
-                
-                RoomEntity roomFive = new RoomEntity(6015, RoomStatusEnum.NOTAVAILABLE, roomTypeFive);
-                roomEntitySessionBean.createNewRoom(roomFive);
-                
-            } catch (RoomNumberExistException | UnknownPersistenceException | InputDataValidationException ex) {
-                System.out.print(ex.getMessage());
-            }
+           
 
         } catch (RoomTypeExistException | UnknownPersistenceException ex) {
             System.out.println(ex.getMessage());
         }
 
     }
-
+    
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     private void doDataInitialisationEmployee() {
         try {
             EmployeeEntity employeeOne = new EmployeeEntity("Employee", "One", "employeeOne", "password",
@@ -121,4 +129,34 @@ public class DataInitSessionBean {
             System.out.println(ex.getMessage());
         }
     }
+    
+    /*
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    private void doDataInitialisationRoomEntity() {
+         try {
+                RoomEntity roomOne = new RoomEntity(2015, RoomStatusEnum.AVAILABLE, roomTypeOne);
+                roomEntitySessionBean.createNewRoom(roomOne);
+                System.out.println("Room one");
+                
+                RoomEntity roomTwo = new RoomEntity(3015, RoomStatusEnum.AVAILABLE, roomTypeTwo);
+                roomEntitySessionBean.createNewRoom(roomTwo);
+                System.out.println("Room two");
+                
+                RoomEntity roomThree = new RoomEntity(4015, RoomStatusEnum.AVAILABLE, roomTypeThree);
+                roomEntitySessionBean.createNewRoom(roomThree);
+                System.out.println("Room three");
+                
+                RoomEntity roomFour = new RoomEntity(5015, RoomStatusEnum.AVAILABLE, roomTypeFour);
+                roomEntitySessionBean.createNewRoom(roomFour);
+                System.out.println("Room four");
+                
+                RoomEntity roomFive = new RoomEntity(6015, RoomStatusEnum.NOTAVAILABLE, roomTypeFive);
+                roomEntitySessionBean.createNewRoom(roomFive);
+                System.out.println("Room five");
+                
+            } catch (RoomNumberExistException | UnknownPersistenceException | InputDataValidationException ex) {
+                System.out.print(ex.getMessage());
+            }
+    }
+*/
 }
