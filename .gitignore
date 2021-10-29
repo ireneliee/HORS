@@ -40,9 +40,9 @@ HorsManagementClient/nbproject/private/
 HorsManagementClient/build/
 HorsManagementClient/dist/
 
-DemoGitLibrary/nbproject/private/
-DemoGitLibrary/build/
-DemoGitLibrary/dist/
+HorsLibrary/nbproject/private/
+HorsLibrary/build/
+HorsLibrary/dist/
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
