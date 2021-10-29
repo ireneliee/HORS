@@ -12,6 +12,7 @@ import entity.PeakRateEntity;
 import entity.PromotionRateEntity;
 import entity.PublishedRateEntity;
 import entity.RoomEntity;
+import entity.RoomRateEntity;
 import entity.RoomTypeEntity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Scanner;
 import util.enumeration.AccessRightEnum;
 import util.enumeration.RoomStatusEnum;
+import util.exception.DeleteRoomRateException;
 import util.exception.InputDataValidationException;
 import util.exception.InvalidAccessRightException;
 import util.exception.NormalRateHasAlreadyExistedException;
@@ -29,6 +31,7 @@ import util.exception.PromotionRateHasAlreadyExistedException;
 import util.exception.PublishedRateHasAlreadyExistedException;
 import util.exception.RoomNotFoundException;
 import util.exception.RoomNumberExistException;
+import util.exception.RoomRateEntityNotFoundException;
 import util.exception.RoomTypeExistException;
 import util.exception.RoomTypeNotFoundException;
 import util.exception.UnknownPersistenceException;
@@ -138,7 +141,7 @@ public class HotelOperationModule {
             System.out.println("*** HORS Management System :: Hotel Operation :: Sales Manager ***\n");
             System.out.println("1: Create new room rate");
             System.out.println("2: View room rate details");
-            System.out.println("3: View all room types");
+            System.out.println("3: View all room rate types");
             System.out.println("4: Back\n");
             response = 0;
 
@@ -148,13 +151,17 @@ public class HotelOperationModule {
                 response = scanner.nextInt();
 
                 if (response == 1) {
-                    
-                   doCreateNewRoomRate();
-                   
+
+                    doCreateNewRoomRate();
+
                 } else if (response == 2) {
 
-                } else if (response == 3) {
+                    doViewParticularRoomRateDetails();
 
+                } else if (response == 3) {
+                    
+                    doRetrieveAllRoomRate();
+                    
                 } else if (response == 4) {
 
                     break;
@@ -168,6 +175,121 @@ public class HotelOperationModule {
                 break;
             }
         }
+    }
+    
+    public void doRetrieveAllRoomRate() {
+        horsManagementControllerSessionBeanRemote
+                .retrieveAllRoomRate()
+                .forEach(System.out::println);
+    }
+
+    public void doViewParticularRoomRateDetails() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("*** HORS Management System :: Hotel Operation :: Sales Manager :: View room rate details ***\n");
+
+        System.out.print("Enter the id of the room rate>");
+        String roomRateIdInString = scanner.nextLine().trim();
+        Long roomRateId = Long.parseLong(roomRateIdInString);
+
+        try {
+            System.out.println("Now, you are viewing: ");
+            RoomRateEntity currentRoomRate = horsManagementControllerSessionBeanRemote.retrieveRoomRateDetails(roomRateId);
+            System.out.println(currentRoomRate);
+            doUpdateOrDeleteRoomRateEntity(currentRoomRate);
+        } catch (RoomRateEntityNotFoundException ex) {
+            System.out.println("Error occurs during retrieval: " + ex.getMessage());
+        }
+    }
+
+    public void doUpdateOrDeleteRoomRateEntity(RoomRateEntity currentRoomRate) {
+        Scanner scanner = new Scanner(System.in);
+        Integer response = 0;
+        while (true) {
+            System.out.println("*** HORS Management System :: Hotel Operation :: Sales Manager :: View room rate details :: Update or Delete Room Rate ***\n");
+            System.out.println("1: Update room rate");
+            System.out.println("2: Delete room rate");
+            System.out.println("3: Back");
+            response = 0;
+
+            while (response < 1 || response > 3) {
+                System.out.print("> ");
+
+                response = Integer.parseInt(scanner.nextLine());
+
+                if (response == 1) {
+
+                    if (currentRoomRate.getClass() == PromotionRateEntity.class
+                            || currentRoomRate.getClass() == PeakRateEntity.class) {
+                        doUpdatePromotionOrPeakRate(currentRoomRate);
+                    } else if (currentRoomRate.getClass() == PublishedRateEntity.class
+                            || currentRoomRate.getClass() == NormalRateEntity.class) {
+                        doUpdatePublishedOrNormalRate(currentRoomRate);
+                    }
+
+                } else if (response == 2) {
+
+                    doDeleteRoomRateEntity(currentRoomRate);
+
+                } else if (response == 3) {
+                    
+                    break;
+
+                } else {
+                    System.out.println("Invalid option, please try again!\n");
+                }
+            }
+
+            if (response == 3) {
+                break;
+            }
+        }
+
+    }
+
+    public void doUpdatePromotionOrPeakRate(RoomRateEntity currentRoomRate) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("*** HORS Management System :: Hotel Operation :: Sales Manager :: View room rate details :: Update ***\n");
+        System.out.println("Do take note that you are only allowed to change the nominal rate and the validity of the room rate");
+        System.out.print("Enter the new nominal rate >");
+        BigDecimal rate = new BigDecimal(Double.parseDouble(scanner.nextLine()));
+
+        System.out.print("Enter the starting validity date in the form of M/d/yyyy>");
+        String startDateInString = scanner.nextLine().trim();
+
+        System.out.print("Enter the ending validity date in the form of M/d/yyyy>");
+        String endDateInString = scanner.nextLine().trim();
+
+        LocalDate dateToPutStart = dateInput(startDateInString);
+        LocalDate dateToPutEnd = dateInput(endDateInString);
+        
+        currentRoomRate.setRate(rate);
+        currentRoomRate.setStartValidityDate(dateToPutStart);
+        currentRoomRate.setEndValidityDate(dateToPutEnd);
+        
+        horsManagementControllerSessionBeanRemote.updatePromotionAndPeakRate(currentRoomRate);
+        System.out.println("Room rate is successfully updated");
+    }
+
+    public void doUpdatePublishedOrNormalRate(RoomRateEntity currentRoomRate) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("*** HORS Management System :: Hotel Operation :: Sales Manager :: View room rate details :: Update ***\n");
+        System.out.println("Do take note that you are only allowed to change the nominal rate of the room rate");
+        System.out.print("Enter the new nominal rate >");
+        BigDecimal rate = new BigDecimal(Double.parseDouble(scanner.nextLine()));
+        currentRoomRate.setRate(rate);
+        
+        horsManagementControllerSessionBeanRemote.updatePublishedAndNormalRate(currentRoomRate);
+        System.out.println("Room rate is successfully updated");
+    }
+
+    public void doDeleteRoomRateEntity(RoomRateEntity currentRoomRate) {
+        System.out.println("*** HORS Management System :: Hotel Operation :: Sales Manager :: View room rate details :: Delete ***\n");
+        try{
+            horsManagementControllerSessionBeanRemote.deleteRoomRateEntity(currentRoomRate);
+        } catch(DeleteRoomRateException ex) {
+            System.out.println(ex.getMessage());
+        }
+
     }
 
     public void doCreateNewRoomRate() {
@@ -221,19 +343,22 @@ public class HotelOperationModule {
                         PromotionRateEntity newPromotionRate = new PromotionRateEntity();
                         newPromotionRate.setRoomType(roomType);
                         newPromotionRate.setRate(rate);
-                        
+
                         System.out.print("Enter the starting validity date in the form of M/d/yyyy>");
                         String startDateInString = scanner.nextLine().trim();
 
-                        
                         System.out.print("Enter the ending validity date in the form of M/d/yyyy>");
                         String endDateInString = scanner.nextLine().trim();
-                        
+
                         LocalDate dateToPutStart = dateInput(startDateInString);
                         LocalDate dateToPutEnd = dateInput(endDateInString);
 
                         newPromotionRate.setStartValidityDate(dateToPutStart);
                         newPromotionRate.setEndValidityDate(dateToPutEnd);
+
+                        System.out.print("Enter the name of the promotion rate>");
+                        String roomRateName = scanner.nextLine();
+                        newPromotionRate.setName(roomRateName);
 
                         try {
                             Long roomRateId = horsManagementControllerSessionBeanRemote
@@ -249,14 +374,13 @@ public class HotelOperationModule {
                         newPeakRate.setRoomType(roomType);
                         newPeakRate.setRate(rate);
                         System.out.println("Now, enter the validity date: ");
-                        
-                       System.out.print("Enter the starting validity date in the form of M/d/yyyy>");
+
+                        System.out.print("Enter the starting validity date in the form of M/d/yyyy>");
                         String startDateInString = scanner.nextLine().trim();
 
-                        
                         System.out.print("Enter the ending validity date in the form of M/d/yyyy>");
                         String endDateInString = scanner.nextLine().trim();
-                        
+
                         LocalDate dateToPutStart = dateInput(startDateInString);
                         LocalDate dateToPutEnd = dateInput(endDateInString);
 
@@ -287,7 +411,7 @@ public class HotelOperationModule {
     public LocalDate dateInput(String userInput) {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("M/d/yyyy");
         LocalDate date = LocalDate.parse(userInput, dateFormat);
-        
+
         return date;
     }
 

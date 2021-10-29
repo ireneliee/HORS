@@ -51,7 +51,7 @@ public class NormalRateEntity extends RoomRateEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.NormalRate[ id=" + this.getRoomRateId() + " ]";
+        return super.toString();
     }
     
 }

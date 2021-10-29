@@ -9,11 +9,15 @@ import entity.NormalRateEntity;
 import entity.PeakRateEntity;
 import entity.PromotionRateEntity;
 import entity.PublishedRateEntity;
+import entity.RoomRateEntity;
+import java.util.List;
 import javax.ejb.Local;
+import util.exception.DeleteRoomRateException;
 import util.exception.NormalRateHasAlreadyExistedException;
 import util.exception.PeakRateHasAlreadyExistedException;
 import util.exception.PromotionRateHasAlreadyExistedException;
 import util.exception.PublishedRateHasAlreadyExistedException;
+import util.exception.RoomRateEntityNotFoundException;
 import util.exception.UnknownPersistenceException;
 
 /**
@@ -30,5 +34,17 @@ public interface RoomRateEntitySessionBeanLocal {
     public Long createNewPeakRateEntity(PeakRateEntity newPeakRateEntity) throws PeakRateHasAlreadyExistedException, UnknownPersistenceException;
 
     public Long createNewPromotionRateEntity(PromotionRateEntity newPromotionRateEntity) throws PromotionRateHasAlreadyExistedException, UnknownPersistenceException;
+
+    public RoomRateEntity retrieveRoomRateDetails(Long roomRateId) throws RoomRateEntityNotFoundException;
+
+    public void updatePublishedAndNormalRate(RoomRateEntity roomRate);
+    
+    public void updatePromotionAndPeakRate(RoomRateEntity roomRate);
+    
+    public List<RoomRateEntity> retrieveAllRoomRate();
+    
+    public void deleteRoomRateEntity(RoomRateEntity roomRate) throws DeleteRoomRateException;
+
+   
     
 }
