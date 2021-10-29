@@ -6,18 +6,29 @@
 package ejb.session.stateless;
 
 import entity.EmployeeEntity;
+import entity.NormalRateEntity;
 import entity.PartnerEntity;
+import entity.PeakRateEntity;
+import entity.PromotionRateEntity;
+import entity.PublishedRateEntity;
 import entity.RoomEntity;
+import entity.RoomRateEntity;
 import entity.RoomTypeEntity;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import util.exception.DeleteRoomRateException;
 import util.exception.EmployeeNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.InvalidLoginCredentialException;
+import util.exception.NormalRateHasAlreadyExistedException;
 import util.exception.PartnerNotFoundException;
+import util.exception.PeakRateHasAlreadyExistedException;
+import util.exception.PromotionRateHasAlreadyExistedException;
+import util.exception.PublishedRateHasAlreadyExistedException;
 import util.exception.RoomNotFoundException;
 import util.exception.RoomNumberExistException;
+import util.exception.RoomRateEntityNotFoundException;
 import util.exception.RoomTypeExistException;
 import util.exception.RoomTypeNotFoundException;
 import util.exception.UnknownPersistenceException;
@@ -30,6 +41,9 @@ public class HorsManagementControllerSessionBean implements HorsManagementContro
         HorsManagementControllerSessionBeanLocal {
 
     @EJB
+    private RoomRateEntitySessionBeanLocal roomRateEntitySessionBean;
+
+    @EJB
     private RoomEntitySessionBeanLocal roomEntitySessionBean;
 
     @EJB
@@ -40,6 +54,8 @@ public class HorsManagementControllerSessionBean implements HorsManagementContro
 
     @EJB
     private final EmployeeEntitySessionBeanLocal employeeEntitySessionBean;
+    
+    
     
     public HorsManagementControllerSessionBean(){
         employeeEntitySessionBean = new EmployeeEntitySessionBean();
@@ -149,6 +165,55 @@ public class HorsManagementControllerSessionBean implements HorsManagementContro
       public List<RoomEntity> retrieveAllRooms() {
           return roomEntitySessionBean.retrieveAllRooms();
       }
+      
+      @Override
+      public Long createNewPublishedRateEntity(PublishedRateEntity newPublishedRateEntity) throws PublishedRateHasAlreadyExistedException,
+            UnknownPersistenceException{
+          return roomRateEntitySessionBean.createNewPublishedRateEntity(newPublishedRateEntity);
+      }
+      
+    @Override
+      public Long createNewNormalRateEntity(NormalRateEntity newNormalRateEntity) throws NormalRateHasAlreadyExistedException,
+            UnknownPersistenceException{
+          return roomRateEntitySessionBean.createNewNormalRateEntity(newNormalRateEntity);
+      }
+      
+    @Override
+      public Long createNewPeakRateEntity(PeakRateEntity newPeakRateEntity) throws PeakRateHasAlreadyExistedException,
+            UnknownPersistenceException{
+          return roomRateEntitySessionBean.createNewPeakRateEntity(newPeakRateEntity);
+      }
+      
+    @Override
+       public Long createNewPromotionRateEntity(PromotionRateEntity newPromotionRateEntity) throws PromotionRateHasAlreadyExistedException,
+            UnknownPersistenceException{
+           return roomRateEntitySessionBean.createNewPromotionRateEntity(newPromotionRateEntity);
+       }
+       
+    @Override
+       public RoomRateEntity retrieveRoomRateDetails(Long roomRateId) throws RoomRateEntityNotFoundException{
+           return roomRateEntitySessionBean.retrieveRoomRateDetails(roomRateId);
+       }
+       
+    @Override
+       public void updatePublishedAndNormalRate(RoomRateEntity roomRate) {
+           roomRateEntitySessionBean.updatePublishedAndNormalRate(roomRate);
+       }
+       
+    @Override
+       public void updatePromotionAndPeakRate(RoomRateEntity roomRate) {
+           roomRateEntitySessionBean.updatePromotionAndPeakRate(roomRate);
+       }
+       
+    @Override
+       public List<RoomRateEntity> retrieveAllRoomRate() {
+           return roomRateEntitySessionBean.retrieveAllRoomRate();
+       }
+       
+    @Override
+       public void deleteRoomRateEntity(RoomRateEntity roomRate) throws DeleteRoomRateException {
+           roomRateEntitySessionBean.deleteRoomRateEntity(roomRate);
+       }
    
         
             

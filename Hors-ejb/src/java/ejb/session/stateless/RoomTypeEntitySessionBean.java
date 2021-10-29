@@ -38,14 +38,19 @@ public class RoomTypeEntitySessionBean implements RoomTypeEntitySessionBeanRemot
     public Long createRoomType(RoomTypeEntity newRoomType) throws RoomTypeExistException,
             UnknownPersistenceException {
         try {
+            //System.out.println("Reach C");
+            newRoomType.setDisabled(false);
             em.persist(newRoomType);
+           // System.out.println("Reach D");
+            /*
             LocalDate dateOfCreation = LocalDate.now();
-            LocalDate availabilityPeriod = dateOfCreation.plusDays(185);
+            LocalDate availabilityPeriod = dateOfCreation.plusDays(370);
             for (LocalDate date = dateOfCreation; date.isBefore(availabilityPeriod); date = date.plusDays(1)) {
                 RoomTypeAvailability newRoomTypeAvailability = new RoomTypeAvailability(date, 0, newRoomType);
                 //em.persist(newRoomTypeAvailability);
                 newRoomType.getRoomTypeAvailabilities().add(newRoomTypeAvailability);
             }
+*/
 
             em.flush();
             return newRoomType.getRoomTypeId();

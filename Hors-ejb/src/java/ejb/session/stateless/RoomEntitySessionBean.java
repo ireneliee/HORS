@@ -56,9 +56,11 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
         try {
 
             roomTypeOfTheNewRoom.getRoomEntities().add(newRoomEntity);
+            /*
             roomTypeOfTheNewRoom.getRoomTypeAvailabilities()
                     .stream()
                     .forEach(x -> x.incrementNoOfAvailableRoomByOne());
+            */
 
             em.persist(newRoomEntity);
             em.flush();

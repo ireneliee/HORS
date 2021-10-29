@@ -53,7 +53,7 @@ public class PublishedRateEntity extends RoomRateEntity implements Serializable 
 
     @Override
     public String toString() {
-        return "entity.PublishedRateEntity[ id=" + super.getRoomRateId()+ " ]";
+        return super.toString();
     }
     
 }

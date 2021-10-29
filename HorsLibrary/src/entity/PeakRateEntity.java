@@ -52,7 +52,9 @@ public class PeakRateEntity extends RoomRateEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.PeakRateEntity[ id=" + this.getRoomRateId() + " ]";
+        
+        return super.toString() + "Start validity date: " + this.getStartValidityDate().toString() + ";\n" +
+                "End validity date: " + this.getEndValidityDate().toString() + ";\n";
     }
     
 }

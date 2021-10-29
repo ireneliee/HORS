@@ -22,7 +22,7 @@ import javax.persistence.InheritanceType;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class RoomRateEntity implements Serializable {
+public class RoomRateEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -33,10 +33,14 @@ public abstract class RoomRateEntity implements Serializable {
     protected RoomTypeEntity roomType;
     protected LocalDate startValidityDate;
     protected LocalDate endValidityDate;
+    private Boolean disabled;
 
-    public RoomRateEntity(){}
+    public RoomRateEntity(){
+        disabled = false;
+    }
 
     public RoomRateEntity(String name, BigDecimal rate, RoomTypeEntity roomType, LocalDate startValidityDate, LocalDate endValidityDate) {
+        this();
         this.name = name;
         this.rate = rate;
         this.roomType = roomType;
@@ -74,7 +78,8 @@ public abstract class RoomRateEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.RoomRateEntity[ id=" + roomRateId + " ]";
+        return "Room rate name: " + this.getName() + ";\n" + "Rating at: " + this.getRate().toString() + ";\n" +
+                "Room type: " + this.getRoomType().getClass().getSimpleName() + ";\n";
     }
 
     public String getName() {
@@ -116,5 +121,15 @@ public abstract class RoomRateEntity implements Serializable {
     public void setStartValidityDate(LocalDate startValidityDate) {
         this.startValidityDate = startValidityDate;
     }
+
+    public Boolean getDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(Boolean disabled) {
+        this.disabled = disabled;
+    }
+    
+    
     
 }
