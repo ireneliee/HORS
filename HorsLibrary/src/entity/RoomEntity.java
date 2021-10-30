@@ -40,12 +40,10 @@ public class RoomEntity implements Serializable {
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private RoomTypeEntity roomType;
-    
-    @OneToMany
-    private List<DateUsedEntity> datesOnWhichTheRoomIsUsed;
+
 
     public RoomEntity() {
-        datesOnWhichTheRoomIsUsed = new ArrayList<>();
+
     }
 
     public RoomEntity(Integer roomNumber, RoomStatusEnum roomStatus, RoomTypeEntity roomType) {
@@ -115,12 +113,5 @@ public class RoomEntity implements Serializable {
         this.roomType = roomType;
     }
 
-    public List<DateUsedEntity> getDatesOnWhichTheRoomIsUsed() {
-        return datesOnWhichTheRoomIsUsed;
-    }
-
-    public void setDatesOnWhichTheRoomIsUsed(List<DateUsedEntity> datesOnWhichTheRoomIsUsed) {
-        this.datesOnWhichTheRoomIsUsed = datesOnWhichTheRoomIsUsed;
-    }
     
 }

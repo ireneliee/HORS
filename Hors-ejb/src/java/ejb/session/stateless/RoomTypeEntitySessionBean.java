@@ -5,7 +5,6 @@
  */
 package ejb.session.stateless;
 
-import entity.RoomTypeAvailability;
 import entity.RoomTypeEntity;
 import java.time.LocalDate;
 import java.util.List;
@@ -41,17 +40,6 @@ public class RoomTypeEntitySessionBean implements RoomTypeEntitySessionBeanRemot
             //System.out.println("Reach C");
             newRoomType.setDisabled(false);
             em.persist(newRoomType);
-           // System.out.println("Reach D");
-            /*
-            LocalDate dateOfCreation = LocalDate.now();
-            LocalDate availabilityPeriod = dateOfCreation.plusDays(370);
-            for (LocalDate date = dateOfCreation; date.isBefore(availabilityPeriod); date = date.plusDays(1)) {
-                RoomTypeAvailability newRoomTypeAvailability = new RoomTypeAvailability(date, 0, newRoomType);
-                //em.persist(newRoomTypeAvailability);
-                newRoomType.getRoomTypeAvailabilities().add(newRoomTypeAvailability);
-            }
-*/
-
             em.flush();
             return newRoomType.getRoomTypeId();
 
