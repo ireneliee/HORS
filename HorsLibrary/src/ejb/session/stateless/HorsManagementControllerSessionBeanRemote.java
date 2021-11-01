@@ -11,9 +11,11 @@ import entity.PartnerEntity;
 import entity.PeakRateEntity;
 import entity.PromotionRateEntity;
 import entity.PublishedRateEntity;
+import entity.RoomAllocationExceptionEntity;
 import entity.RoomEntity;
 import entity.RoomRateEntity;
 import entity.RoomTypeEntity;
+import java.time.LocalDate;
 import java.util.List;
 import javax.ejb.Remote;
 import util.exception.DeleteRoomRateException;
@@ -24,6 +26,7 @@ import util.exception.PartnerNotFoundException;
 import util.exception.PeakRateHasAlreadyExistedException;
 import util.exception.PromotionRateHasAlreadyExistedException;
 import util.exception.PublishedRateHasAlreadyExistedException;
+import util.exception.RoomAllocationIsDoneException;
 import util.exception.RoomNotFoundException;
 import util.exception.RoomNumberExistException;
 import util.exception.RoomRateEntityNotFoundException;
@@ -90,5 +93,9 @@ public interface HorsManagementControllerSessionBeanRemote {
     public List<RoomRateEntity> retrieveAllRoomRate();
 
     public void deleteRoomRateEntity(RoomRateEntity roomRate) throws DeleteRoomRateException;
+    
+    public void allocateRoomGivenDate(LocalDate checkInDate) throws RoomAllocationIsDoneException;
+    
+    public RoomAllocationExceptionEntity retrieveReportByDate(LocalDate reportDate);
 
 }

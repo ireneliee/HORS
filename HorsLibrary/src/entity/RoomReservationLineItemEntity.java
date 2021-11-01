@@ -141,5 +141,21 @@ public class RoomReservationLineItemEntity implements Serializable {
     public void setRoomAllocation(RoomEntity roomAllocation) {
         this.roomAllocation = roomAllocation;
     }
+
+    public Boolean getCheckedIn() {
+        return checkedIn;
+    }
+
+    public void setCheckedIn(Boolean checkedIn) {
+        this.checkedIn = checkedIn;
+    }
+
+    public Boolean getCheckedOut() {
+        return checkedOut;
+    }
+
+    public void setCheckedOut(Boolean checkedOut) {
+        this.checkedOut = checkedOut;
+    }
     
 }

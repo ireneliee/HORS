@@ -5,7 +5,10 @@
  */
 package ejb.session.stateless;
 
+import entity.RoomAllocationExceptionEntity;
+import java.time.LocalDate;
 import javax.ejb.Remote;
+import util.exception.RoomAllocationIsDoneException;
 
 /**
  *
@@ -13,5 +16,9 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface RoomAllocationSessionBeanRemote {
+    
+    public void allocateRoomGivenDate(LocalDate checkInDate) throws RoomAllocationIsDoneException;
+    
+    public RoomAllocationExceptionEntity retrieveReportByDate(LocalDate reportDate);
     
 }
