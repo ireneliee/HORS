@@ -6,7 +6,10 @@
 package horsmanagementclient;
 
 import ejb.session.stateless.HorsManagementControllerSessionBeanRemote;
+import ejb.session.stateless.RoomEntitySessionBeanRemote;
+import entity.RoomEntity;
 import javax.ejb.EJB;
+import util.enumeration.RoomStatusEnum;
 
 
 /**
@@ -14,6 +17,7 @@ import javax.ejb.EJB;
  * @author irene
  */
 public class Main {
+
 
     @EJB
     private static HorsManagementControllerSessionBeanRemote horsManagementControllerSessionBeanRemote;
@@ -23,6 +27,7 @@ public class Main {
      */
     
     public static void main(String[] args) {
+        
 
        MainApp mainApp = new MainApp(horsManagementControllerSessionBeanRemote);
        mainApp.runApp();

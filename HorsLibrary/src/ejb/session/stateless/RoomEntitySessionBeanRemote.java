@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.RoomEntity;
+import entity.RoomTypeEntity;
 import java.util.List;
 import javax.ejb.Remote;
 import util.exception.InputDataValidationException;
@@ -33,6 +34,8 @@ public interface RoomEntitySessionBeanRemote {
         public RoomEntity retrieveRoomByRoomNumber(Integer roomNumber) throws RoomNotFoundException;
         
         public void deleteRoom(Integer roomNumber) throws RoomNotFoundException;
+        
+        public void createNewRoom(RoomEntity newRoomEntity,  List<RoomEntity> listOfRoomEntities);
 
     
 }

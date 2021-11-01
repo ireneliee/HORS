@@ -8,32 +8,41 @@ package ejb.session.singleton;
 import ejb.session.stateless.EmployeeEntitySessionBeanLocal;
 import ejb.session.stateless.GuestEntitySessionBeanLocal;
 import ejb.session.stateless.RoomEntitySessionBeanLocal;
+import ejb.session.stateless.RoomReservationEntitySessionBeanLocal;
 import ejb.session.stateless.RoomTypeEntitySessionBeanLocal;
 import entity.EmployeeEntity;
-import entity.GuestEntity;
+import entity.RoomEntity;
+import entity.RoomReservationEntity;
+import entity.RoomReservationLineItemEntity;
 import entity.RoomTypeEntity;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.LocalBean;
 import javax.ejb.Startup;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import util.enumeration.AccessRightEnum;
+import util.enumeration.RoomStatusEnum;
+import util.exception.InputDataValidationException;
+import util.exception.InvalidRoomReservationEntityException;
+import util.exception.RoomNumberExistException;
 import util.exception.RoomTypeExistException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UsernameExistException;
 
 /**
- * dummy files for testing - loading data
- * test
+ * dummy files for testing - loading data test
  */
 @Singleton
 @LocalBean
 @Startup
 public class DataInitSessionBean {
+
+    @EJB
+    private RoomReservationEntitySessionBeanLocal roomReservationEntitySessionBean;
 
     @EJB
     private RoomEntitySessionBeanLocal roomEntitySessionBean;
@@ -43,24 +52,14 @@ public class DataInitSessionBean {
 
     @EJB
     private EmployeeEntitySessionBeanLocal employeeEntitySessionBean;
-    
+
     @EJB
     private GuestEntitySessionBeanLocal guestEntitySessionBean;
 
     @PersistenceContext(unitName = "Hors-ejbPU")
     private EntityManager em;
-    
-    /*
-    private RoomTypeEntity roomTypeOne;
-    private RoomTypeEntity roomTypeTwo;
-    private RoomTypeEntity roomTypeThree;
-    private RoomTypeEntity roomTypeFour;
-    private RoomTypeEntity roomTypeFive;
-*/
-    
 
     @PostConstruct
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void postConstruct() {
         if (em.find(EmployeeEntity.class, 1L) == null) {
             doDataInitialisationEmployee();
@@ -69,51 +68,109 @@ public class DataInitSessionBean {
         if (em.find(RoomTypeEntity.class, 1L) == null) {
             doDataInitialisationRoomTypeEntity();
         }
-               /*
-        if(em.find(RoomEntity.class, 1L) == null) {
-            doDataInitialisationRoomEntity();
-        }
-        */
+
+        //gotta remove this bcs it causes duplicated data - pls go fix that first :(
+        /*
         if (em.find(GuestEntity.class, 1L) == null) {
             doDataInitialisationGuestEntity();
-        }       
-        
+        } 
+         */
     }
-    
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+
     private void doDataInitialisationRoomTypeEntity() {
         try {
-            System.out.println("Reach A");
+            // roomType creation
             RoomTypeEntity roomTypeOne = new RoomTypeEntity("Deluxe", "Basic room", "10x8", 2, 2, "wifi", 1);
-            System.out.println("Reach B");
-            roomTypeEntitySessionBean.createRoomType(roomTypeOne);
-            System.out.println("Room type one");
 
             RoomTypeEntity roomTypeTwo = new RoomTypeEntity("Premium", "Better room", "12x8", 2, 2, "bathtub", 2);
-            roomTypeEntitySessionBean.createRoomType(roomTypeTwo);
-            System.out.println("Room type two");
 
             RoomTypeEntity roomTypeThree = new RoomTypeEntity("Premium plus", "Much better room", "12x10", 2, 3, "bathtub + sofa", 3);
-            roomTypeEntitySessionBean.createRoomType(roomTypeThree);
-            System.out.println("Room type three");
 
             RoomTypeEntity roomTypeFour = new RoomTypeEntity("Queen", "Much better room", "12x10", 3, 3, "bathtub + sofa", 4);
+
+            RoomTypeEntity roomTypeFive = new RoomTypeEntity("King", "Much better room", "12x14", 2, 3, "bathtub + sofa", 5);
+
+            roomTypeEntitySessionBean.createRoomType(roomTypeOne);
+            roomTypeEntitySessionBean.createRoomType(roomTypeTwo);
+            roomTypeEntitySessionBean.createRoomType(roomTypeThree);
             roomTypeEntitySessionBean.createRoomType(roomTypeFour);
-            System.out.println("Room type four");
-
-           RoomTypeEntity roomTypeFive = new RoomTypeEntity("King", "Much better room", "12x14", 2, 3, "bathtub + sofa", 5);
             roomTypeEntitySessionBean.createRoomType(roomTypeFive);
-            System.out.println("Room type five");
 
-           
+            // room creation - 3 basic, 2 premium (1 not available), 1 Queen
+            /*
+            RoomEntity roomA = new RoomEntity(2015, RoomStatusEnum.AVAILABLE, roomTypeOne);
+
+            RoomEntity roomB = new RoomEntity(3015, RoomStatusEnum.AVAILABLE, roomTypeOne);
+
+            RoomEntity roomC = new RoomEntity(4015, RoomStatusEnum.AVAILABLE, roomTypeOne);
+
+            RoomEntity roomD = new RoomEntity(5015, RoomStatusEnum.AVAILABLE, roomTypeTwo);
+
+            RoomEntity roomE = new RoomEntity(6015, RoomStatusEnum.NOTAVAILABLE, roomTypeTwo);
+
+            RoomEntity roomF = new RoomEntity(7015, RoomStatusEnum.AVAILABLE, roomTypeTwo);
+
+            RoomEntity roomG = new RoomEntity(8015, RoomStatusEnum.AVAILABLE, roomTypeFour);
+            */
+
+            // room reservation created. 4 deluxe room, 2 premium room, all in the same check in and check out date :)
+            // reservation 1
+            RoomReservationLineItemEntity roomOne = new RoomReservationLineItemEntity(roomTypeOne, new BigDecimal(100000),
+                    LocalDate.of(2021, 11, 10), LocalDate.of(2021, 11, 15));
+
+            RoomReservationLineItemEntity roomTwo = new RoomReservationLineItemEntity(roomTypeOne, new BigDecimal(100000),
+                    LocalDate.of(2021, 11, 10), LocalDate.of(2021, 11, 15));
+
+            RoomReservationEntity roomReservationOne = new RoomReservationEntity(new BigDecimal(200000), LocalDate.of(2021, 10, 10));
+            roomReservationOne.getRoomReservationLineItems().add(roomOne);
+            roomReservationOne.getRoomReservationLineItems().add(roomTwo);
+
+            // reservation 2
+            RoomReservationLineItemEntity roomThree = new RoomReservationLineItemEntity(roomTypeOne, new BigDecimal(100000),
+                    LocalDate.of(2021, 11, 10), LocalDate.of(2021, 11, 15));
+
+            RoomReservationLineItemEntity roomFour = new RoomReservationLineItemEntity(roomTypeOne, new BigDecimal(100000),
+                    LocalDate.of(2021, 11, 10), LocalDate.of(2021, 11, 15));
+
+            RoomReservationEntity roomReservationTwo = new RoomReservationEntity(new BigDecimal(200000), LocalDate.of(2021, 10, 10));
+            roomReservationTwo.getRoomReservationLineItems().add(roomThree);
+            roomReservationTwo.getRoomReservationLineItems().add(roomFour);
+
+            // reservation 3
+            RoomReservationLineItemEntity roomFive = new RoomReservationLineItemEntity(roomTypeTwo, new BigDecimal(100000),
+                    LocalDate.of(2021, 11, 10), LocalDate.of(2021, 11, 15));
+
+            RoomReservationLineItemEntity roomSix = new RoomReservationLineItemEntity(roomTypeTwo, new BigDecimal(100000),
+                    LocalDate.of(2021, 11, 10), LocalDate.of(2021, 11, 15));
+
+            RoomReservationEntity roomReservationThree = new RoomReservationEntity(new BigDecimal(200000), LocalDate.of(2021, 10, 10));
+            roomReservationThree.getRoomReservationLineItems().add(roomFive);
+            roomReservationThree.getRoomReservationLineItems().add(roomSix);
+
+            try {
+                roomReservationEntitySessionBean.createNewRoomReservationEntity(roomReservationOne);
+                roomReservationEntitySessionBean.createNewRoomReservationEntity(roomReservationTwo);
+                roomReservationEntitySessionBean.createNewRoomReservationEntity(roomReservationThree);
+            } catch (InvalidRoomReservationEntityException ex) {
+                System.out.print("Error has occured!");
+            }
+            
+            /*
+            roomEntitySessionBean.createNewRoom(roomA, roomTypeOne);
+            roomEntitySessionBean.createNewRoom(roomB, roomTypeOne);
+            roomEntitySessionBean.createNewRoom(roomC, roomTypeOne);
+            roomEntitySessionBean.createNewRoom(roomD, roomTypeTwo);
+            roomEntitySessionBean.createNewRoom(roomE, roomTypeTwo);
+            roomEntitySessionBean.createNewRoom(roomF, roomTypeTwo);
+            roomEntitySessionBean.createNewRoom(roomG, roomTypeFour);
+            */
 
         } catch (RoomTypeExistException | UnknownPersistenceException ex) {
             System.out.println(ex.getMessage());
         }
 
     }
-    
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+
     private void doDataInitialisationEmployee() {
         try {
             EmployeeEntity employeeOne = new EmployeeEntity("Employee", "One", "employeeOne", "password",
@@ -136,39 +193,8 @@ public class DataInitSessionBean {
             System.out.println(ex.getMessage());
         }
     }
-    
-    /*
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    private void doDataInitialisationRoomEntity() {
-         try {
-                RoomEntity roomOne = new RoomEntity(2015, RoomStatusEnum.AVAILABLE, roomTypeOne);
-                roomEntitySessionBean.createNewRoom(roomOne);
-                System.out.println("Room one");
-                
-                RoomEntity roomTwo = new RoomEntity(3015, RoomStatusEnum.AVAILABLE, roomTypeTwo);
-                roomEntitySessionBean.createNewRoom(roomTwo);
-                System.out.println("Room two");
-                
-                RoomEntity roomThree = new RoomEntity(4015, RoomStatusEnum.AVAILABLE, roomTypeThree);
-                roomEntitySessionBean.createNewRoom(roomThree);
-                System.out.println("Room three");
-                
-                RoomEntity roomFour = new RoomEntity(5015, RoomStatusEnum.AVAILABLE, roomTypeFour);
-                roomEntitySessionBean.createNewRoom(roomFour);
-                System.out.println("Room four");
-                
-                RoomEntity roomFive = new RoomEntity(6015, RoomStatusEnum.NOTAVAILABLE, roomTypeFive);
-                roomEntitySessionBean.createNewRoom(roomFive);
-                System.out.println("Room five");
-                
-            } catch (RoomNumberExistException | UnknownPersistenceException | InputDataValidationException ex) {
-                System.out.print(ex.getMessage());
-            }
-    }
-*/
-    
-       
-            
+
+    /* 
         @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     private void doDataInitialisationGuestEntity() {
             try {   
@@ -186,6 +212,5 @@ public class DataInitSessionBean {
             } catch (UsernameExistException | UnknownPersistenceException ex) {
             System.out.println(ex.getMessage());
         }
-    }
-
+    }*/
 }

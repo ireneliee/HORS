@@ -42,13 +42,11 @@ public class RoomTypeEntity implements Serializable {
     @OneToMany(mappedBy="roomType", fetch = FetchType.EAGER)
     private List<RoomEntity> roomEntities;
     
-    @OneToMany(mappedBy="roomType", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<RoomTypeAvailability> roomTypeAvailabilities;
    
             
     public RoomTypeEntity() {
         roomEntities = new ArrayList<>();
-        roomTypeAvailabilities = new ArrayList<>();
+
     }
 
     public RoomTypeEntity(String name, String description, String size, Integer bed, Integer capacity, String amenities, Integer rank) {
@@ -157,13 +155,7 @@ public class RoomTypeEntity implements Serializable {
         this.roomEntities = roomEntities;
     }
 
-    public List<RoomTypeAvailability> getRoomTypeAvailabilities() {
-        return roomTypeAvailabilities;
-    }
 
-    public void setRoomTypeAvailabilities(List<RoomTypeAvailability> roomTypeAvailabilities) {
-        this.roomTypeAvailabilities = roomTypeAvailabilities;
-    }
 
     public Boolean getDisabled() {
         return disabled;

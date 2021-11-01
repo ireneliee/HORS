@@ -46,24 +46,15 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
     public Long createNewRoom(RoomEntity newRoomEntity) throws RoomNumberExistException,
             UnknownPersistenceException, InputDataValidationException {
         
-       RoomTypeEntity roomTypeOfTheNewRoom = em.find(RoomTypeEntity.class, newRoomEntity.getRoomType()
-       .getRoomTypeId());
-       /*
-       roomTypeOfTheNewRoom.getRoomEntities().size();
-       roomTypeOfTheNewRoom.getRoomTypeAvailabilities().size();
-       */
-        
+        em.persist(newRoomEntity);
+        em.flush();
+
+        RoomTypeEntity roomTypeOfTheNewRoom = em.find(RoomTypeEntity.class, 
+                newRoomEntity.getRoomType().getRoomTypeId());
+
         try {
 
             roomTypeOfTheNewRoom.getRoomEntities().add(newRoomEntity);
-            /*
-            roomTypeOfTheNewRoom.getRoomTypeAvailabilities()
-                    .stream()
-                    .forEach(x -> x.incrementNoOfAvailableRoomByOne());
-            */
-
-            em.persist(newRoomEntity);
-            em.flush();
 
             return newRoomEntity.getRoomEntityId();
         } catch (PersistenceException ex) {
@@ -78,6 +69,15 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
             }
         }
     }
+    
+    // created for the purpose of data initialization
+    @Override
+    public void createNewRoom(RoomEntity newRoomEntity, List<RoomEntity> listOfRoomEntities) {
+        listOfRoomEntities.add(newRoomEntity);
+        em.persist(newRoomEntity);
+    }
+    
+
 
     @Override
     public RoomEntity retrieveRoomByRoomNumber(Integer roomNumber) throws RoomNotFoundException {
@@ -106,26 +106,8 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
             RoomEntity roomEntityToUpdate = retrieveRoomByRoomNumber(roomEntity.getRoomNumber());
 
             if (roomEntityToUpdate.getRoomNumber().equals(roomEntity.getRoomNumber())) {
-                RoomStatusEnum currentStatus = roomEntityToUpdate.getRoomStatus();
-                RoomStatusEnum statusToBeChanged = roomEntity.getRoomStatus();
 
                 roomEntityToUpdate.setRoomStatus(roomEntity.getRoomStatus());
-
-                if (currentStatus.equals(RoomStatusEnum.AVAILABLE)
-                        && statusToBeChanged.equals(RoomStatusEnum.NOTAVAILABLE)) {
-                    roomEntityToUpdate
-                            .getRoomType()
-                            .getRoomTypeAvailabilities()
-                            .forEach(x -> x.decreaseNoOfAvailableRoomByOne());
-                }
-
-                if (currentStatus.equals(RoomStatusEnum.NOTAVAILABLE)
-                        && statusToBeChanged.equals(RoomStatusEnum.AVAILABLE)) {
-                    roomEntityToUpdate
-                            .getRoomType()
-                            .getRoomTypeAvailabilities()
-                            .forEach(x -> x.incrementNoOfAvailableRoomByOne());
-                }
 
             } else {
                 throw new UpdateRoomException("Room record to be updated does not match the existing record");
@@ -178,10 +160,6 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
         } catch (RoomIsCurrentlyUsedException ex) {
             RoomEntity roomToBeDeleted = retrieveRoomByRoomNumber(roomNumber);
             roomToBeDeleted.setRoomStatus(RoomStatusEnum.NOTAVAILABLE);
-            roomToBeDeleted
-                    .getRoomType()
-                    .getRoomTypeAvailabilities()
-                    .forEach(x -> x.decreaseNoOfAvailableRoomByOne());
         } catch (RoomNotFoundException ex) {
             throw new RoomNotFoundException(ex.getMessage());
         }
@@ -193,10 +171,6 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
         try {
             roomToBeDeleted = retrieveRoomByRoomNumber(roomNumber);
             if (roomToBeDeleted.getRoomStatus().equals(RoomStatusEnum.AVAILABLE)) {
-                roomToBeDeleted
-                        .getRoomType()
-                        .getRoomTypeAvailabilities()
-                        .forEach(x -> x.decreaseNoOfAvailableRoomByOne());
             }
         } catch (RoomNotFoundException ex) {
             throw new RoomNotFoundException(ex.getMessage());
