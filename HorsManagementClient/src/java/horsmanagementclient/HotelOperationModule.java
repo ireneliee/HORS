@@ -11,8 +11,10 @@ import entity.NormalRateEntity;
 import entity.PeakRateEntity;
 import entity.PromotionRateEntity;
 import entity.PublishedRateEntity;
+import entity.RoomAllocationExceptionEntity;
 import entity.RoomEntity;
 import entity.RoomRateEntity;
+import entity.RoomReservationLineItemEntity;
 import entity.RoomTypeEntity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -29,6 +31,7 @@ import util.exception.NormalRateHasAlreadyExistedException;
 import util.exception.PeakRateHasAlreadyExistedException;
 import util.exception.PromotionRateHasAlreadyExistedException;
 import util.exception.PublishedRateHasAlreadyExistedException;
+import util.exception.RoomAllocationIsDoneException;
 import util.exception.RoomNotFoundException;
 import util.exception.RoomNumberExistException;
 import util.exception.RoomRateEntityNotFoundException;
@@ -76,10 +79,11 @@ public class HotelOperationModule {
             System.out.println("6: Delete room");
             System.out.println("7: View all rooms");
             System.out.println("8: View room allocation exception report");
-            System.out.println("9: Back\n");
+            System.out.println("9: Allocate room now");
+            System.out.println("10: Back\n");
             response = 0;
 
-            while (response < 1 || response > 9) {
+            while (response < 1 || response > 10) {
                 System.out.print("> ");
 
                 response = scanner.nextInt();
@@ -114,14 +118,20 @@ public class HotelOperationModule {
 
                 } else if (response == 8) {
 
+                    doViewRoomAllocationExceptionReport();
+
                 } else if (response == 9) {
+                    
+                    doAllocateRoomNow();
+                    
+                } else if (response == 10) {
                     break;
                 } else {
                     System.out.println("Invalid option, please try again!\n");
                 }
             }
 
-            if (response == 9) {
+            if (response == 10) {
                 break;
             }
         }
@@ -159,9 +169,9 @@ public class HotelOperationModule {
                     doViewParticularRoomRateDetails();
 
                 } else if (response == 3) {
-                    
+
                     doRetrieveAllRoomRate();
-                    
+
                 } else if (response == 4) {
 
                     break;
@@ -176,7 +186,49 @@ public class HotelOperationModule {
             }
         }
     }
-    
+
+    public void doAllocateRoomNow() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("*** HORS Management System :: Hotel Operation :: Operation Manager :: Allocate room now ***\n");
+        System.out.print("Enter the date of check-in day you want to allocate of M/d/yyyy>");
+        String allocateDateInString = scanner.nextLine().trim();
+        LocalDate allocateDate = dateInput(allocateDateInString);
+        try {
+            horsManagementControllerSessionBeanRemote.allocateRoomGivenDate(allocateDate);
+            System.out.println("Rooms has been successfully allocated.");
+        } catch (RoomAllocationIsDoneException ex) {
+            System.out.println("An error has occured: " +ex.getMessage());
+        }
+
+    }
+
+    public void doViewRoomAllocationExceptionReport() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("*** HORS Management System :: Hotel Operation :: Operation Manager :: View room allocation exception report ***\n");
+        System.out.print("Enter the date of the report you want to view in the form of M/d/yyyy>");
+        String reportDateInString = scanner.nextLine().trim();
+        LocalDate reportDate = dateInput(reportDateInString);
+
+        RoomAllocationExceptionEntity reportRetrieved = horsManagementControllerSessionBeanRemote.retrieveReportByDate(reportDate);
+
+        System.out.println("*** HORS Management System :: Type One Exception***\n");
+        List<RoomReservationLineItemEntity> typeOneException = reportRetrieved.getTypeOneException();
+        for (RoomReservationLineItemEntity roomReservation : typeOneException) {
+            System.out.println("Room reservation line item: " + roomReservation.getRoomReservationLineItemId()
+                    + "\n" + "Room reserved: " + roomReservation.getRoomTypeEntity().getName());
+            System.out.println("Status: A room has been allocated");
+        }
+
+        System.out.println("*** HORS Management System :: Type Two Exception***\n");
+        List<RoomReservationLineItemEntity> typeTwoException = reportRetrieved.getTypeTwoException();
+        for (RoomReservationLineItemEntity roomReservation : typeTwoException) {
+            System.out.println("Room reservation line item: " + roomReservation.getRoomReservationLineItemId()
+                    + "\n" + "Room reserved: " + roomReservation.getRoomTypeEntity().getName());
+            System.out.println("Status: A room has not been allocated");
+        }
+
+    }
+
     public void doRetrieveAllRoomRate() {
         horsManagementControllerSessionBeanRemote
                 .retrieveAllRoomRate()
@@ -232,7 +284,7 @@ public class HotelOperationModule {
                     break;
 
                 } else if (response == 3) {
-                    
+
                     break;
 
                 } else {
@@ -262,11 +314,11 @@ public class HotelOperationModule {
 
         LocalDate dateToPutStart = dateInput(startDateInString);
         LocalDate dateToPutEnd = dateInput(endDateInString);
-        
+
         currentRoomRate.setRate(rate);
         currentRoomRate.setStartValidityDate(dateToPutStart);
         currentRoomRate.setEndValidityDate(dateToPutEnd);
-        
+
         horsManagementControllerSessionBeanRemote.updatePromotionAndPeakRate(currentRoomRate);
         System.out.println("Room rate is successfully updated");
     }
@@ -278,17 +330,17 @@ public class HotelOperationModule {
         System.out.print("Enter the new nominal rate >");
         BigDecimal rate = new BigDecimal(Double.parseDouble(scanner.nextLine()));
         currentRoomRate.setRate(rate);
-        
+
         horsManagementControllerSessionBeanRemote.updatePublishedAndNormalRate(currentRoomRate);
         System.out.println("Room rate is successfully updated");
     }
 
     public void doDeleteRoomRateEntity(RoomRateEntity currentRoomRate) {
         System.out.println("*** HORS Management System :: Hotel Operation :: Sales Manager :: View room rate details :: Delete ***\n");
-        try{
+        try {
             horsManagementControllerSessionBeanRemote.deleteRoomRateEntity(currentRoomRate);
             System.out.println("Room rate is successfully deleted.");
-        } catch(DeleteRoomRateException ex) {
+        } catch (DeleteRoomRateException ex) {
             System.out.println(ex.getMessage());
         }
 
