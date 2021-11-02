@@ -21,6 +21,7 @@ public class MainApp {
     private EmployeeEntity currentEmployeeEntity;
     private SystemAdministrationModule systemAdministrationModule;
     private HotelOperationModule hotelOperationModule;
+    private FrontOfficeModule frontOfficeModule;
 
     public MainApp() {
     }
@@ -51,6 +52,8 @@ public class MainApp {
                         hotelOperationModule = new HotelOperationModule(horsManagementControllerSessionBeanRemote,
                                 currentEmployeeEntity);
                         systemAdministrationModule = new SystemAdministrationModule(horsManagementControllerSessionBeanRemote,
+                                currentEmployeeEntity);
+                        frontOfficeModule = new FrontOfficeModule(horsManagementControllerSessionBeanRemote,
                                 currentEmployeeEntity);
                         menuMain();
                     } catch (InvalidLoginCredentialException ex) {
@@ -126,6 +129,12 @@ public class MainApp {
                 } else if (response == 3) {
                     try {
                         hotelOperationModule.salesManagerMenu();
+                    } catch (InvalidAccessRightException ex) {
+                        System.out.println("Invalid option, please try again!: " + ex.getMessage() + "\n");
+                    }
+                }else if (response == 4) {
+                    try {
+                        frontOfficeModule.menuOfficeModule();
                     } catch (InvalidAccessRightException ex) {
                         System.out.println("Invalid option, please try again!: " + ex.getMessage() + "\n");
                     }

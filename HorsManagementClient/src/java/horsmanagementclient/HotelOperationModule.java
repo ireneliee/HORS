@@ -59,6 +59,7 @@ public class HotelOperationModule {
         this.horsManagementControllerSessionBeanRemote = horsManagementControllerSessionBeanRemote;
         this.currentEmployee = currentEmployee;
     }
+    
 
     public void operationManagerMenu() throws InvalidAccessRightException {
 
