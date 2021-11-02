@@ -31,6 +31,7 @@ import util.exception.NormalRateHasAlreadyExistedException;
 import util.exception.PeakRateHasAlreadyExistedException;
 import util.exception.PromotionRateHasAlreadyExistedException;
 import util.exception.PublishedRateHasAlreadyExistedException;
+import util.exception.RoomAllocationExceptionReportDoesNotExistException;
 import util.exception.RoomAllocationIsDoneException;
 import util.exception.RoomNotFoundException;
 import util.exception.RoomNumberExistException;
@@ -121,9 +122,9 @@ public class HotelOperationModule {
                     doViewRoomAllocationExceptionReport();
 
                 } else if (response == 9) {
-                    
+
                     doAllocateRoomNow();
-                    
+
                 } else if (response == 10) {
                     break;
                 } else {
@@ -197,7 +198,7 @@ public class HotelOperationModule {
             horsManagementControllerSessionBeanRemote.allocateRoomGivenDate(allocateDate);
             System.out.println("Rooms has been successfully allocated.");
         } catch (RoomAllocationIsDoneException ex) {
-            System.out.println("An error has occured: " +ex.getMessage());
+            System.out.println("An error has occured: " + ex.getMessage());
         }
 
     }
@@ -208,8 +209,12 @@ public class HotelOperationModule {
         System.out.print("Enter the date of the report you want to view in the form of M/d/yyyy>");
         String reportDateInString = scanner.nextLine().trim();
         LocalDate reportDate = dateInput(reportDateInString);
-
-        RoomAllocationExceptionEntity reportRetrieved = horsManagementControllerSessionBeanRemote.retrieveReportByDate(reportDate);
+        RoomAllocationExceptionEntity reportRetrieved = new RoomAllocationExceptionEntity();
+        try {
+            reportRetrieved = horsManagementControllerSessionBeanRemote.retrieveReportByDate(reportDate);
+        } catch (RoomAllocationExceptionReportDoesNotExistException ex) {
+            System.out.println("An error has occured: " + ex.getMessage());
+        }
 
         System.out.println("*** HORS Management System :: Type One Exception***\n");
         List<RoomReservationLineItemEntity> typeOneException = reportRetrieved.getTypeOneException();

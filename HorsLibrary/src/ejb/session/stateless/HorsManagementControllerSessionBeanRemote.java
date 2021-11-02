@@ -21,11 +21,13 @@ import javax.ejb.Remote;
 import util.exception.DeleteRoomRateException;
 import util.exception.InputDataValidationException;
 import util.exception.InvalidLoginCredentialException;
+import util.exception.InvalidRoomReservationEntityException;
 import util.exception.NormalRateHasAlreadyExistedException;
 import util.exception.PartnerNotFoundException;
 import util.exception.PeakRateHasAlreadyExistedException;
 import util.exception.PromotionRateHasAlreadyExistedException;
 import util.exception.PublishedRateHasAlreadyExistedException;
+import util.exception.RoomAllocationExceptionReportDoesNotExistException;
 import util.exception.RoomAllocationIsDoneException;
 import util.exception.RoomNotFoundException;
 import util.exception.RoomNumberExistException;
@@ -35,6 +37,8 @@ import util.exception.RoomTypeNotFoundException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UpdateRoomException;
 import util.exception.UsernameExistException;
+import util.exception.WrongCheckInDate;
+import util.exception.WrongCheckoutDate;
 
 @Remote
 public interface HorsManagementControllerSessionBeanRemote {
@@ -96,6 +100,10 @@ public interface HorsManagementControllerSessionBeanRemote {
     
     public void allocateRoomGivenDate(LocalDate checkInDate) throws RoomAllocationIsDoneException;
     
-    public RoomAllocationExceptionEntity retrieveReportByDate(LocalDate reportDate);
+    public RoomAllocationExceptionEntity retrieveReportByDate(LocalDate reportDate) throws RoomAllocationExceptionReportDoesNotExistException;
+    
+    public void checkOut(Long roomReservationId, LocalDate date) throws WrongCheckoutDate, InvalidRoomReservationEntityException;
+    
+    public List<RoomEntity> checkIn(Long roomReservationId, LocalDate date) throws InvalidRoomReservationEntityException, WrongCheckInDate;
 
 }

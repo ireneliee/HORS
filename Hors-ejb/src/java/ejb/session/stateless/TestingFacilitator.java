@@ -33,33 +33,31 @@ public class TestingFacilitator {
 
     @EJB
     private RoomTypeEntitySessionBeanLocal roomTypeEntitySessionBean;
-    
+
     @PersistenceContext(unitName = "Hors-ejbPU")
     private EntityManager em;
 
     public TestingFacilitator() {
     }
-}
-    
-   
+
     // room creation - 3 basic, 2 premium (1 not available), 1 Queen
-     
-    //@Schedule(hour = "*", minute = "*", second = "*/5", info = "toFacilitateRoomReservationAllocation")
-    /*
+    @Schedule(hour = "*", minute = "*", second = "*/5", info = "toFacilitateRoomReservationAllocation")
     public void doDataInitialisationRoomEntity() {
         Query query = em.createQuery("SELECT s FROM RoomEntity s");
-        if(query.getResultList().isEmpty()) {
+        if (query.getResultList().isEmpty()) {
             doDataInitialisationRoomEntity();
         }
     }
-    */
-    /*
+
     public void initiateRoomEntity() {
         try {
             RoomTypeEntity roomTypeOne = roomTypeEntitySessionBean.retrieveRoomType("Deluxe");
+            
             RoomTypeEntity roomTypeTwo = roomTypeEntitySessionBean.retrieveRoomType("Premium");
+            
             RoomTypeEntity roomTypeFour = roomTypeEntitySessionBean.retrieveRoomType("Queen");
-
+            
+            System.out.println("Done here A");
             RoomEntity roomA = new RoomEntity(2015, RoomStatusEnum.AVAILABLE, roomTypeOne);
 
             RoomEntity roomB = new RoomEntity(3015, RoomStatusEnum.AVAILABLE, roomTypeOne);
@@ -73,7 +71,7 @@ public class TestingFacilitator {
             RoomEntity roomF = new RoomEntity(7015, RoomStatusEnum.AVAILABLE, roomTypeTwo);
 
             RoomEntity roomG = new RoomEntity(8015, RoomStatusEnum.AVAILABLE, roomTypeFour);
-
+            System.out.println("Done here B");
             try {
                 roomEntitySessionBean.createNewRoom(roomA);
                 roomEntitySessionBean.createNewRoom(roomB);
@@ -83,16 +81,13 @@ public class TestingFacilitator {
                 roomEntitySessionBean.createNewRoom(roomF);
                 roomEntitySessionBean.createNewRoom(roomG);
             } catch (RoomNumberExistException | UnknownPersistenceException | InputDataValidationException ex) {
-                   System.out.println("too bad");
+                System.out.println("too bad");
             }
-
+            System.out.println("Done here C");
         } catch (RoomTypeNotFoundException ex) {
             System.out.println("too bad");
         }
 
     }
 
-
-
 }
-*/

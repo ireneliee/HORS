@@ -111,10 +111,10 @@ public class DataInitSessionBean {
 
             // reservation 2
             RoomReservationLineItemEntity roomThree = new RoomReservationLineItemEntity(roomTypeOne, new BigDecimal(100000),
-                    LocalDate.of(2021, 11, 10), LocalDate.of(2021, 11, 6));
+                    LocalDate.of(2021, 11, 10), LocalDate.of(2021, 11, 16));
 
             RoomReservationLineItemEntity roomFour = new RoomReservationLineItemEntity(roomTypeOne, new BigDecimal(100000),
-                    LocalDate.of(2021, 11, 10), LocalDate.of(2021, 11, 6));
+                    LocalDate.of(2021, 11, 10), LocalDate.of(2021, 11, 16));
 
             RoomReservationEntity roomReservationTwo = new RoomReservationEntity(new BigDecimal(200000), LocalDate.of(2021, 10, 10));
             roomReservationTwo.getRoomReservationLineItems().add(roomThree);
@@ -122,10 +122,10 @@ public class DataInitSessionBean {
 
             // reservation 3
             RoomReservationLineItemEntity roomFive = new RoomReservationLineItemEntity(roomTypeTwo, new BigDecimal(100000),
-                    LocalDate.of(2021, 11, 10), LocalDate.of(2021, 11, 6));
+                    LocalDate.of(2021, 11, 10), LocalDate.of(2021, 11, 16));
 
             RoomReservationLineItemEntity roomSix = new RoomReservationLineItemEntity(roomTypeTwo, new BigDecimal(100000),
-                    LocalDate.of(2021, 11, 10), LocalDate.of(2021, 11, 6));
+                    LocalDate.of(2021, 11, 10), LocalDate.of(2021, 11, 16));
 
             RoomReservationEntity roomReservationThree = new RoomReservationEntity(new BigDecimal(200000), LocalDate.of(2021, 10, 10));
             roomReservationThree.getRoomReservationLineItems().add(roomFive);
