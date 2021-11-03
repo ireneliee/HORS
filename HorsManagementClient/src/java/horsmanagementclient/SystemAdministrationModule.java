@@ -90,7 +90,7 @@ public class SystemAdministrationModule {
         
          while(true)
         {
-            System.out.println("Select Access Right (1: System administrator, 2: Operation Manager ");
+            System.out.println("Select Access Right: ");
             System.out.println("1: System administrator");
             System.out.println("2: Operation Manager");
             System.out.println("3: Sales Manager");

@@ -219,10 +219,15 @@ public class HotelOperationModule {
 
         System.out.println("*** HORS Management System :: Type One Exception***\n");
         List<RoomReservationLineItemEntity> typeOneException = reportRetrieved.getTypeOneException();
+        
         for (RoomReservationLineItemEntity roomReservation : typeOneException) {
             System.out.println("Room reservation line item: " + roomReservation.getRoomReservationLineItemId()
                     + "\n" + "Room reserved: " + roomReservation.getRoomTypeEntity().getName());
-            System.out.println("Status: A room has been allocated");
+            System.out.println("Status: Room of higher rank has been allocated");
+        }
+        
+        if(reportRetrieved.getTypeOneException().isEmpty()) {
+            System.out.println("No exception.\n");
         }
 
         System.out.println("*** HORS Management System :: Type Two Exception***\n");
@@ -230,7 +235,11 @@ public class HotelOperationModule {
         for (RoomReservationLineItemEntity roomReservation : typeTwoException) {
             System.out.println("Room reservation line item: " + roomReservation.getRoomReservationLineItemId()
                     + "\n" + "Room reserved: " + roomReservation.getRoomTypeEntity().getName());
-            System.out.println("Status: A room has not been allocated");
+            System.out.println("Status: Room has not been allocated. Please handle this manually.\n");
+        }
+        
+        if(reportRetrieved.getTypeTwoException().isEmpty()) {
+            System.out.println("No exception.");
         }
 
     }

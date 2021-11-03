@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.EmployeeEntity;
+import entity.GuestHasNotCheckedInException;
 import entity.NormalRateEntity;
 import entity.PartnerEntity;
 import entity.PeakRateEntity;
@@ -22,6 +23,7 @@ import util.exception.DeleteRoomRateException;
 import util.exception.InputDataValidationException;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.InvalidRoomReservationEntityException;
+import util.exception.NoMoreRoomToAccomodateException;
 import util.exception.NormalRateHasAlreadyExistedException;
 import util.exception.PartnerNotFoundException;
 import util.exception.PeakRateHasAlreadyExistedException;
@@ -102,8 +104,9 @@ public interface HorsManagementControllerSessionBeanRemote {
     
     public RoomAllocationExceptionEntity retrieveReportByDate(LocalDate reportDate) throws RoomAllocationExceptionReportDoesNotExistException;
     
-    public void checkOut(Long roomReservationId, LocalDate date) throws WrongCheckoutDate, InvalidRoomReservationEntityException;
+    public void checkOut(Long roomReservationId, LocalDate date) throws WrongCheckoutDate, InvalidRoomReservationEntityException,
+            GuestHasNotCheckedInException;
     
-    public List<RoomEntity> checkIn(Long roomReservationId, LocalDate date) throws InvalidRoomReservationEntityException, WrongCheckInDate;
+    public List<RoomEntity> checkIn(Long roomReservationId, LocalDate date) throws InvalidRoomReservationEntityException, WrongCheckInDate, NoMoreRoomToAccomodateException;
 
 }

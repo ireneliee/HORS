@@ -5,12 +5,14 @@
  */
 package ejb.session.stateless;
 
+import entity.GuestHasNotCheckedInException;
 import entity.RoomEntity;
 import entity.RoomReservationEntity;
 import java.time.LocalDate;
 import java.util.List;
 import javax.ejb.Remote;
 import util.exception.InvalidRoomReservationEntityException;
+import util.exception.NoMoreRoomToAccomodateException;
 import util.exception.WrongCheckInDate;
 import util.exception.WrongCheckoutDate;
 
@@ -25,8 +27,9 @@ public interface RoomReservationEntitySessionBeanRemote {
 
     public Long createNewRoomReservationEntity(RoomReservationEntity newRoomReservationEntity) throws InvalidRoomReservationEntityException;
     
-    public List<RoomEntity> checkIn(Long roomReservationId, LocalDate date) throws InvalidRoomReservationEntityException, WrongCheckInDate;
+    public List<RoomEntity> checkIn(Long roomReservationId, LocalDate date) throws InvalidRoomReservationEntityException, WrongCheckInDate, NoMoreRoomToAccomodateException;
     
-    public void checkOut(Long roomReservationId, LocalDate date) throws WrongCheckoutDate, InvalidRoomReservationEntityException;
+    public void checkOut(Long roomReservationId, LocalDate date) throws WrongCheckoutDate, InvalidRoomReservationEntityException,
+            GuestHasNotCheckedInException;
 
 }

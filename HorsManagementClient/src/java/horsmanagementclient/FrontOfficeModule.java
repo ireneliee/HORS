@@ -7,6 +7,7 @@ package horsmanagementclient;
 
 import ejb.session.stateless.HorsManagementControllerSessionBeanRemote;
 import entity.EmployeeEntity;
+import entity.GuestHasNotCheckedInException;
 import entity.RoomEntity;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -15,6 +16,7 @@ import java.util.Scanner;
 import util.enumeration.AccessRightEnum;
 import util.exception.InvalidAccessRightException;
 import util.exception.InvalidRoomReservationEntityException;
+import util.exception.NoMoreRoomToAccomodateException;
 import util.exception.WrongCheckInDate;
 import util.exception.WrongCheckoutDate;
 
@@ -95,7 +97,7 @@ public class FrontOfficeModule {
                     .stream()
                     .forEach(System.out::println);
             
-        } catch (InvalidRoomReservationEntityException | WrongCheckInDate ex) {
+        } catch (InvalidRoomReservationEntityException | WrongCheckInDate | NoMoreRoomToAccomodateException ex) {
             System.out.println("An error has occured: "  +ex.getMessage());
         }
 
@@ -114,7 +116,8 @@ public class FrontOfficeModule {
         try {
             horsManagementControllerSessionBeanRemote.checkOut(reservationId, checkoutDate);
             System.out.println("Check-out is successful!");
-        } catch (InvalidRoomReservationEntityException | WrongCheckoutDate ex) {
+        } catch (InvalidRoomReservationEntityException | WrongCheckoutDate |
+            GuestHasNotCheckedInException ex) {
             System.out.println("An error has occured: "  +ex.getMessage());
         }
     }

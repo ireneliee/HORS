@@ -5,6 +5,7 @@
  */
 package ejb.session.stateless;
 
+import entity.GuestHasNotCheckedInException;
 import entity.RoomEntity;
 import entity.RoomReservationEntity;
 import entity.RoomReservationLineItemEntity;
@@ -17,9 +18,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import util.exception.InvalidRoomReservationEntityException;
+import util.exception.NoMoreRoomToAccomodateException;
 import util.exception.WrongCheckInDate;
 import util.exception.WrongCheckoutDate;
-
 
 @Stateless
 public class RoomReservationEntitySessionBean implements RoomReservationEntitySessionBeanRemote, RoomReservationEntitySessionBeanLocal {
@@ -27,87 +28,94 @@ public class RoomReservationEntitySessionBean implements RoomReservationEntitySe
     @PersistenceContext(unitName = "Hors-ejbPU")
     private EntityManager em;
 
-    public RoomReservationEntitySessionBean(){}
-    
+    public RoomReservationEntitySessionBean() {
+    }
+
     // for one that needs user entity, does not include guest
     // payment must be added before -> then can create roomReservationEntity
     // roomReservationLineItemEntity must be added before too -> then can create room reservation entity
     @Override
     public Long createNewRoomReservationEntity(Long userId,
             RoomReservationEntity newRoomReservationEntity) throws InvalidRoomReservationEntityException {
-        
-        if(newRoomReservationEntity == null) {
-            
+
+        if (newRoomReservationEntity == null) {
+
             throw new InvalidRoomReservationEntityException("Room reservation information not provided.");
-            
+
         }
         UserEntity user = em.find(UserEntity.class, userId);
-        
+
         user.getRoomReservations().add(newRoomReservationEntity);
-        
+
         newRoomReservationEntity.setBookingAccount(user);
-        
+
         em.persist(newRoomReservationEntity);
-        
+
         return newRoomReservationEntity.getRoomReservationId();
 
     }
-    
+
     @Override
     public Long createNewRoomReservationEntity(RoomReservationEntity newRoomReservationEntity) throws InvalidRoomReservationEntityException {
-        
-        if(newRoomReservationEntity == null) {
-            
+
+        if (newRoomReservationEntity == null) {
+
             throw new InvalidRoomReservationEntityException("Room reservation information not provided.");
-            
+
         }
 
-        
         em.persist(newRoomReservationEntity);
-        
+
         return newRoomReservationEntity.getRoomReservationId();
 
     }
-    
+
     @Override
-    public List <RoomEntity> checkIn(Long roomReservationId, LocalDate date) throws InvalidRoomReservationEntityException, WrongCheckInDate {
-   
-        try{
+    public List<RoomEntity> checkIn(Long roomReservationId, LocalDate date) throws InvalidRoomReservationEntityException, WrongCheckInDate,
+            NoMoreRoomToAccomodateException  {
+
+        try {
             RoomReservationEntity roomReservation = em.find(RoomReservationEntity.class, roomReservationId);
             List<RoomReservationLineItemEntity> listOfRoomReservations = roomReservation.getRoomReservationLineItems();
-            
-            if(!listOfRoomReservations.get(0).getCheckInDate().equals(date)) {
+
+            if (!listOfRoomReservations.get(0).getCheckInDate().equals(date)) {
                 throw new WrongCheckInDate("You are not supposed to check in today!");
             }
             List<RoomEntity> roomsForCheckIn = new ArrayList<>();
             // checkIn = true
-            listOfRoomReservations
-                    .stream()
-                    .forEach(x -> x.setCheckedIn(true));
-            
-            
-            listOfRoomReservations
-                    .stream()
-                    .forEach(x -> roomsForCheckIn.add(x.getRoomAllocation()));
+            for (RoomReservationLineItemEntity x : listOfRoomReservations) {
+                   if(x.getRoomAllocation() != null) {
+                       roomsForCheckIn.add(x.getRoomAllocation());
+                       x.setCheckedIn(true);
+                   } else {
+                       String roomNumber = "";
+                       for(int i = 0; i < roomsForCheckIn.size(); i++) {
+                           roomNumber = roomNumber + roomsForCheckIn.get(i) + "\n";
+                       }
+                       throw new NoMoreRoomToAccomodateException("Currently, the hotel only has " + roomsForCheckIn.size() + " room(s)" + 
+                               " to accomodate for the guest's reservation. The room(s) are \n" + roomNumber + "\nPlease handle this manually");
+                   }
+            }
+
             return roomsForCheckIn;
-            
-           
-        } catch(NoResultException ex) {
+
+        } catch (NoResultException ex) {
             throw new InvalidRoomReservationEntityException("Room reservation does not exist.");
         }
-        
-        
-        
-       
+
     }
-    
+
     @Override
-    public void checkOut(Long roomReservationId, LocalDate date) throws WrongCheckoutDate, InvalidRoomReservationEntityException {
-        try{
+    public void checkOut(Long roomReservationId, LocalDate date) throws WrongCheckoutDate, InvalidRoomReservationEntityException,
+            GuestHasNotCheckedInException{
+        try {
             RoomReservationEntity roomReservation = em.find(RoomReservationEntity.class, roomReservationId);
             List<RoomReservationLineItemEntity> listOfRoomReservations = roomReservation.getRoomReservationLineItems();
-            
-            if(!(listOfRoomReservations.get(0).getCheckoutDate().equals(date))) {
+            // check if the guest has checked in
+            if(!listOfRoomReservations.get(0).getCheckedIn()) {
+                throw new GuestHasNotCheckedInException("Guest has not checked in!'");
+            }
+            if (!(listOfRoomReservations.get(0).getCheckoutDate().equals(date))) {
                 System.out.println(listOfRoomReservations.get(0).getCheckoutDate());
                 throw new WrongCheckoutDate("Checkout date need to be rechecked!");
             }
@@ -116,15 +124,10 @@ public class RoomReservationEntitySessionBean implements RoomReservationEntitySe
             listOfRoomReservations
                     .stream()
                     .forEach(x -> x.setCheckedOut(true));
-  
+
         } catch (NoResultException ex) {
             throw new InvalidRoomReservationEntityException("Room reservation does not exist.");
         }
     }
-   
-    
 
-    
-
-    
 }
