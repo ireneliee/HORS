@@ -107,7 +107,8 @@ public class RoomReservationEntitySessionBean implements RoomReservationEntitySe
             RoomReservationEntity roomReservation = em.find(RoomReservationEntity.class, roomReservationId);
             List<RoomReservationLineItemEntity> listOfRoomReservations = roomReservation.getRoomReservationLineItems();
             
-            if(!listOfRoomReservations.get(0).getCheckInDate().equals(date)) {
+            if(!(listOfRoomReservations.get(0).getCheckoutDate().equals(date))) {
+                System.out.println(listOfRoomReservations.get(0).getCheckoutDate());
                 throw new WrongCheckoutDate("Checkout date need to be rechecked!");
             }
 

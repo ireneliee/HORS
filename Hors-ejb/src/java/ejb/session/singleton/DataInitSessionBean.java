@@ -172,6 +172,10 @@ public class DataInitSessionBean {
             EmployeeEntity employeeFour = new EmployeeEntity("Employee", "Four", "employeeFour", "password",
                     AccessRightEnum.SALESMANAGER);
             employeeEntitySessionBean.createNewEmployee(employeeFour);
+            
+            EmployeeEntity employeeFive = new EmployeeEntity("Employee", "Five", "employeeFive", "password",
+                    AccessRightEnum.GUESTRELATIONOFFICER);
+            employeeEntitySessionBean.createNewEmployee(employeeFour);
 
         } catch (UsernameExistException | UnknownPersistenceException ex) {
             System.out.println(ex.getMessage());
