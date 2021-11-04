@@ -4,12 +4,10 @@
     <jta-data-source>jdbc/hors</jta-data-source>
     <class>entity.RoomEntity</class>
     <class>entity.RoomTypeEntity</class>
-    <class>entity.RoomTypeAvailability</class>
     <class>entity.NormalRate</class>
     <class>entity.PeakRateEntity</class>
     <class>entity.PromotionRateEntity</class>
     <class>entity.PublishedRateEntity</class>
-    <class>entity.RoomRateEntity</class>
     <class>entity.PaymentEntity</class>
     <class>entity.RoomReservationEntity</class>
     <class>entity.RoomReservationLineItemEntity</class>
@@ -20,6 +18,8 @@
     <class>entity.UserEntity</class>
     <class>entity.VisitorEntity</class>
     <class>entity.DateUsedEntity</class>
+    <class>entity.NormalRateEntity</class>
+    <class>entity.RoomRateEntity</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.schema-generation.database.action" value="create"/>

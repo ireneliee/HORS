@@ -31,22 +31,22 @@ public class RoomReservationEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roomReservationId;
-    
+
     @OneToMany(cascade = CascadeType.ALL)
     private List<RoomReservationLineItemEntity> roomReservationLineItems;
-    
+
     private BigDecimal totalAmount;
-    
+
     @ManyToOne
-    @JoinColumn 
+    @JoinColumn
     private UserEntity bookingAccount;
-    
+
     private LocalDate reservationDate;
-    
+
     @OneToOne
     private PaymentEntity payment;
-    
-    public RoomReservationEntity(){
+
+    public RoomReservationEntity() {
         roomReservationLineItems = new ArrayList<>();
     }
 
@@ -55,8 +55,7 @@ public class RoomReservationEntity implements Serializable {
         this.totalAmount = totalAmount;
         this.reservationDate = reservationDate;
     }
-    
-    
+
     public Long getRoomReservationId() {
         return roomReservationId;
     }
@@ -87,7 +86,14 @@ public class RoomReservationEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.RoomReservationEntity[ id=" + roomReservationId + " ]";
+        String lineItems = "";
+        List<RoomReservationLineItemEntity> current = this.getRoomReservationLineItems();
+        for (int i = 0; i < this.getRoomReservationLineItems().size(); i++) {
+
+            lineItems = lineItems + current.get(i);
+        }
+        return "Room reservation Id " + this.getRoomReservationId() + "\n" + "Total rooms reserved: " + this.getRoomReservationLineItems().size()
+                + "\n" + lineItems;
     }
 
     public List<RoomReservationLineItemEntity> getRoomReservationLineItems() {
@@ -129,5 +135,5 @@ public class RoomReservationEntity implements Serializable {
     public void setBookingAccount(UserEntity bookingAccount) {
         this.bookingAccount = bookingAccount;
     }
-    
+
 }

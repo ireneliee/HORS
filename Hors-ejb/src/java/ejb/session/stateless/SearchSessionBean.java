@@ -45,7 +45,8 @@ public class SearchSessionBean implements SearchSessionBeanRemote, SearchSession
     public BigDecimal calculatePublishedRate(LocalDate checkIn, LocalDate checkOut,
             RoomTypeEntity roomType) throws RateNotFoundException {
         roomType = em.find(RoomTypeEntity.class, roomType.getRoomTypeId());
-        String databaseQuery = "SELECT pr FROM PublishedRateEntity pr WHERE pr.roomType = :iRoomType";
+        String databaseQuery = "SELECT pr FROM PublishedRateEntity pr WHERE pr.roomType = :iRoomType " + 
+                "AND pr.disabled = false";
         Query query = em.createQuery(databaseQuery);
         query.setParameter("iRoomType", roomType);
         try {
@@ -98,7 +99,8 @@ public class SearchSessionBean implements SearchSessionBeanRemote, SearchSession
     private BigDecimal calculateNormalRate(RoomTypeEntity roomType)
             throws RateNotFoundException {
         roomType = em.find(RoomTypeEntity.class, roomType.getRoomTypeId());
-        String databaseQuery = "SELECT pr FROM NormalRateEntity pr WHERE pr.roomType = :iRoomType";
+        String databaseQuery = "SELECT pr FROM NormalRateEntity pr WHERE pr.roomType = :iRoomType " + 
+                "AND pr.disabled = false";
         Query query = em.createQuery(databaseQuery);
         query.setParameter("iRoomType", roomType);
         try {
@@ -116,7 +118,8 @@ public class SearchSessionBean implements SearchSessionBeanRemote, SearchSession
     private BigDecimal calculatePromotionRate(RoomTypeEntity roomType, LocalDate date)
             throws PromotionRateNotFoundException {
         roomType = em.find(RoomTypeEntity.class, roomType.getRoomTypeId());
-        String queryInString = "SELECT pr FROM PromotionRateEntity pr WHERE pr.roomType = :iRoomType";
+        String queryInString = "SELECT pr FROM PromotionRateEntity pr WHERE pr.roomType = :iRoomType " + 
+                "AND pr.disabled = false";
         Query query = em.createQuery(queryInString);
         query.setParameter("iRoomType", roomType);
         List<PromotionRateEntity> listOfPromotionRates = query.getResultList();
@@ -144,7 +147,8 @@ public class SearchSessionBean implements SearchSessionBeanRemote, SearchSession
     // method to check if promotion exists for a certain type of room, for a certain date
     private Boolean checkIfPromotionExist(RoomTypeEntity roomType, LocalDate date) {
         roomType = em.find(RoomTypeEntity.class, roomType.getRoomTypeId());
-        String queryInString = "SELECT pr FROM PromotionRateEntity pr WHERE pr.roomType = :iRoomType";
+        String queryInString = "SELECT pr FROM PromotionRateEntity pr WHERE pr.roomType = :iRoomType " + 
+                "AND pr.disabled = false";
         Query query = em.createQuery(queryInString);
         query.setParameter("iRoomType", roomType);
         List<PromotionRateEntity> listOfPromotionRates = query.getResultList();
@@ -160,7 +164,8 @@ public class SearchSessionBean implements SearchSessionBeanRemote, SearchSession
     private BigDecimal calculatePeakRate(RoomTypeEntity roomType, LocalDate date)
             throws PeakRateNotFoundException {
         roomType = em.find(RoomTypeEntity.class, roomType.getRoomTypeId());
-        String queryInString = "SELECT pr FROM PeakRateEntity pr WHERE pr.roomType = :iRoomType";
+        String queryInString = "SELECT pr FROM PeakRateEntity pr WHERE pr.roomType = :iRoomType " + 
+                "AND pr.disabled = false";
         Query query = em.createQuery(queryInString);
         query.setParameter("iRoomType", roomType);
         List<PeakRateEntity> listOfPeakRates = query.getResultList();
@@ -187,7 +192,8 @@ public class SearchSessionBean implements SearchSessionBeanRemote, SearchSession
 
     private Boolean checkIfPeakRateExist(RoomTypeEntity roomType, LocalDate date) {
         roomType = em.find(RoomTypeEntity.class, roomType.getRoomTypeId());
-        String queryInString = "SELECT pr FROM PeakRateEntity pr WHERE pr.roomType = :iRoomType";
+        String queryInString = "SELECT pr FROM PeakRateEntity pr WHERE pr.roomType = :iRoomType " + 
+                "AND pr.disabled = false";
         Query query = em.createQuery(queryInString);
         query.setParameter("iRoomType", roomType);
         List<PeakRateEntity> listOfPeakRates = query.getResultList();

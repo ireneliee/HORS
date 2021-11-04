@@ -90,7 +90,7 @@ public class RoomReservationLineItemEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.RoomReservationLineItem[ id=" + roomReservationLineItemId + " ] Room type: " + this.getRoomTypeEntity().getName();
+        return "RoomType: " + this.getRoomTypeEntity().getName() + "\n" + "Check-in date: " + this.getCheckInDate() + " Check-out date: " + this.getCheckoutDate();
     }
 
     public List<RoomRateEntity> getRoomRatesPerNight() {
