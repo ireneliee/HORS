@@ -5,29 +5,26 @@
  */
 package horsreservationclient;
 
-import ejb.session.stateless.GuestEntitySessionBeanRemote;
+
+import ejb.session.stateless.HorsReservationClientControllerRemote;
 import entity.GuestEntity;
 import java.util.Scanner;
-import util.exception.InvalidAccessRightException;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UsernameExistException;
 
-/**
- *
- * @author zenyew
- */
+
 public class MainApp {
     
-    private GuestEntitySessionBeanRemote guestEntitySessionBeanRemote;
+    private HorsReservationClientControllerRemote horsReservationClientController;
     private GuestEntity currentGuestEntity;
 
     public MainApp() {
     }
     
    
-    public MainApp(GuestEntitySessionBeanRemote guestEntitySessionBeanRemote) {
-        this.guestEntitySessionBeanRemote = guestEntitySessionBeanRemote;
+    public MainApp(HorsReservationClientControllerRemote horsReservationClientControllerr) {
+        this.horsReservationClientController = horsReservationClientController;
     }
     
     
@@ -111,7 +108,7 @@ public class MainApp {
         
         if(username.length() > 0 && password.length() > 0)
         {
-            currentGuestEntity = guestEntitySessionBeanRemote.guestLogin(username, password);
+            currentGuestEntity = horsReservationClientController.guestLogin(username, password);
         }
         else
         {
@@ -144,11 +141,11 @@ public class MainApp {
         
         Long newGuestId = 0L;
             try{
-                newGuestId = guestEntitySessionBeanRemote.guestRegister(newGuestEntity);
+                newGuestId = horsReservationClientController.guestRegister(newGuestEntity);
             } catch (UsernameExistException | UnknownPersistenceException ex) {
                 System.out.println(ex.getMessage());
             }
-            System.out.println("A new employee with employeeId " + newGuestId + " is created");
+            System.out.println("A new guest with guestId " + newGuestId + " is created");
                 
               
     }

@@ -5,12 +5,12 @@
  */
 package ejb.session.stateless;
 
-import entity.GuestHasNotCheckedInException;
 import entity.RoomEntity;
 import entity.RoomReservationEntity;
 import java.time.LocalDate;
 import java.util.List;
 import javax.ejb.Local;
+import util.exception.GuestHasNotCheckedInException;
 import util.exception.InvalidRoomReservationEntityException;
 import util.exception.NoMoreRoomToAccomodateException;
 import util.exception.WrongCheckInDate;

@@ -6,6 +6,8 @@
 package horsreservationclient;
 
 import ejb.session.stateless.GuestEntitySessionBeanRemote;
+import ejb.session.stateless.HolidayReservationSystemControllerRemote;
+import ejb.session.stateless.HorsReservationClientControllerRemote;
 import javax.ejb.EJB;
 
 /**
@@ -13,10 +15,14 @@ import javax.ejb.EJB;
  * @author irene
  */
 public class Main {
-    
-    
+
     @EJB
-    private static GuestEntitySessionBeanRemote guestEntitySessionBeanRemote;
+    private static HorsReservationClientControllerRemote horsReservationClientController;
+
+    
+    
+    
+    
         
 
     /**
@@ -26,7 +32,7 @@ public class Main {
         
        
         
-        MainApp mainApp = new MainApp(guestEntitySessionBeanRemote);
+        MainApp mainApp = new MainApp(horsReservationClientController);
         mainApp.runApp();
         
         

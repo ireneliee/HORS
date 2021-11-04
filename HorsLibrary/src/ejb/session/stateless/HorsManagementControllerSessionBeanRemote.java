@@ -6,7 +6,6 @@
 package ejb.session.stateless;
 
 import entity.EmployeeEntity;
-import entity.GuestHasNotCheckedInException;
 import entity.NormalRateEntity;
 import entity.PartnerEntity;
 import entity.PeakRateEntity;
@@ -20,6 +19,7 @@ import java.time.LocalDate;
 import java.util.List;
 import javax.ejb.Remote;
 import util.exception.DeleteRoomRateException;
+import util.exception.GuestHasNotCheckedInException;
 import util.exception.InputDataValidationException;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.InvalidRoomReservationEntityException;

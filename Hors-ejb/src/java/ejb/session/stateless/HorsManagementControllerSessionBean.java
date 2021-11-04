@@ -6,7 +6,6 @@
 package ejb.session.stateless;
 
 import entity.EmployeeEntity;
-import entity.GuestHasNotCheckedInException;
 import entity.NormalRateEntity;
 import entity.PartnerEntity;
 import entity.PeakRateEntity;
@@ -22,6 +21,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import util.exception.DeleteRoomRateException;
 import util.exception.EmployeeNotFoundException;
+import util.exception.GuestHasNotCheckedInException;
 import util.exception.InputDataValidationException;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.InvalidRoomReservationEntityException;

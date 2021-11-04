@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity;
+package util.exception;
 
 /**
  *
  * @author irene
  */
-public class GuestHasNotCheckedInException extends Exception {
+public class GuestHasNotCheckedInException extends Exception{
     public GuestHasNotCheckedInException(){}
     
     public GuestHasNotCheckedInException(String msg) {

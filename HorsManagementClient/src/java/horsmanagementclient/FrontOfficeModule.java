@@ -7,13 +7,13 @@ package horsmanagementclient;
 
 import ejb.session.stateless.HorsManagementControllerSessionBeanRemote;
 import entity.EmployeeEntity;
-import entity.GuestHasNotCheckedInException;
 import entity.RoomEntity;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 import util.enumeration.AccessRightEnum;
+import util.exception.GuestHasNotCheckedInException;
 import util.exception.InvalidAccessRightException;
 import util.exception.InvalidRoomReservationEntityException;
 import util.exception.NoMoreRoomToAccomodateException;

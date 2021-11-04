@@ -5,6 +5,7 @@
  */
 package holidayreservationsystemclient;
 
+import ejb.session.stateless.HolidayReservationSystemControllerRemote;
 import ejb.session.stateless.PartnerEntitySessionBeanRemote;
 import javax.ejb.EJB;
 
@@ -15,7 +16,9 @@ import javax.ejb.EJB;
 public class Main {
 
     @EJB
-    private static PartnerEntitySessionBeanRemote partnerEntitySessionBeanRemote;
+    private static HolidayReservationSystemControllerRemote holidayReservationSystemController;
+
+    
 
     /**
      * @param args the command line arguments
@@ -23,7 +26,7 @@ public class Main {
     public static void main(String[] args) {
         // TODO code application logic here
         
-        MainApp mainApp = new MainApp(partnerEntitySessionBeanRemote);
+        MainApp mainApp = new MainApp(holidayReservationSystemController);
         mainApp.runApp();
     }
     

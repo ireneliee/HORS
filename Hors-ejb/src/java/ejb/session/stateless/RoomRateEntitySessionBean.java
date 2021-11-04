@@ -19,7 +19,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
-import static org.hibernate.validator.internal.util.privilegedactions.Unmarshal.action;
 import util.exception.DeleteRoomRateException;
 import util.exception.NormalRateHasAlreadyExistedException;
 import util.exception.PeakRateHasAlreadyExistedException;

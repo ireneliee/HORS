@@ -5,6 +5,7 @@
  */
 package holidayreservationsystemclient;
 
+import ejb.session.stateless.HolidayReservationSystemControllerRemote;
 import ejb.session.stateless.PartnerEntitySessionBeanRemote;
 import entity.PartnerEntity;
 import java.util.Scanner;
@@ -17,14 +18,14 @@ import util.exception.UsernameExistException;
  */
 public class MainApp {
     
-    private static PartnerEntitySessionBeanRemote partnerEntitySessionBeanRemote;
+    private HolidayReservationSystemControllerRemote holidayReservationSystemController;
     private PartnerEntity currentPartnerEntity;
 
     public MainApp() {
     }
     
-    public MainApp(PartnerEntitySessionBeanRemote partnerEntitySessionBeanRemote) {
-        this.partnerEntitySessionBeanRemote = partnerEntitySessionBeanRemote;
+    public MainApp(HolidayReservationSystemControllerRemote holidayReservationSystemController) {
+        this.holidayReservationSystemController = holidayReservationSystemController;
     }
     
     
@@ -96,7 +97,7 @@ public class MainApp {
         
         if(username.length() > 0 && password.length() > 0)
         {
-            currentPartnerEntity = partnerEntitySessionBeanRemote.partnerLogin(username, password);
+            currentPartnerEntity = holidayReservationSystemController.partnerLogin(username, password);
         }
         else
         {
