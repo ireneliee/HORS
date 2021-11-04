@@ -11,8 +11,10 @@ import entity.RoomAllocationExceptionEntity;
 import entity.RoomEntity;
 import entity.RoomRateEntity;
 import entity.RoomTypeEntity;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.Local;
 import util.exception.DeleteRoomRateException;
 import util.exception.GuestHasNotCheckedInException;
@@ -25,6 +27,7 @@ import util.exception.PartnerNotFoundException;
 import util.exception.PeakRateHasAlreadyExistedException;
 import util.exception.PromotionRateHasAlreadyExistedException;
 import util.exception.PublishedRateHasAlreadyExistedException;
+import util.exception.RateNotFoundException;
 import util.exception.RoomAllocationExceptionReportDoesNotExistException;
 import util.exception.RoomAllocationIsDoneException;
 import util.exception.RoomNotFoundException;
@@ -105,6 +108,12 @@ public interface HorsManagementControllerSessionBeanLocal {
             GuestHasNotCheckedInException;
 
     public List<RoomEntity> checkIn(Long roomReservationId, LocalDate date) throws InvalidRoomReservationEntityException, WrongCheckInDate, NoMoreRoomToAccomodateException;
+    
+    public Map<RoomTypeEntity, Integer> findAvailableRoomTypes(LocalDate checkIn, LocalDate checkOut);
+    
+    public BigDecimal calculatePublishedRate(LocalDate checkIn, LocalDate checkOut, RoomTypeEntity roomType) throws RateNotFoundException;
+    
+    public BigDecimal calculateNonPublishedRate(LocalDate checkIn, LocalDate checkOut, RoomTypeEntity roomType) throws RateNotFoundException;
 
     
 }

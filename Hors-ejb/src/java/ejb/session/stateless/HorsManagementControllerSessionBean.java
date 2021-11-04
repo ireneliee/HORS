@@ -15,8 +15,10 @@ import entity.RoomAllocationExceptionEntity;
 import entity.RoomEntity;
 import entity.RoomRateEntity;
 import entity.RoomTypeEntity;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import util.exception.DeleteRoomRateException;
@@ -31,6 +33,7 @@ import util.exception.PartnerNotFoundException;
 import util.exception.PeakRateHasAlreadyExistedException;
 import util.exception.PromotionRateHasAlreadyExistedException;
 import util.exception.PublishedRateHasAlreadyExistedException;
+import util.exception.RateNotFoundException;
 import util.exception.RoomAllocationExceptionReportDoesNotExistException;
 import util.exception.RoomAllocationIsDoneException;
 import util.exception.RoomNotFoundException;
@@ -47,6 +50,9 @@ import util.exception.WrongCheckoutDate;
 @Stateless
 public class HorsManagementControllerSessionBean implements HorsManagementControllerSessionBeanRemote,
         HorsManagementControllerSessionBeanLocal {
+
+    @EJB
+    private SearchSessionBeanLocal searchSessionBean;
 
     @EJB
     private RoomReservationEntitySessionBeanLocal roomReservationEntitySessionBean;
@@ -244,9 +250,24 @@ public class HorsManagementControllerSessionBean implements HorsManagementContro
     }
 
     @Override
-    public List<RoomEntity> checkIn(Long roomReservationId, LocalDate date) throws InvalidRoomReservationEntityException, WrongCheckInDate, 
-            NoMoreRoomToAccomodateException{
+    public List<RoomEntity> checkIn(Long roomReservationId, LocalDate date) throws InvalidRoomReservationEntityException, WrongCheckInDate,
+            NoMoreRoomToAccomodateException {
         return roomReservationEntitySessionBean.checkIn(roomReservationId, date);
+    }
+
+    @Override
+    public Map<RoomTypeEntity, Integer> findAvailableRoomTypes(LocalDate checkIn, LocalDate checkOut) {
+        return searchSessionBean.findAvailableRoomTypes(checkIn, checkOut);
+    }
+
+    @Override
+    public BigDecimal calculatePublishedRate(LocalDate checkIn, LocalDate checkOut, RoomTypeEntity roomType) throws RateNotFoundException {
+        return searchSessionBean.calculatePublishedRate(checkIn, checkOut, roomType);
+    }
+
+    @Override
+    public BigDecimal calculateNonPublishedRate(LocalDate checkIn, LocalDate checkOut, RoomTypeEntity roomType) throws RateNotFoundException {
+        return searchSessionBean.calculateNonPublishedRate(checkIn, checkOut, roomType);
     }
 
 }
