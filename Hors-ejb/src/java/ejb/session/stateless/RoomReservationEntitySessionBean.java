@@ -16,6 +16,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import util.exception.GuestHasNotCheckedInException;
 import util.exception.InvalidRoomReservationEntityException;
 import util.exception.NoMoreRoomToAccomodateException;
@@ -129,5 +130,16 @@ public class RoomReservationEntitySessionBean implements RoomReservationEntitySe
             throw new InvalidRoomReservationEntityException("Room reservation does not exist.");
         }
     }
+    
+    public List<RoomReservationEntity> viewAllMyReservation(String username){
+        
+         String databaseQueryString = "SELECT rr FROM RoomReservationEntity rr WHERE rr.bookingAccount.name = :iName";
+            Query query = em.createQuery(databaseQueryString);
+            query.setParameter("iName", username);
+            
+            List<RoomReservationEntity> reservations = query.getResultList();
+        
+        return reservations;
+    } 
 
 }

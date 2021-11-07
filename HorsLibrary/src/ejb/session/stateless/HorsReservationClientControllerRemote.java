@@ -6,11 +6,20 @@
 package ejb.session.stateless;
 
 import entity.GuestEntity;
+import entity.PaymentEntity;
+import entity.RoomTypeEntity;
+import entity.UserEntity;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
 import javax.ejb.Remote;
 import util.exception.GuestNotFoundException;
 import util.exception.InvalidLoginCredentialException;
+import util.exception.InvalidRoomReservationEntityException;
+import util.exception.RoomTypeNotFoundException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UsernameExistException;
+import util.reservation.Pair;
 
 /**
  *
@@ -25,4 +34,7 @@ public interface HorsReservationClientControllerRemote {
 
     public Long guestRegister(GuestEntity newGuestEntity) throws UsernameExistException, UnknownPersistenceException;
     
+    public List<Pair<RoomTypeEntity, BigDecimal>> searchRoom(int reserveType, LocalDate checkinDate, LocalDate checkoutDate, Integer numberOfRooms);
+    
+    public Long makeReservation(UserEntity username,int response, PaymentEntity payment) throws RoomTypeNotFoundException, InvalidRoomReservationEntityException;
 }

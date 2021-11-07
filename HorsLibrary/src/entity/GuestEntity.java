@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 
@@ -16,9 +17,13 @@ public class GuestEntity extends UserEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     private String firstName;
     private String lastName;
+    @Column(nullable = false, unique = true)
     private String username;
+    @Column(nullable = false)
     private String password;
+    @Column(nullable = false)
     private String mobileNo;
+    @Column(nullable = false)
     private String passportNo;
 
     public GuestEntity() {

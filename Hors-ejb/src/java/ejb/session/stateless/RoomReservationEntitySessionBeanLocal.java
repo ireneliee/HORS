@@ -31,5 +31,7 @@ public interface RoomReservationEntitySessionBeanLocal {
 
     public void checkOut(Long roomReservationId, LocalDate date) throws WrongCheckoutDate, InvalidRoomReservationEntityException,
             GuestHasNotCheckedInException;
+
+    public List<RoomReservationEntity> viewAllMyReservation(String username);
     
 }
