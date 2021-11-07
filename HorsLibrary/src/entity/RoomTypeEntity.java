@@ -39,7 +39,7 @@ public class RoomTypeEntity implements Serializable {
     private Integer roomRanking;
     private Boolean disabled;
     
-    @OneToMany(mappedBy="roomType", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="roomType", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<RoomEntity> roomEntities;
     
    
@@ -50,7 +50,7 @@ public class RoomTypeEntity implements Serializable {
     }
 
     public RoomTypeEntity(String name, String description, String size, Integer bed, Integer capacity, String amenities, Integer rank) {
-        super();
+        this();
         this.disabled = false;
         this.name = name;
         this.description = description;

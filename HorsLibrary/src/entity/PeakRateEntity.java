@@ -21,13 +21,13 @@ public class PeakRateEntity extends RoomRateEntity implements Serializable {
     
     public PeakRateEntity(){
         super();
-        this.rank = 2;
+        this.roomRank = 2;
     }
     
     public PeakRateEntity(String name, LocalDate startValidityDate, LocalDate endValidityDate,
             BigDecimal rate, RoomTypeEntity roomType) {
         super(name, rate, roomType, startValidityDate, endValidityDate);
-        this.rank = 2;
+        this.roomRank = 2;
     }
 
 

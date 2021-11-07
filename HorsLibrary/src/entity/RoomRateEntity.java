@@ -34,8 +34,8 @@ public class RoomRateEntity implements Serializable {
     protected LocalDate startValidityDate;
     protected LocalDate endValidityDate;
     protected Boolean disabled;
-    protected Integer rank;
-
+    protected Integer roomRank;
+    
     public RoomRateEntity(){
         disabled = false;
     }
@@ -131,12 +131,12 @@ public class RoomRateEntity implements Serializable {
         this.disabled = disabled;
     }
 
-    public Integer getRank() {
-        return rank;
+    public Integer getRoomRank() {
+        return roomRank;
     }
 
-    public void setRank(Integer rank) {
-        this.rank = rank;
+    public void setRoomRank(Integer roomRank) {
+        this.roomRank = roomRank;
     }
     
     
