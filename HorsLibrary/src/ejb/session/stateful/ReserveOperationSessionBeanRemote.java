@@ -30,10 +30,6 @@ public interface ReserveOperationSessionBeanRemote {
 
     public Long makeReservation(UserEntity username, int response, PaymentEntity payment) throws RoomTypeNotFoundException, InvalidRoomReservationEntityException;
 
-    public List<RoomReservationEntity> viewAllReservation(String username) throws ReservationNotFoundException, GuestNotFoundException;
-
-    public RoomReservationEntity viewReservationDetails(Long reservationId) throws ReservationNotFoundException;
-
-    
+   
     
 }

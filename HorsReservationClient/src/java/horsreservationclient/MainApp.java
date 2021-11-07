@@ -10,6 +10,7 @@ import ejb.session.stateful.ReserveOperationSessionBeanRemote;
 import ejb.session.stateless.HorsReservationClientControllerRemote;
 import entity.GuestEntity;
 import entity.PaymentEntity;
+import entity.RoomReservationEntity;
 import entity.RoomTypeEntity;
 import java.math.BigDecimal;
 import java.time.DateTimeException;
@@ -22,8 +23,10 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import util.enumeration.PaymentMethodEnum;
+import util.exception.GuestNotFoundException;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.InvalidRoomReservationEntityException;
+import util.exception.ReservationNotFoundException;
 import util.exception.RoomTypeNotFoundException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UsernameExistException;
@@ -200,7 +203,7 @@ public class MainApp {
                 }
                 else if(response == 2)
                 {
-                    //view details//
+                    doViewMyReservationDetails();
                 }
                 else if (response == 3)
                 {
@@ -316,6 +319,59 @@ public class MainApp {
         }
         
        
+                
+    }
+     
+    public void doViewMyReservationDetails() {
+        
+        Scanner scanner = new Scanner(System.in);
+        Long reservationId = 0L;
+       
+        System.out.println("*** HORS Reservation  :: View My Reservation Details ***\n");
+        System.out.print("Enter Reservation Id> ");
+        reservationId = scanner.nextLong();
+        
+        try
+        {
+            RoomReservationEntity roomReservation = horsReservationClientController.viewReservationDetails(reservationId);
+            System.out.println("Reservation Id :" + roomReservation.getRoomReservationId());
+            System.out.println("Booking Account :" + roomReservation.getBookingAccount());
+            System.out.println("Reservation Date :" + roomReservation.getReservationDate());
+            System.out.println("Number of Rooms :" + roomReservation.getRoomReservationLineItems().size());
+            System.out.println("Check-in Date :" + roomReservation.getRoomReservationLineItems().get(0).getCheckInDate());
+            System.out.println("Check-out Date :" + roomReservation.getRoomReservationLineItems().get(0).getCheckoutDate());
+            System.out.println("Total Amount :" + roomReservation.getTotalAmount());
+            
+                  
+        } catch (ReservationNotFoundException ex) {
+            System.out.println("Invalid Reservation Id");
+        }
+    }
+    
+    public void viewAllReservations() throws  ReservationNotFoundException, GuestNotFoundException{
+        
+       
+        try 
+        {
+            List<RoomReservationEntity> reservations = horsReservationClientController.viewAllReservation(currentGuestEntity.getUsername());
+        
+            System.out.printf("%10s%10s%10s%10s%10s%10s\n", "Reservation Id", "Booking Account", "Reservation Date", "Number of Rooms", "Check-in Date", "Check-out Date");
+            if(reservations.isEmpty() == false) {
+                for(RoomReservationEntity roomReservation : reservations) {
+                    System.out.printf("%10s%10s%10s%10s%10s%10s\n", roomReservation.getRoomReservationId(), roomReservation.getBookingAccount(), roomReservation.getReservationDate(),
+                                                                    roomReservation.getRoomReservationLineItems().size(), roomReservation.getRoomReservationLineItems().get(0).getCheckInDate(),
+                                                                    roomReservation.getRoomReservationLineItems().get(0).getCheckoutDate());
+                } 
+
+            }
+            else 
+            {
+                throw new ReservationNotFoundException("No reservation made");
+            }
+        } 
+        catch (GuestNotFoundException ex) {
+            System.out.println("Guest not found");
+        }
                 
     }
 

@@ -178,32 +178,6 @@ public class ReserveOperationSessionBean implements ReserveOperationSessionBeanR
         return roomReservationEntitySessionBeanLocal.createNewRoomReservationEntity(newReservation);
     }
     
-    @Override
-    public List<RoomReservationEntity> viewAllReservation(String username) throws ReservationNotFoundException, GuestNotFoundException{
-        
-        
-        return roomReservationEntitySessionBeanLocal.viewAllMyReservation(username);
-        
-        
-    }
-    
-    @Override
-    public RoomReservationEntity viewReservationDetails(Long reservationId) throws ReservationNotFoundException {
-         RoomReservationEntity employeeEntity = em.find(RoomReservationEntity.class, reservationId);
-        
-        if(employeeEntity != null) {
-            return employeeEntity;
-        } else {
-            String errorMessage = "Employee ID " + reservationId + " does not exist!"; 
-            throw new ReservationNotFoundException(errorMessage);
-        }
-    }
-   
-    
-
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
-
     /**
      * @return the roomResults
      */

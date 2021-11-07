@@ -20,6 +20,7 @@ import javax.persistence.Query;
 import util.exception.GuestHasNotCheckedInException;
 import util.exception.InvalidRoomReservationEntityException;
 import util.exception.NoMoreRoomToAccomodateException;
+import util.exception.ReservationNotFoundException;
 import util.exception.WrongCheckInDate;
 import util.exception.WrongCheckoutDate;
 
@@ -131,6 +132,7 @@ public class RoomReservationEntitySessionBean implements RoomReservationEntitySe
         }
     }
     
+    @Override
     public List<RoomReservationEntity> viewAllMyReservation(String username){
         
          String databaseQueryString = "SELECT rr FROM RoomReservationEntity rr WHERE rr.bookingAccount.name = :iName";
@@ -141,5 +143,17 @@ public class RoomReservationEntitySessionBean implements RoomReservationEntitySe
         
         return reservations;
     } 
+    
+    @Override
+    public RoomReservationEntity viewReservationDetails(Long reservationId) throws ReservationNotFoundException {
+         RoomReservationEntity reservationEntity = em.find(RoomReservationEntity.class, reservationId);
+        
+        if(reservationEntity != null) {
+            return reservationEntity;
+        } else {
+            String errorMessage = " ID " + reservationId + " does not exist!"; 
+            throw new ReservationNotFoundException(errorMessage);
+        }
+    }
 
 }
