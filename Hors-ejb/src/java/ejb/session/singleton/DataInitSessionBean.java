@@ -11,7 +11,7 @@ import ejb.session.stateless.RoomEntitySessionBeanLocal;
 import ejb.session.stateless.RoomReservationEntitySessionBeanLocal;
 import ejb.session.stateless.RoomTypeEntitySessionBeanLocal;
 import entity.EmployeeEntity;
-import entity.RoomEntity;
+import entity.GuestEntity;
 import entity.RoomReservationEntity;
 import entity.RoomReservationLineItemEntity;
 import entity.RoomTypeEntity;
@@ -25,10 +25,7 @@ import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import util.enumeration.AccessRightEnum;
-import util.enumeration.RoomStatusEnum;
-import util.exception.InputDataValidationException;
 import util.exception.InvalidRoomReservationEntityException;
-import util.exception.RoomNumberExistException;
 import util.exception.RoomTypeExistException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UsernameExistException;
@@ -69,12 +66,11 @@ public class DataInitSessionBean {
             doDataInitialisationRoomTypeEntity();
         }
 
-        //gotta remove this bcs it causes duplicated data - pls go fix that first :(
-        /*
+        
         if (em.find(GuestEntity.class, 1L) == null) {
             doDataInitialisationGuestEntity();
         } 
-         */
+         
     }
 
     private void doDataInitialisationRoomTypeEntity() {
@@ -182,8 +178,7 @@ public class DataInitSessionBean {
         }
     }
 
-    /* 
-        @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    
     private void doDataInitialisationGuestEntity() {
             try {   
             
@@ -192,7 +187,7 @@ public class DataInitSessionBean {
             guestEntitySessionBean.guestRegister(guestOne);
             
             GuestEntity guestTwo = new GuestEntity("Guest","Two", "guestTwo","password", "email2", "22222","2222");
-            guestEntitySessionBean.guestRegister(guestOne);
+            guestEntitySessionBean.guestRegister(guestTwo);
             
             GuestEntity guestThree = new GuestEntity("Guest","Three", "guestThree","password", "email3", "33333","3333");
             guestEntitySessionBean.guestRegister(guestThree);
@@ -200,5 +195,5 @@ public class DataInitSessionBean {
             } catch (UsernameExistException | UnknownPersistenceException ex) {
             System.out.println(ex.getMessage());
         }
-    }*/
+    }
 }
