@@ -84,16 +84,16 @@ public class GuestEntitySessionBean implements GuestEntitySessionBeanRemote, Gue
                 {
                     if(ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException"))
                     {
-                        throw new UsernameExistException();
+                        throw new UsernameExistException("Username exist in the system");
                     }
                     else
                     {
-                        throw new UnknownPersistenceException(ex.getMessage());
+                        throw new UnknownPersistenceException("Unknown persist error");
                 }
                 }
                 else
                 {
-                    throw new UnknownPersistenceException(ex.getMessage());
+                    throw new UnknownPersistenceException("Unknown persist error");
                 }
             }
 

@@ -16,9 +16,11 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import util.exception.GuestHasNotCheckedInException;
 import util.exception.InvalidRoomReservationEntityException;
 import util.exception.NoMoreRoomToAccomodateException;
+import util.exception.ReservationNotFoundException;
 import util.exception.WrongCheckInDate;
 import util.exception.WrongCheckoutDate;
 
@@ -127,6 +129,30 @@ public class RoomReservationEntitySessionBean implements RoomReservationEntitySe
 
         } catch (NoResultException ex) {
             throw new InvalidRoomReservationEntityException("Room reservation does not exist.");
+        }
+    }
+    
+    @Override
+    public List<RoomReservationEntity> viewAllMyReservation(String username){
+        
+         String databaseQueryString = "SELECT rr FROM RoomReservationEntity rr WHERE rr.bookingAccount.name = :iName";
+            Query query = em.createQuery(databaseQueryString);
+            query.setParameter("iName", username);
+            
+            List<RoomReservationEntity> reservations = query.getResultList();
+        
+        return reservations;
+    } 
+    
+    @Override
+    public RoomReservationEntity viewReservationDetails(Long reservationId) throws ReservationNotFoundException {
+         RoomReservationEntity reservationEntity = em.find(RoomReservationEntity.class, reservationId);
+        
+        if(reservationEntity != null) {
+            return reservationEntity;
+        } else {
+            String errorMessage = " ID " + reservationId + " does not exist!"; 
+            throw new ReservationNotFoundException(errorMessage);
         }
     }
 
