@@ -165,6 +165,7 @@ public class MainApp {
                 newGuestId = horsReservationClientController.guestRegister(newGuestEntity);
                 System.out.println("Register successful!\n");
                 System.out.println("A new guest with guestId " + newGuestId + " is created");
+                System.out.println("Please login now!");
             } catch (UsernameExistException | UnknownPersistenceException ex) {
                 System.out.println("Register failed!\n");
                 System.out.println(ex.getMessage());
