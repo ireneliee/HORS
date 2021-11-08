@@ -13,6 +13,7 @@ import javax.ejb.Remote;
 import util.exception.GuestHasNotCheckedInException;
 import util.exception.InvalidRoomReservationEntityException;
 import util.exception.NoMoreRoomToAccomodateException;
+import util.exception.ReservationNotFoundException;
 import util.exception.WrongCheckInDate;
 import util.exception.WrongCheckoutDate;
 
@@ -31,5 +32,11 @@ public interface RoomReservationEntitySessionBeanRemote {
     
     public void checkOut(Long roomReservationId, LocalDate date) throws WrongCheckoutDate, InvalidRoomReservationEntityException,
             GuestHasNotCheckedInException;
+    
+    public List<RoomReservationEntity> viewAllMyReservation(String username);
+    
+    public RoomReservationEntity viewReservationDetails(Long reservationId) throws ReservationNotFoundException;
+    
+    
 
 }

@@ -1,0 +1,207 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is Metro/2.4.3 (RELEASE-2.4.3-ad3323c; 2019-01-21T17:46:06+0000) JAXWS-RI/2.3.2 JAXWS-API/2.3.2 JAXB-RI/2.3.2 JAXB-API/2.3.2 git-revision#unknown. --><xs:schema xmlns:tns="http://ws.session.ejb/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://ws.session.ejb/">
+
+<xs:element name="InvalidLoginCredentialException" type="tns:InvalidLoginCredentialException"/>
+
+<xs:element name="PartnerNotFoundException" type="tns:PartnerNotFoundException"/>
+
+<xs:element name="UnknownPersistenceException" type="tns:UnknownPersistenceException"/>
+
+<xs:element name="UsernameExistException" type="tns:UsernameExistException"/>
+
+<xs:element name="createNewPartner" type="tns:createNewPartner"/>
+
+<xs:element name="createNewPartnerResponse" type="tns:createNewPartnerResponse"/>
+
+<xs:element name="partnerLogin" type="tns:partnerLogin"/>
+
+<xs:element name="partnerLoginResponse" type="tns:partnerLoginResponse"/>
+
+<xs:element name="retrieveAllPartner" type="tns:retrieveAllPartner"/>
+
+<xs:element name="retrieveAllPartnerResponse" type="tns:retrieveAllPartnerResponse"/>
+
+<xs:element name="retrievePartnerByUsername" type="tns:retrievePartnerByUsername"/>
+
+<xs:element name="retrievePartnerByUsernameResponse" type="tns:retrievePartnerByUsernameResponse"/>
+
+<xs:complexType name="createNewPartner">
+<xs:sequence>
+<xs:element name="arg0" type="tns:partnerEntity" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="partnerEntity">
+<xs:complexContent>
+<xs:extension base="tns:userEntity">
+<xs:sequence>
+<xs:element name="partnerName" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="userEntity" abstract="true">
+<xs:sequence>
+<xs:element name="email" type="xs:string" minOccurs="0"/>
+<xs:element name="roomReservations" type="tns:roomReservationEntity" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="userId" type="xs:long" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="roomReservationEntity">
+<xs:sequence>
+<xs:element name="bookingAccount" type="tns:userEntity" minOccurs="0"/>
+<xs:element name="payment" type="tns:paymentEntity" minOccurs="0"/>
+<xs:element name="reservationDate" type="tns:localDate" minOccurs="0"/>
+<xs:element name="roomReservationId" type="xs:long" minOccurs="0"/>
+<xs:element name="roomReservationLineItems" type="tns:roomReservationLineItemEntity" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="totalAmount" type="xs:decimal" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="paymentEntity">
+<xs:sequence>
+<xs:element name="amountPaid" type="xs:decimal" minOccurs="0"/>
+<xs:element name="paymentId" type="xs:long" minOccurs="0"/>
+<xs:element name="paymentMethod" type="tns:paymentMethodEnum" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="localDate" final="extension restriction">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="roomReservationLineItemEntity">
+<xs:sequence>
+<xs:element name="checkInDate" type="tns:localDate" minOccurs="0"/>
+<xs:element name="checkedIn" type="xs:boolean" minOccurs="0"/>
+<xs:element name="checkedOut" type="xs:boolean" minOccurs="0"/>
+<xs:element name="checkoutDate" type="tns:localDate" minOccurs="0"/>
+<xs:element name="roomAllocation" type="tns:roomEntity" minOccurs="0"/>
+<xs:element name="roomRatesPerNight" type="tns:roomRateEntity" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="roomReservationLineItemId" type="xs:long" minOccurs="0"/>
+<xs:element name="roomTypeEntity" type="tns:roomTypeEntity" minOccurs="0"/>
+<xs:element name="subTotal" type="xs:decimal" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="roomEntity">
+<xs:sequence>
+<xs:element name="roomEntityId" type="xs:long" minOccurs="0"/>
+<xs:element name="roomNumber" type="xs:int" minOccurs="0"/>
+<xs:element name="roomStatus" type="tns:roomStatusEnum" minOccurs="0"/>
+<xs:element name="roomType" type="tns:roomTypeEntity" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="roomTypeEntity">
+<xs:sequence>
+<xs:element name="amenities" type="xs:string" minOccurs="0"/>
+<xs:element name="bed" type="xs:int" minOccurs="0"/>
+<xs:element name="capacity" type="xs:int" minOccurs="0"/>
+<xs:element name="description" type="xs:string" minOccurs="0"/>
+<xs:element name="disabled" type="xs:boolean" minOccurs="0"/>
+<xs:element name="name" type="xs:string" minOccurs="0"/>
+<xs:element name="roomEntities" type="tns:roomEntity" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="roomRanking" type="xs:int" minOccurs="0"/>
+<xs:element name="roomSize" type="xs:string" minOccurs="0"/>
+<xs:element name="roomTypeId" type="xs:long" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="roomRateEntity">
+<xs:sequence>
+<xs:element name="disabled" type="xs:boolean" minOccurs="0"/>
+<xs:element name="endValidityDate" type="tns:localDate" minOccurs="0"/>
+<xs:element name="name" type="xs:string" minOccurs="0"/>
+<xs:element name="rank" type="xs:int" minOccurs="0"/>
+<xs:element name="rate" type="xs:decimal" minOccurs="0"/>
+<xs:element name="roomRateId" type="xs:long" minOccurs="0"/>
+<xs:element name="roomType" type="tns:roomTypeEntity" minOccurs="0"/>
+<xs:element name="startValidityDate" type="tns:localDate" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="createNewPartnerResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:long" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="UsernameExistException">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="UnknownPersistenceException">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="retrieveAllPartner">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="retrieveAllPartnerResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:partnerEntity" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="partnerLogin">
+<xs:sequence>
+<xs:element name="arg0" type="xs:string" minOccurs="0"/>
+<xs:element name="arg1" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="partnerLoginResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:partnerEntity" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="InvalidLoginCredentialException">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="retrievePartnerByUsername">
+<xs:sequence>
+<xs:element name="arg0" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="retrievePartnerByUsernameResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:partnerEntity" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="PartnerNotFoundException">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:simpleType name="paymentMethodEnum">
+<xs:restriction base="xs:string">
+<xs:enumeration value="CASH"/>
+<xs:enumeration value="AMEX"/>
+<xs:enumeration value="MASTERCARD"/>
+<xs:enumeration value="VISA"/>
+</xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="roomStatusEnum">
+<xs:restriction base="xs:string">
+<xs:enumeration value="AVAILABLE"/>
+<xs:enumeration value="NOTAVAILABLE"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:schema>
