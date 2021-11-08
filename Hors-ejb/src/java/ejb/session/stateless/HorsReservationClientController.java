@@ -60,7 +60,7 @@ public class HorsReservationClientController implements HorsReservationClientCon
     }
     
     @Override
-    public List<Pair<RoomTypeEntity, BigDecimal>> searchRoom(int reserveType, LocalDate checkinDate, LocalDate checkoutDate, Integer numberOfRooms){
+    public List<Pair> searchRoom(int reserveType, LocalDate checkinDate, LocalDate checkoutDate, Integer numberOfRooms){
         return reserveOperationSessionBean.searchRoom(reserveType, checkinDate, checkoutDate, numberOfRooms);
     }
     

@@ -5,11 +5,15 @@
  */
 package util.reservation;
 
+import entity.RoomTypeEntity;
+import java.io.Serializable;
+import java.math.BigDecimal;
+
 /**
  *
  * @author zenyew
  */
-public class Pair<RoomTypeEntity, BigDecimal> {
+public class Pair implements Serializable{
     
     private RoomTypeEntity roomType;
     private BigDecimal price;
