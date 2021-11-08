@@ -112,7 +112,7 @@ public class ReserveOperationSessionBean implements ReserveOperationSessionBeanR
     
     private Integer calculateRoomAvailibility(RoomTypeEntity roomType, LocalDate date){
         
-        String databaseQueryString = "SELECT rt FROM RoomEntity rt WHERE rt.roomType = :iRoomType AND s.roomStatus = :iRoomStatus";
+        String databaseQueryString = "SELECT rt FROM RoomEntity rt WHERE rt.roomType = :iRoomType AND rt.roomStatus = :iRoomStatus";
         Query query = em.createQuery(databaseQueryString);
         query.setParameter("iRoomType", roomType);
         query.setParameter("iRoomStatus", RoomStatusEnum.AVAILABLE);
