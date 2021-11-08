@@ -192,7 +192,7 @@ public class MainApp {
             System.out.println("4: Logout\n");
             response = 0;
             
-            while(response < 1 || response > 3)
+            while(response < 1 || response > 4)
             {
                 System.out.print("> ");
 
@@ -263,47 +263,51 @@ public class MainApp {
             LocalDate checkinDate = LocalDate.of(cinYear, cinMonth, cinDay);
             LocalDate checkoutDate = LocalDate.of(coutYear, coutMonth, coutDay);
             
-            List<Pair<RoomTypeEntity, BigDecimal>> availableRooms = horsReservationClientController.searchRoom(4, checkinDate, checkoutDate, numberOfRooms);
+            List<Pair> availableRooms = horsReservationClientController.searchRoom(4, checkinDate, checkoutDate, numberOfRooms);
             System.out.printf("\n%3s%10s%10s", "No", "Room Type", "Total Price");
             
             for(Pair pair: availableRooms)
             {
                 i++;
-                System.out.printf("\n%3s%10s%10s", i, pair.getRoomType(), pair.getPrice());
+                System.out.printf("\n%3s%10s%10s", i, pair.getRoomType().getName(), pair.getPrice());
                 
             }            
             
-           
+            System.out.println("");
             System.out.println("------------------------");
             System.out.print("Reserve Room(s)? (Enter 'Y' to reserve)> ");
             confirmReserve = scanner.nextLine().trim();
             
             if(confirmReserve.equals("Y"))
             {
-                System.out.println("Select the option.");
-                option = scanner.nextInt();
-                if(option < 1 || option > availableRooms.size()) {
-                   
-                    while(true)
-                    {
-                        System.out.println("The fee is $" + availableRooms.get(option - 1).getPrice() + ". Please choose the payment option");
-                        System.out.println("1: AMEX; 2:MASTERCARD; 3:VISA");
-                        Integer payment = scanner.nextInt();
-
-                        if(payment >= 1 && payment <= 2)
-                        {
-                            newPaymentEntity.setPaymentMethod(PaymentMethodEnum.values()[payment]);
-                            break;
-                        }
-                        else
-                        {
-                            System.out.println("Invalid option, please try again!\n");
-                        }
-                    }
+                while(true) {
                     
-                    horsReservationClientController.makeReservation(currentGuestEntity, numberOfRooms, newPaymentEntity);
-                } else {
-                    System.out.println("Invalid option, please try again!");
+                    System.out.println("Select the option.");
+                    option = scanner.nextInt();
+                    if(option >= 1 || option <= availableRooms.size()) {
+
+                        while(true)
+                        {
+                            System.out.println("The fee is $" + availableRooms.get(option - 1).getPrice() + ". Please choose the payment option");
+                            System.out.println("1: AMEX; 2:MASTERCARD; 3:VISA");
+                            Integer payment = scanner.nextInt();
+
+                            if(payment >= 1 && payment <= 3)
+                            {
+                                newPaymentEntity.setPaymentMethod(PaymentMethodEnum.values()[payment - 1]);
+                                break;
+                            }
+                            else
+                            {
+                                System.out.println("Invalid option, please try again!\n");
+                            }
+                        }
+
+                        horsReservationClientController.makeReservation(currentGuestEntity, option-1, newPaymentEntity);
+                        break;
+                    } else {
+                        System.out.println("Invalid option, please try again!");
+                    }
                 }
                 
             }
@@ -338,9 +342,11 @@ public class MainApp {
             System.out.println("Reservation Id :" + roomReservation.getRoomReservationId());
             System.out.println("Booking Account :" + roomReservation.getBookingAccount());
             System.out.println("Reservation Date :" + roomReservation.getReservationDate());
+            /*
             System.out.println("Number of Rooms :" + roomReservation.getRoomReservationLineItems().size());
             System.out.println("Check-in Date :" + roomReservation.getRoomReservationLineItems().get(0).getCheckInDate());
             System.out.println("Check-out Date :" + roomReservation.getRoomReservationLineItems().get(0).getCheckoutDate());
+            */
             System.out.println("Total Amount :" + roomReservation.getTotalAmount());
             
                   
@@ -359,9 +365,9 @@ public class MainApp {
             System.out.printf("%10s%10s%10s%10s%10s%10s\n", "Reservation Id", "Booking Account", "Reservation Date", "Number of Rooms", "Check-in Date", "Check-out Date");
             if(reservations.isEmpty() == false) {
                 for(RoomReservationEntity roomReservation : reservations) {
-                    System.out.printf("%10s%10s%10s%10s%10s%10s\n", roomReservation.getRoomReservationId(), roomReservation.getBookingAccount(), roomReservation.getReservationDate(),
-                                                                    roomReservation.getRoomReservationLineItems().size(), roomReservation.getRoomReservationLineItems().get(0).getCheckInDate(),
-                                                                    roomReservation.getRoomReservationLineItems().get(0).getCheckoutDate());
+                    System.out.printf("%10s%10s%10s\n", roomReservation.getRoomReservationId(), roomReservation.getBookingAccount(), roomReservation.getReservationDate()
+                                                                    /*,roomReservation.getRoomReservationLineItems().size(), roomReservation.getRoomReservationLineItems().get(0).getCheckInDate(),
+                                                                    roomReservation.getRoomReservationLineItems().get(0).getCheckoutDate()*/);
                 } 
 
             }

@@ -43,7 +43,7 @@ public class RoomReservationEntity implements Serializable {
 
     private LocalDate reservationDate;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     private PaymentEntity payment;
 
     public RoomReservationEntity() {

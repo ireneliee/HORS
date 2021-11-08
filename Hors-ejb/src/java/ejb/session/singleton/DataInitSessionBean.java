@@ -12,6 +12,7 @@ import ejb.session.stateless.RoomRateEntitySessionBeanLocal;
 import ejb.session.stateless.RoomReservationEntitySessionBeanLocal;
 import ejb.session.stateless.RoomTypeEntitySessionBeanLocal;
 import entity.EmployeeEntity;
+import entity.GuestEntity;
 import entity.NormalRateEntity;
 import entity.PublishedRateEntity;
 import entity.RoomEntity;
@@ -73,12 +74,12 @@ public class DataInitSessionBean {
             doDataInitialisationRoomTypeEntity();
         }
 
-        //gotta remove this bcs it causes duplicated data - pls go fix that first :(
         /*
         if (em.find(GuestEntity.class, 1L) == null) {
             doDataInitialisationGuestEntity();
         } 
-         */
+        */
+         
     }
 
     private void doDataInitialisationRoomTypeEntity() {
@@ -283,11 +284,10 @@ public class DataInitSessionBean {
             System.out.println(ex.getMessage());
         }
     }
-}
 
 
-/* 
-        @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+
+
     private void doDataInitialisationGuestEntity() {
             try {   
             
@@ -296,7 +296,7 @@ public class DataInitSessionBean {
             guestEntitySessionBean.guestRegister(guestOne);
             
             GuestEntity guestTwo = new GuestEntity("Guest","Two", "guestTwo","password", "email2", "22222","2222");
-            guestEntitySessionBean.guestRegister(guestOne);
+            guestEntitySessionBean.guestRegister(guestTwo);
             
             GuestEntity guestThree = new GuestEntity("Guest","Three", "guestThree","password", "email3", "33333","3333");
             guestEntitySessionBean.guestRegister(guestThree);
@@ -304,6 +304,8 @@ public class DataInitSessionBean {
             } catch (UsernameExistException | UnknownPersistenceException ex) {
             System.out.println(ex.getMessage());
         }
+    }
+}
      // room reservation created. 4 deluxe room, 2 premium room, all in the same check in and check out date :)
             // reservation 1
             /*

@@ -22,17 +22,17 @@ public class NormalRateEntity extends RoomRateEntity implements Serializable {
     
     public NormalRateEntity(){
         super();
-        this.roomRank = 1;
+        this.roomRank = 2;
     }
     
     public NormalRateEntity(String name, BigDecimal rate) {
         super(name, rate, null, LocalDate.now(), LocalDate.of(2100, 01, 01));
-        this.roomRank = 1;
+        this.roomRank = 2;
     }
     
     public NormalRateEntity(String name, BigDecimal rate, RoomTypeEntity roomType) {
         super(name, rate, roomType, LocalDate.now(), LocalDate.of(2100, 01, 01));
-        this.roomRank = 1;
+        this.roomRank = 2;
     }
 
     @Override
