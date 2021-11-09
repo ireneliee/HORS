@@ -330,10 +330,10 @@ public class MainApp {
             {
                 i++;
                 System.out.printf("\n%3s. %10s%10s", i, pair.getRoomType().getName(), pair.getPrice());
-                System.out.print(">");
+                
                 
             }            
-            
+            System.out.print(">");
             System.out.println("");
             System.out.println("------------------------");
            
