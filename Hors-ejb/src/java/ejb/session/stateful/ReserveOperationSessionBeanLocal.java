@@ -28,7 +28,7 @@ public interface ReserveOperationSessionBeanLocal {
 
     public List<Pair> searchRoom(int reserveType, LocalDate checkinDate, LocalDate checkoutDate, Integer numberOfRooms);
 
-    public Long makeReservation(UserEntity username, int response, PaymentEntity payment) throws RoomTypeNotFoundException, InvalidRoomReservationEntityException;
+    public Long makeReservation(UserEntity username, List<Pair> roomResults, int response, PaymentEntity payment) throws RoomTypeNotFoundException, InvalidRoomReservationEntityException;
 
      
 }

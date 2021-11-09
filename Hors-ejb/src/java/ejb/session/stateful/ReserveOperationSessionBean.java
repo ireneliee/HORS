@@ -8,6 +8,7 @@ package ejb.session.stateful;
 import ejb.session.stateless.RoomEntitySessionBeanLocal;
 import ejb.session.stateless.RoomReservationEntitySessionBeanLocal;
 import ejb.session.stateless.RoomTypeEntitySessionBeanLocal;
+import ejb.session.stateless.SearchSessionBeanLocal;
 import entity.PaymentEntity;
 import entity.RoomRateEntity;
 import entity.RoomReservationEntity;
@@ -38,6 +39,9 @@ import util.reservation.Pair;
 @Stateful
 public class ReserveOperationSessionBean implements ReserveOperationSessionBeanRemote, ReserveOperationSessionBeanLocal {
 
+    @EJB
+    private SearchSessionBeanLocal searchSessionBeanLocal;
+    
     @EJB
     private RoomReservationEntitySessionBeanLocal roomReservationEntitySessionBeanLocal;
 
@@ -106,8 +110,9 @@ public class ReserveOperationSessionBean implements ReserveOperationSessionBeanR
             }
         }
         
-         return this.getRoomResults();
-     
+         
+        
+        return this.getRoomResults();
     }
     
     private Integer calculateRoomAvailibility(RoomTypeEntity roomType, LocalDate date){
@@ -135,31 +140,32 @@ public class ReserveOperationSessionBean implements ReserveOperationSessionBeanR
     private BigDecimal computeFarePerNight(Integer highestRank, RoomTypeEntity roomType, LocalDate date) {
         
         if(highestRank == 1) {
-            String databaseQueryString = "SELECT rr FROM RoomRateEntity rr WHERE rr.roomRank = 1 AND rr.roomType.name = :iName AND rr.disabled = false";
+            String databaseQueryString = "SELECT rr FROM RoomRateEntity rr WHERE rr.roomRank = 1 AND rr.roomType.name = :iName AND rr.disabled = false ORDER BY rr.rate ASC";
             Query query = em.createQuery(databaseQueryString);
             query.setParameter("iName", roomType.getName());
             
-            RoomRateEntity roomRate = (RoomRateEntity)query.getSingleResult();
+            RoomRateEntity roomRate = (RoomRateEntity)query.getResultList().get(0);
             return roomRate.getRate();
             
         }else {
             String databaseQueryString = "SELECT rr FROM RoomRateEntity rr WHERE rr.roomRank = (SELECT max(r.roomRank) FROM RoomRateEntity r WHERE rr.roomType.name = :iName) "
-                                            + "AND rr.roomType.name = :iName AND rr.startValidityDate <= :iDate AND rr.endValidityDate > :iDate";
+                                            + "AND rr.roomType.name = :iName AND rr.startValidityDate <= :iDate AND rr.endValidityDate > :iDate ORDER BY rr.rate ASC";
             Query query = em.createQuery(databaseQueryString);
             query.setParameter("iName", roomType.getName());
             query.setParameter("iDate" , date);
             
            
             
-            RoomRateEntity roomRate = (RoomRateEntity)query.getSingleResult();
+            RoomRateEntity roomRate = (RoomRateEntity)query.getResultList().get(0);
            
             return roomRate.getRate();
         }
         
     }
+
     
     @Override
-    public Long makeReservation(UserEntity username,int response, PaymentEntity payment) throws RoomTypeNotFoundException, InvalidRoomReservationEntityException{
+    public Long makeReservation(UserEntity username,List<Pair> roomResults, int response, PaymentEntity payment) throws RoomTypeNotFoundException, InvalidRoomReservationEntityException{
         
         RoomReservationEntity newReservation = new RoomReservationEntity();
         BigDecimal price = this.getRoomResults().get(response).getPrice();
@@ -169,7 +175,7 @@ public class ReserveOperationSessionBean implements ReserveOperationSessionBeanR
         newReservation.setBookingAccount(username);
         
         
-        RoomTypeEntity roomType = this.getRoomResults().get(response - 1).getRoomType();
+        RoomTypeEntity roomType = this.getRoomResults().get(response).getRoomType();
         RoomTypeEntity roomTypeEntity = roomTypeEntitySessionBeanLocal.retrieveRoomType(roomType.getName());
         
         

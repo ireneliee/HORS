@@ -133,11 +133,11 @@ public class RoomReservationEntitySessionBean implements RoomReservationEntitySe
     }
     
     @Override
-    public List<RoomReservationEntity> viewAllMyReservation(String username){
+    public List<RoomReservationEntity> viewAllMyReservation(Long userId){
         
-         String databaseQueryString = "SELECT rr FROM RoomReservationEntity rr WHERE rr.bookingAccount.name = :iName";
+         String databaseQueryString = "SELECT rr FROM RoomReservationEntity rr WHERE rr.bookingAccount.userId = :iUserId";
             Query query = em.createQuery(databaseQueryString);
-            query.setParameter("iName", username);
+            query.setParameter("iUserId", userId);
             
             List<RoomReservationEntity> reservations = query.getResultList();
         
