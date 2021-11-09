@@ -63,7 +63,7 @@ public class GuestEntitySessionBean implements GuestEntitySessionBeanRemote, Gue
         try {
             return(GuestEntity) query.getSingleResult();
         } catch(NoResultException | NonUniqueResultException ex) {
-            String errorMessage = " Employee Username " + username + " does not exist!";
+            String errorMessage = " Guest Username " + username + " does not exist!";
             throw new GuestNotFoundException(errorMessage);
         }
     }
