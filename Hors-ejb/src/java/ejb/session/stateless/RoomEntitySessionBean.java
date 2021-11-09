@@ -80,7 +80,7 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
 
 
     @Override
-    public RoomEntity retrieveRoomByRoomNumber(Integer roomNumber) throws RoomNotFoundException {
+    public RoomEntity retrieveRoomByRoomNumber(String roomNumber) throws RoomNotFoundException {
         try {
             String databaseQuery = "SELECT s FROM RoomEntity s WHERE s.roomNumber =:iRoomNumber";
             Query query = em.createQuery(databaseQuery);
@@ -125,7 +125,7 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
     }
 
     @Override
-    public Boolean checkIfTheRoomIsUsed(Integer roomNumber) {
+    public Boolean checkIfTheRoomIsUsed(String roomNumber) {
         LocalDate now = LocalDate.now();
         String databaseQuery = "SELECT s FROM RoomReservationLineItemEntity s"
                 + " WHERE s.roomAllocation.roomNumber = :iRoomNumber ";
@@ -144,7 +144,7 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
 
     }
 
-    private List<RoomReservationLineItemEntity> findReservationUsingRoom(Integer roomNumber) {
+    private List<RoomReservationLineItemEntity> findReservationUsingRoom(String roomNumber) {
         String databaseQuery = "SELECT s FROM RoomReservationLineItemEntity s"
                 + " WHERE s.roomAllocation.roomNumber = :iRoomNumber ";
         Query query = em.createQuery(databaseQuery);
@@ -153,7 +153,7 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
     }
 
     @Override
-    public void deleteRoom(Integer roomNumber) throws RoomNotFoundException {
+    public void deleteRoom(String roomNumber) throws RoomNotFoundException {
 
         try {
             deleteUnusedRoom(roomNumber);
@@ -165,7 +165,7 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
         }
     }
 
-    private void deleteUnusedRoom(Integer roomNumber) throws RoomIsCurrentlyUsedException,
+    private void deleteUnusedRoom(String roomNumber) throws RoomIsCurrentlyUsedException,
             RoomNotFoundException {
         RoomEntity roomToBeDeleted;
         try {

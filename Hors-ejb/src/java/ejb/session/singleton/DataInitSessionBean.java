@@ -86,11 +86,11 @@ public class DataInitSessionBean {
         // roomType creation
         RoomTypeEntity roomTypeOne = new RoomTypeEntity("Deluxe Room", "Ocean view with normal amenities", "10x8", 2, 2, "shower, TV, sofa", 1);
 
-        RoomEntity roomOne = new RoomEntity(0101, RoomStatusEnum.AVAILABLE);
-        RoomEntity roomTwo = new RoomEntity(0201, RoomStatusEnum.AVAILABLE);
-        RoomEntity roomThree = new RoomEntity(0301, RoomStatusEnum.AVAILABLE);
-        RoomEntity roomFour = new RoomEntity(0401, RoomStatusEnum.AVAILABLE);
-        RoomEntity roomFive = new RoomEntity(0501, RoomStatusEnum.AVAILABLE);
+        RoomEntity roomOne = new RoomEntity("0101", RoomStatusEnum.AVAILABLE);
+        RoomEntity roomTwo = new RoomEntity("0201", RoomStatusEnum.AVAILABLE);
+        RoomEntity roomThree = new RoomEntity("0301", RoomStatusEnum.AVAILABLE);
+        RoomEntity roomFour = new RoomEntity("0401", RoomStatusEnum.AVAILABLE);
+        RoomEntity roomFive = new RoomEntity("0501", RoomStatusEnum.AVAILABLE);
 
         roomOne.setRoomType(roomTypeOne);
         roomTwo.setRoomType(roomTypeOne);
@@ -106,11 +106,11 @@ public class DataInitSessionBean {
 
         RoomTypeEntity roomTypeTwo = new RoomTypeEntity("Premiere Room", "City view with luxurious amenities", "12x8", 2, 2, "bathtub, TV, shower, sofa", 2);
 
-        RoomEntity roomSix = new RoomEntity(0102, RoomStatusEnum.AVAILABLE);
-        RoomEntity roomSeven = new RoomEntity(0202, RoomStatusEnum.AVAILABLE);
-        RoomEntity roomEight = new RoomEntity(0302, RoomStatusEnum.AVAILABLE);
-        RoomEntity roomNine = new RoomEntity(0402, RoomStatusEnum.AVAILABLE);
-        RoomEntity roomTen = new RoomEntity(0502, RoomStatusEnum.AVAILABLE);
+        RoomEntity roomSix = new RoomEntity("0102", RoomStatusEnum.AVAILABLE);
+        RoomEntity roomSeven = new RoomEntity("0202", RoomStatusEnum.AVAILABLE);
+        RoomEntity roomEight = new RoomEntity("0302", RoomStatusEnum.AVAILABLE);
+        RoomEntity roomNine = new RoomEntity("0402", RoomStatusEnum.AVAILABLE);
+        RoomEntity roomTen = new RoomEntity("0502", RoomStatusEnum.AVAILABLE);
 
         roomSix.setRoomType(roomTypeTwo);
         roomSeven.setRoomType(roomTypeTwo);
@@ -126,11 +126,11 @@ public class DataInitSessionBean {
 
         RoomTypeEntity roomTypeThree = new RoomTypeEntity("Family Room", "Room suitable for a family", "14x12", 4, 4, "personal jacuzzi and a big sofa ", 3);
 
-        RoomEntity roomEleven = new RoomEntity(0103, RoomStatusEnum.AVAILABLE);
-        RoomEntity roomTwelve = new RoomEntity(0203, RoomStatusEnum.AVAILABLE);
-        RoomEntity roomThirteen = new RoomEntity(0303, RoomStatusEnum.AVAILABLE);
-        RoomEntity roomFourteen = new RoomEntity(0403, RoomStatusEnum.AVAILABLE);
-        RoomEntity roomFifteen = new RoomEntity(0503, RoomStatusEnum.AVAILABLE);
+        RoomEntity roomEleven = new RoomEntity("0103", RoomStatusEnum.AVAILABLE);
+        RoomEntity roomTwelve = new RoomEntity("0203", RoomStatusEnum.AVAILABLE);
+        RoomEntity roomThirteen = new RoomEntity("0303", RoomStatusEnum.AVAILABLE);
+        RoomEntity roomFourteen = new RoomEntity("0403", RoomStatusEnum.AVAILABLE);
+        RoomEntity roomFifteen = new RoomEntity("0503", RoomStatusEnum.AVAILABLE);
 
         roomEleven.setRoomType(roomTypeThree);
         roomTwelve.setRoomType(roomTypeThree);
@@ -146,11 +146,11 @@ public class DataInitSessionBean {
 
         RoomTypeEntity roomTypeFour = new RoomTypeEntity("Junior Suite", "Extra luxurious room with highest quality amenities imported from Italy", "18x16", 2, 2, "bathtub, sofa, personal jacuzzi and big bed", 4);
 
-        RoomEntity roomSixteen = new RoomEntity(0104, RoomStatusEnum.AVAILABLE);
-        RoomEntity roomSeventeen = new RoomEntity(0204, RoomStatusEnum.AVAILABLE);
-        RoomEntity roomEighteen = new RoomEntity(0304, RoomStatusEnum.AVAILABLE);
-        RoomEntity roomNineteen = new RoomEntity(0404, RoomStatusEnum.AVAILABLE);
-        RoomEntity roomTwenty = new RoomEntity(0504, RoomStatusEnum.AVAILABLE);
+        RoomEntity roomSixteen = new RoomEntity("0104", RoomStatusEnum.AVAILABLE);
+        RoomEntity roomSeventeen = new RoomEntity("0204", RoomStatusEnum.AVAILABLE);
+        RoomEntity roomEighteen = new RoomEntity("0304", RoomStatusEnum.AVAILABLE);
+        RoomEntity roomNineteen = new RoomEntity("0404", RoomStatusEnum.AVAILABLE);
+        RoomEntity roomTwenty = new RoomEntity("0504", RoomStatusEnum.AVAILABLE);
 
         roomSixteen.setRoomType(roomTypeFour);
         roomSeventeen.setRoomType(roomTypeFour);
@@ -166,11 +166,11 @@ public class DataInitSessionBean {
 
         RoomTypeEntity roomTypeFive = new RoomTypeEntity("Grand Suite", "A room with everything you ever dream of", "12x14", 2, 2, "personal swimming pool and sauna, free breakfast, dining room, and kitchen", 5);
 
-        RoomEntity roomTwentyOne = new RoomEntity(0105, RoomStatusEnum.AVAILABLE);
-        RoomEntity roomTwentyTwo = new RoomEntity(0205, RoomStatusEnum.AVAILABLE);
-        RoomEntity roomTwentyThree = new RoomEntity(0305, RoomStatusEnum.AVAILABLE);
-        RoomEntity roomTwentyFour = new RoomEntity(0405, RoomStatusEnum.AVAILABLE);
-        RoomEntity roomTwentyFive = new RoomEntity(0505, RoomStatusEnum.AVAILABLE);
+        RoomEntity roomTwentyOne = new RoomEntity("0105", RoomStatusEnum.AVAILABLE);
+        RoomEntity roomTwentyTwo = new RoomEntity("0205", RoomStatusEnum.AVAILABLE);
+        RoomEntity roomTwentyThree = new RoomEntity("0305", RoomStatusEnum.AVAILABLE);
+        RoomEntity roomTwentyFour = new RoomEntity("0405", RoomStatusEnum.AVAILABLE);
+        RoomEntity roomTwentyFive = new RoomEntity("0505", RoomStatusEnum.AVAILABLE);
 
         roomTwentyOne.setRoomType(roomTypeFive);
         roomTwentyTwo.setRoomType(roomTypeFive);

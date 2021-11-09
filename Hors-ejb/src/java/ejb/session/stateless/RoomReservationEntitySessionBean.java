@@ -5,13 +5,18 @@
  */
 package ejb.session.stateless;
 
+import ejb.session.stateful.ReserveOperationSessionBeanLocal;
 import entity.RoomEntity;
 import entity.RoomReservationEntity;
 import entity.RoomReservationLineItemEntity;
 import entity.UserEntity;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -27,6 +32,9 @@ import util.exception.WrongCheckoutDate;
 @Stateless
 public class RoomReservationEntitySessionBean implements RoomReservationEntitySessionBeanRemote, RoomReservationEntitySessionBeanLocal {
 
+    @EJB
+    private RoomAllocationSessionBeanLocal roomAllocationSessionBean;
+
     @PersistenceContext(unitName = "Hors-ejbPU")
     private EntityManager em;
 
@@ -41,7 +49,7 @@ public class RoomReservationEntitySessionBean implements RoomReservationEntitySe
             RoomReservationEntity newRoomReservationEntity) throws InvalidRoomReservationEntityException {
 
         if (newRoomReservationEntity == null) {
-
+            System.out.println("Reach C");
             throw new InvalidRoomReservationEntityException("Room reservation information not provided.");
 
         }
@@ -50,11 +58,32 @@ public class RoomReservationEntitySessionBean implements RoomReservationEntitySe
         user.getRoomReservations().add(newRoomReservationEntity);
 
         newRoomReservationEntity.setBookingAccount(user);
+        System.out.println("Reach D");
 
         em.persist(newRoomReservationEntity);
+        System.out.println("Reach C");
+
+        em.flush();
+
+        allocateRoomNow(newRoomReservationEntity);
 
         return newRoomReservationEntity.getRoomReservationId();
 
+    }
+
+    private void allocateRoomNow(RoomReservationEntity newRoomReservationEntity) {
+        List<RoomReservationLineItemEntity> roomReservations = newRoomReservationEntity.getRoomReservationLineItems();
+        RoomReservationLineItemEntity firstReservation = roomReservations.get(0);
+        LocalDate checkinDate = firstReservation.getCheckInDate();
+
+        if (newRoomReservationEntity.getReservationDate().isEqual(checkinDate)) {
+            LocalDateTime timeNow = LocalDateTime.now();
+            LocalTime hourNow = LocalTime.of(2, 0);
+            LocalDateTime twoAmMark = LocalDateTime.of(checkinDate, hourNow);
+            if (timeNow.isAfter(twoAmMark)) {
+                roomAllocationSessionBean.allocateRoomNow(newRoomReservationEntity);
+            }
+        }
     }
 
     @Override
@@ -74,7 +103,7 @@ public class RoomReservationEntitySessionBean implements RoomReservationEntitySe
 
     @Override
     public List<RoomEntity> checkIn(Long roomReservationId, LocalDate date) throws InvalidRoomReservationEntityException, WrongCheckInDate,
-            NoMoreRoomToAccomodateException  {
+            NoMoreRoomToAccomodateException {
 
         try {
             RoomReservationEntity roomReservation = em.find(RoomReservationEntity.class, roomReservationId);
@@ -86,17 +115,17 @@ public class RoomReservationEntitySessionBean implements RoomReservationEntitySe
             List<RoomEntity> roomsForCheckIn = new ArrayList<>();
             // checkIn = true
             for (RoomReservationLineItemEntity x : listOfRoomReservations) {
-                   if(x.getRoomAllocation() != null) {
-                       roomsForCheckIn.add(x.getRoomAllocation());
-                       x.setCheckedIn(true);
-                   } else {
-                       String roomNumber = "";
-                       for(int i = 0; i < roomsForCheckIn.size(); i++) {
-                           roomNumber = roomNumber + roomsForCheckIn.get(i) + "\n";
-                       }
-                       throw new NoMoreRoomToAccomodateException("Currently, the hotel only has " + roomsForCheckIn.size() + " room(s)" + 
-                               " to accomodate for the guest's reservation. The room(s) are \n" + roomNumber + "\nPlease handle this manually");
-                   }
+                if (x.getRoomAllocation() != null) {
+                    roomsForCheckIn.add(x.getRoomAllocation());
+                    x.setCheckedIn(true);
+                } else {
+                    String roomNumber = "";
+                    for (int i = 0; i < roomsForCheckIn.size(); i++) {
+                        roomNumber = roomNumber + roomsForCheckIn.get(i) + "\n";
+                    }
+                    throw new NoMoreRoomToAccomodateException("Currently, the hotel only has " + roomsForCheckIn.size() + " room(s)"
+                            + " to accomodate for the guest's reservation. The room(s) are \n" + roomNumber + "\nPlease handle this manually");
+                }
             }
 
             return roomsForCheckIn;
@@ -109,12 +138,12 @@ public class RoomReservationEntitySessionBean implements RoomReservationEntitySe
 
     @Override
     public void checkOut(Long roomReservationId, LocalDate date) throws WrongCheckoutDate, InvalidRoomReservationEntityException,
-            GuestHasNotCheckedInException{
+            GuestHasNotCheckedInException {
         try {
             RoomReservationEntity roomReservation = em.find(RoomReservationEntity.class, roomReservationId);
             List<RoomReservationLineItemEntity> listOfRoomReservations = roomReservation.getRoomReservationLineItems();
             // check if the guest has checked in
-            if(!listOfRoomReservations.get(0).getCheckedIn()) {
+            if (!listOfRoomReservations.get(0).getCheckedIn()) {
                 throw new GuestHasNotCheckedInException("Guest has not checked in!'");
             }
             if (!(listOfRoomReservations.get(0).getCheckoutDate().equals(date))) {
@@ -131,27 +160,27 @@ public class RoomReservationEntitySessionBean implements RoomReservationEntitySe
             throw new InvalidRoomReservationEntityException("Room reservation does not exist.");
         }
     }
-    
+
     @Override
-    public List<RoomReservationEntity> viewAllMyReservation(Long userId){
-        
-         String databaseQueryString = "SELECT rr FROM RoomReservationEntity rr WHERE rr.bookingAccount.userId = :iUserId";
-            Query query = em.createQuery(databaseQueryString);
-            query.setParameter("iUserId", userId);
-            
-            List<RoomReservationEntity> reservations = query.getResultList();
-        
+    public List<RoomReservationEntity> viewAllMyReservation(Long userId) {
+
+        String databaseQueryString = "SELECT rr FROM RoomReservationEntity rr WHERE rr.bookingAccount.userId = :iUserId";
+        Query query = em.createQuery(databaseQueryString);
+        query.setParameter("iUserId", userId);
+
+        List<RoomReservationEntity> reservations = query.getResultList();
+
         return reservations;
-    } 
-    
+    }
+
     @Override
     public RoomReservationEntity viewReservationDetails(Long reservationId) throws ReservationNotFoundException {
-         RoomReservationEntity reservationEntity = em.find(RoomReservationEntity.class, reservationId);
-        
-        if(reservationEntity != null) {
+        RoomReservationEntity reservationEntity = em.find(RoomReservationEntity.class, reservationId);
+
+        if (reservationEntity != null) {
             return reservationEntity;
         } else {
-            String errorMessage = " ID " + reservationId + " does not exist!"; 
+            String errorMessage = " ID " + reservationId + " does not exist!";
             throw new ReservationNotFoundException(errorMessage);
         }
     }

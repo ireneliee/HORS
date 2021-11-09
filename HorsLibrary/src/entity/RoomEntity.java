@@ -32,7 +32,7 @@ public class RoomEntity implements Serializable {
     //@NotNull
     //@Size(min = 4, max = 4)
     @Column(nullable = false, unique = true, length = 4)
-    private Integer roomNumber;
+    private String roomNumber;
     
     //@NotNull
     private RoomStatusEnum roomStatus;
@@ -46,12 +46,12 @@ public class RoomEntity implements Serializable {
 
     }
     
-    public RoomEntity(Integer roomNumber, RoomStatusEnum roomStatus) {
+    public RoomEntity(String roomNumber, RoomStatusEnum roomStatus) {
         this.roomNumber = roomNumber;
         this.roomStatus = roomStatus;
     }
 
-    public RoomEntity(Integer roomNumber, RoomStatusEnum roomStatus, RoomTypeEntity roomType) {
+    public RoomEntity(String roomNumber, RoomStatusEnum roomStatus, RoomTypeEntity roomType) {
         this();
         this.roomType = roomType;
         this.roomNumber = roomNumber;
@@ -94,11 +94,11 @@ public class RoomEntity implements Serializable {
                 "Availability: " + this.getRoomStatus().toString() + "\n";
     }
 
-    public Integer getRoomNumber() {
+    public String getRoomNumber() {
         return roomNumber;
     }
 
-    public void setRoomNumber(Integer roomNumber) {
+    public void setRoomNumber(String roomNumber) {
         this.roomNumber = roomNumber;
     }
 
