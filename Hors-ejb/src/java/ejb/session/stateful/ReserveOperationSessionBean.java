@@ -68,11 +68,11 @@ public class ReserveOperationSessionBean implements ReserveOperationSessionBeanR
     private Integer numberOfRooms;
 
     public ReserveOperationSessionBean() {
-        roomResults = new ArrayList<>();
+        
     }
 
     public ReserveOperationSessionBean(List<Pair> roomResults, LocalDate checkinDate, LocalDate checkoutDate, Integer numberOfRooms) {
-        this.roomResults = roomResults;
+        
         this.checkinDate = checkinDate;
         this.checkoutDate = checkoutDate;
         this.numberOfRooms = numberOfRooms;
@@ -93,7 +93,8 @@ public class ReserveOperationSessionBean implements ReserveOperationSessionBeanR
         this.checkinDate = checkinDate;
         this.checkoutDate = checkoutDate;
         this.numberOfRooms = numberOfRooms;
-     
+        this.roomResults = new ArrayList<>();
+        
         try {
             String queryString = "SELECT DISTINCT rt FROM RoomTypeEntity rt WHERE rt.disabled = false";
             Query query = em.createQuery(queryString);
