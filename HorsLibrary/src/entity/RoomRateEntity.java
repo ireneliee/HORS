@@ -30,7 +30,7 @@ public class RoomRateEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long roomRateId;
     
-    @Column(nullable = false, length = 32)
+    @Column(nullable = false, length = 600)
     protected String name;
     
     @Column(nullable = false, precision = 11, scale = 2)

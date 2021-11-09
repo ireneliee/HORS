@@ -231,6 +231,17 @@ public class DataInitSessionBean {
         rateEight.setRoomType(roomTypeFour);
         rateNine.setRoomType(roomTypeFive);
         rateTen.setRoomType(roomTypeFive);
+        
+        rateEleven.setRoomType(roomTypeOne);
+        rateTwelve.setRoomType(roomTypeOne);
+        rateThir.setRoomType(roomTypeTwo);
+        rateFourt.setRoomType(roomTypeTwo);
+        rateFift.setRoomType(roomTypeThree);
+        rateSixt.setRoomType(roomTypeThree);
+        rateSevent.setRoomType(roomTypeFour);
+        rateEighte.setRoomType(roomTypeFour);
+        rateNinet.setRoomType(roomTypeFive);
+        rateTwen.setRoomType(roomTypeFive);
         try {
             roomTypeEntitySessionBean.createRoomType(roomTypeOne);
             roomTypeEntitySessionBean.createRoomType(roomTypeTwo);
