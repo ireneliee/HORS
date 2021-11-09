@@ -14,10 +14,14 @@ import ejb.session.stateless.RoomTypeEntitySessionBeanLocal;
 import entity.EmployeeEntity;
 import entity.GuestEntity;
 import entity.NormalRateEntity;
+import entity.PeakRateEntity;
+import entity.PromotionRateEntity;
 import entity.PublishedRateEntity;
 import entity.RoomEntity;
 import entity.RoomTypeEntity;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.Month;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
@@ -29,6 +33,8 @@ import util.enumeration.AccessRightEnum;
 import util.enumeration.RoomStatusEnum;
 import util.exception.InputDataValidationException;
 import util.exception.NormalRateHasAlreadyExistedException;
+import util.exception.PeakRateHasAlreadyExistedException;
+import util.exception.PromotionRateHasAlreadyExistedException;
 import util.exception.PublishedRateHasAlreadyExistedException;
 import util.exception.RoomNumberExistException;
 import util.exception.RoomTypeExistException;
@@ -74,11 +80,12 @@ public class DataInitSessionBean {
             doDataInitialisationRoomTypeEntity();
         }
 
-        /*
+        
         if (em.find(GuestEntity.class, 1L) == null) {
             doDataInitialisationGuestEntity();
         } 
-        */
+        
+        
          
     }
 
@@ -186,7 +193,7 @@ public class DataInitSessionBean {
 
         PublishedRateEntity rateOne = new PublishedRateEntity("DELUXE ROOM PUBLISHED RATE", new BigDecimal(100));
         NormalRateEntity rateTwo = new NormalRateEntity("DELUXE ROOM NORMAL RATE", new BigDecimal(50));
-
+        
         PublishedRateEntity rateThree = new PublishedRateEntity("PREMIERE ROOM PUBLISHED RATE", new BigDecimal(200));
         NormalRateEntity rateFour = new NormalRateEntity("PREMIERE ROOM NORMAL RATE", new BigDecimal(100));
 
@@ -196,9 +203,24 @@ public class DataInitSessionBean {
         PublishedRateEntity rateSeven = new PublishedRateEntity("JUNIOR SUITE ROOM PUBLISHED RATE", new BigDecimal(400));
         NormalRateEntity rateEight = new NormalRateEntity("JUNIOR SUITE ROOM NORMAL RATE", new BigDecimal(200));
 
-        PublishedRateEntity rateNine = new PublishedRateEntity("JUNIOR SUITE ROOM PUBLISHED RATE", new BigDecimal(500));
-        NormalRateEntity rateTen = new NormalRateEntity("JUNIOR SUITE ROOM NORMAL RATE", new BigDecimal(250));
+        PublishedRateEntity rateNine = new PublishedRateEntity("GRAND SUITE ROOM PUBLISHED RATE", new BigDecimal(500));
+        NormalRateEntity rateTen = new NormalRateEntity("GRAND SUITE ROOM NORMAL RATE", new BigDecimal(250));
 
+        PeakRateEntity rateEleven = new PeakRateEntity("DELUXE ROOM PEAK RATE", LocalDate.of(2021, 12, 24),LocalDate.of(2021, 12, 27), new BigDecimal(150), roomTypeOne);
+        PromotionRateEntity rateTwelve = new PromotionRateEntity("DELUXE ROOM PROMOTION RATE", LocalDate.of(2021, 12, 27),LocalDate.of(2021, 12, 29), new BigDecimal(40), roomTypeOne);
+        
+        PeakRateEntity rateThir = new PeakRateEntity("PREMIERE ROOM PEAK RATE", LocalDate.of(2021, 12, 24),LocalDate.of(2021, 12, 27), new BigDecimal(250), roomTypeTwo);
+        PromotionRateEntity rateFourt = new PromotionRateEntity("PREMIERE ROOM PROMOTION RATE", LocalDate.of(2021, 12, 27),LocalDate.of(2021, 12, 29), new BigDecimal(50), roomTypeTwo);
+        
+        PeakRateEntity rateFift = new PeakRateEntity("FAMILY ROOM PEAK RATE", LocalDate.of(2021, 12, 24),LocalDate.of(2021, 12, 27), new BigDecimal(350), roomTypeThree);
+        PromotionRateEntity rateSixt = new PromotionRateEntity("FAMILY ROOM PROMOTION RATE", LocalDate.of(2021, 12, 27),LocalDate.of(2021, 12, 29), new BigDecimal(100), roomTypeThree);
+        
+        PeakRateEntity rateSevent = new PeakRateEntity("JUNIOR SUITE  ROOM PEAK RATE", LocalDate.of(2021, 12, 24),LocalDate.of(2021, 12, 27), new BigDecimal(450), roomTypeFour);
+        PromotionRateEntity rateEighte = new PromotionRateEntity("JUNIOR SUITE  ROOM PROMOTION RATE", LocalDate.of(2021, 12, 27),LocalDate.of(2021, 12, 29), new BigDecimal(150), roomTypeFour);
+        
+        PeakRateEntity rateNinet = new PeakRateEntity("GRAND SUITE PEAK RATE", LocalDate.of(2021, 12, 24),LocalDate.of(2021, 12, 27), new BigDecimal(550), roomTypeFive);
+        PromotionRateEntity rateTwen = new PromotionRateEntity("GRAND SUITE PROMOTION RATE", LocalDate.of(2021, 12, 27),LocalDate.of(2021, 12, 29), new BigDecimal(200), roomTypeFive);
+        
         rateOne.setRoomType(roomTypeOne);
         rateTwo.setRoomType(roomTypeOne);
         rateThree.setRoomType(roomTypeTwo);
@@ -254,8 +276,21 @@ public class DataInitSessionBean {
             roomRateEntitySessionBean.createNewNormalRateEntity(rateEight);
             roomRateEntitySessionBean.createNewNormalRateEntity(rateTen);
             System.out.println("done D");
+            roomRateEntitySessionBean.createNewPeakRateEntity(rateEleven);
+            roomRateEntitySessionBean.createNewPeakRateEntity(rateThir);
+            roomRateEntitySessionBean.createNewPeakRateEntity(rateFift);
+            roomRateEntitySessionBean.createNewPeakRateEntity(rateSevent);
+            roomRateEntitySessionBean.createNewPeakRateEntity(rateNinet);
+            
+            roomRateEntitySessionBean.createNewPromotionRateEntity(rateTwelve);
+            roomRateEntitySessionBean.createNewPromotionRateEntity(rateFourt);
+            roomRateEntitySessionBean.createNewPromotionRateEntity(rateSixt);
+            roomRateEntitySessionBean.createNewPromotionRateEntity(rateEighte);
+            roomRateEntitySessionBean.createNewPromotionRateEntity(rateTwen);
+            
         } catch (UnknownPersistenceException | RoomTypeExistException | PublishedRateHasAlreadyExistedException
-                | RoomNumberExistException | InputDataValidationException | NormalRateHasAlreadyExistedException ex) {
+                | RoomNumberExistException | InputDataValidationException | NormalRateHasAlreadyExistedException 
+                | PeakRateHasAlreadyExistedException | PromotionRateHasAlreadyExistedException ex) {
             System.out.println(ex.getMessage());
 
         }
