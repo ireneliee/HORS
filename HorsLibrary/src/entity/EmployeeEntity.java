@@ -6,7 +6,10 @@
 package entity;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import util.enumeration.AccessRightEnum;
 
 
@@ -14,10 +17,20 @@ import util.enumeration.AccessRightEnum;
 public class EmployeeEntity extends UserEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    @Column(nullable = false, length = 32)
     private String firstName;
+    
+    @Column(nullable = false, length = 32)
     private String lastName;
+    
+    @Column(nullable = false, length = 32, unique = true)
     private String username;
+    
+    @Column(nullable = false, length = 32)
     private String password;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private AccessRightEnum accessRight;
     
     public EmployeeEntity() {

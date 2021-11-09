@@ -7,6 +7,7 @@ package entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,7 +25,11 @@ public class PaymentEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long paymentId;
+    
+    @Column(nullable = false)
     private BigDecimal amountPaid;
+    
+    @Column(nullable = false)
     private PaymentMethodEnum paymentMethod;
     
     public PaymentEntity(){}

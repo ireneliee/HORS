@@ -8,7 +8,7 @@ package entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,12 +28,26 @@ public class RoomRateEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long roomRateId;
+    
+    @Column(nullable = false, length = 32)
     protected String name;
+    
+    @Column(nullable = false, precision = 11, scale = 2)
     protected BigDecimal rate;
+    
+    @Column(nullable = false, length = 32)
     protected RoomTypeEntity roomType;
+    
+    @Column(nullable = false)
     protected LocalDate startValidityDate;
+    
+    @Column(nullable = false)
     protected LocalDate endValidityDate;
+    
+    @Column(nullable = false)
     protected Boolean disabled;
+    
+    @Column(nullable = false)
     protected Integer roomRank;
     
     public RoomRateEntity(){

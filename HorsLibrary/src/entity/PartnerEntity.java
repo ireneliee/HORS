@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 
@@ -17,8 +18,14 @@ import javax.persistence.Entity;
 public class PartnerEntity extends UserEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    
+    @Column(nullable = false, length = 32)
     private String partnerName;
+    
+    @Column(nullable = false, length = 32, unique = true)
     private String username;
+    
+    @Column(nullable = false, length = 32)
     private String password;
     
     public PartnerEntity(){

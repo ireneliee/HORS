@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -34,8 +35,9 @@ public class RoomReservationEntity implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<RoomReservationLineItemEntity> roomReservationLineItems;
-
-    private BigDecimal totalAmount;
+    
+    @Column(nullable = false, precision = 11, scale = 2)
+     private BigDecimal totalAmount;
 
     @ManyToOne
     @JoinColumn

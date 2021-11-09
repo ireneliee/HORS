@@ -31,12 +31,25 @@ public class RoomTypeEntity implements Serializable {
     
     @Column(unique = true)
     private String name;
+    
+    @Column(nullable = false, length = 300)
     private String description;
+    
+    @Column(nullable = false, length = 7)
     private String roomSize;
+    
+    @Column(nullable = false, length = 2)
     private Integer bed;
+    
+    @Column(nullable = false, length = 2)
     private Integer capacity;
+    
+    @Column(nullable = false, length = 300)
     private String amenities;
+    
+    @Column(nullable = false, length = 1)
     private Integer roomRanking;
+    
     private Boolean disabled;
     
     @OneToMany(mappedBy="roomType", fetch = FetchType.EAGER, cascade = CascadeType.ALL)

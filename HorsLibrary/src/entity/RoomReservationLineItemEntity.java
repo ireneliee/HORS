@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -30,17 +31,24 @@ public class RoomReservationLineItemEntity implements Serializable {
     private Long roomReservationLineItemId;
     
     @OneToOne (optional = false)
+    @Column(nullable = false)
     private RoomTypeEntity roomTypeEntity;
     
     @OneToMany
     private List<RoomRateEntity> roomRatesPerNight;
     
+    @Column(nullable = false, precision = 11, scale = 2)
     private BigDecimal subTotal;
+    
+    @Column(nullable = false)
     private LocalDate checkInDate;
+    
+    @Column(nullable = false, precision = 11, scale = 2)
     private LocalDate checkoutDate;
     
     @OneToOne
     private RoomEntity roomAllocation;
+    
     private Boolean checkedIn;
     private Boolean checkedOut;
     
