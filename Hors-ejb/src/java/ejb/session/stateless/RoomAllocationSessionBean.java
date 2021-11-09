@@ -7,6 +7,7 @@ package ejb.session.stateless;
 
 import entity.RoomAllocationExceptionEntity;
 import entity.RoomEntity;
+import entity.RoomReservationEntity;
 import entity.RoomReservationLineItemEntity;
 import entity.RoomTypeEntity;
 import java.time.LocalDate;
@@ -50,7 +51,7 @@ public class RoomAllocationSessionBean implements RoomAllocationSessionBeanRemot
     }
 
     @Schedule(dayOfWeek = "*", hour = "2")
-    public void dailyAllocationOfRoom() {
+    private void dailyAllocationOfRoom() {
         LocalDate dateOfToday = LocalDate.now();
         try {
             allocateRoomGivenDate(dateOfToday);
@@ -59,65 +60,27 @@ public class RoomAllocationSessionBean implements RoomAllocationSessionBeanRemot
         }
     }
 
-    @Override
-    public void allocateRoomGivenDate(LocalDate checkInDate) throws RoomAllocationIsDoneException {
-        // Check if rooms have been allocated that day
-        if (roomAllocationIsDone(checkInDate)) {
-            throw new RoomAllocationIsDoneException("Room allocation for " + checkInDate.toString()
-                    + " has already been done.");
-        }
-        RoomAllocationExceptionEntity exceptionReport = new RoomAllocationExceptionEntity(checkInDate);
-        em.persist(exceptionReport);
-        em.flush();
+    // to immediately allocate for booking after 2am
+    public void allocateRoomNow(RoomReservationEntity roomReservation) {
+        List<RoomReservationLineItemEntity> toBeAllocated = roomReservation.getRoomReservationLineItems();
+        RoomReservationLineItemEntity firstReservation = toBeAllocated.get(0);
+        LocalDate checkinDate = firstReservation.getCheckInDate();
+        RoomTypeEntity typeOfRoom = firstReservation.getRoomTypeEntity();
 
-        // retrieve list of all room types. Allocation will be done one by one -> following the room type
-        String databaseQueryInString = "SELECT DISTINCT rt FROM RoomTypeEntity rt ";
-        Query query = em.createQuery(databaseQueryInString);
-        List<RoomTypeEntity> listOfRoomTypes = query.getResultList();
-        /*
-        System.out.println("Reach A");
-        listOfRoomTypes
-                .stream()
-                .forEach(System.out::println);
-         */
-        listOfRoomTypes
-                .stream()
-                .forEach(x -> allocateRoomToday(checkInDate, x, exceptionReport));
-
-        System.out.println("Reach B");
+        mainAllocationAlgorithm(toBeAllocated, checkinDate, typeOfRoom);
 
     }
 
-    // allocate room reservation to their room by roomType
-    private void allocateRoomToday(LocalDate checkInDate, RoomTypeEntity typeOfRoom,
-            RoomAllocationExceptionEntity exceptionReport) {
-        exceptionReport = em.find(RoomAllocationExceptionEntity.class, exceptionReport.getRoomAllocationExceptionId());
-        //System.out.println("Reach C");
-        // retrieve available rooms for that check in date x for room type y
-        List<RoomEntity> availableRooms = retrieveListOfAvailableRoom(typeOfRoom, checkInDate);
-        System.out.println("***Retrieving available room... for " + typeOfRoom.getName() + "***");
+    private void mainAllocationAlgorithm(List<RoomReservationLineItemEntity> toBeAllocated, LocalDate checkinDate,
+            RoomTypeEntity typeOfRoom) {
+        RoomAllocationExceptionEntity exceptionReport;
+        try {
+            exceptionReport = retrieveReportByDate(checkinDate);
+        } catch (RoomAllocationExceptionReportDoesNotExistException ex) {
+            exceptionReport = new RoomAllocationExceptionEntity(checkinDate);
+        }
 
-        availableRooms
-                .stream()
-                .forEach(System.out::println);
-
-        // initiate an exception report
-        //retrieve list of reservation which request for that room type y, check in date x
-        String reservationQuery = " SELECT rr FROM RoomReservationLineItemEntity rr WHERE "
-                + "rr.roomTypeEntity = :iRoomType AND rr.checkInDate = :iCheckInDate";
-        Query reservationDatabaseQuery = em.createQuery(reservationQuery);
-        reservationDatabaseQuery.setParameter("iRoomType", typeOfRoom);
-        reservationDatabaseQuery.setParameter("iCheckInDate", checkInDate);
-        System.out.println("***Retrieving all room reservations requiring the room type" + typeOfRoom.getName() + "***");
-
-        List<RoomReservationLineItemEntity> toBeAllocated = reservationDatabaseQuery.getResultList();
-
-        System.out.println("No of room available: " + availableRooms.size());
-        /*
-        toBeAllocated
-                .stream()
-                .forEach(System.out::println);
-         */
+        List<RoomEntity> availableRooms = retrieveListOfAvailableRoom(typeOfRoom, checkinDate);
 
         for (int i = 0; i < toBeAllocated.size(); i++) {
 
@@ -156,8 +119,45 @@ public class RoomAllocationSessionBean implements RoomAllocationSessionBeanRemot
         }
         em.persist(exceptionReport);
         em.flush();
+    }
 
-        //System.out.println("Reach D");
+    @Override
+    public void allocateRoomGivenDate(LocalDate checkInDate) throws RoomAllocationIsDoneException {
+        // Check if rooms have been allocated that day
+        if (roomAllocationIsDone(checkInDate)) {
+            throw new RoomAllocationIsDoneException("Room allocation for " + checkInDate.toString()
+                    + " has already been done.");
+        }
+
+        // retrieve list of all room types. Allocation will be done one by one -> following the room type
+        String databaseQueryInString = "SELECT DISTINCT rt FROM RoomTypeEntity rt ";
+        Query query = em.createQuery(databaseQueryInString);
+        List<RoomTypeEntity> listOfRoomTypes = query.getResultList();
+
+        listOfRoomTypes
+                .stream()
+                .forEach(x -> allocateRoomToday(checkInDate, x));
+
+    }
+
+    // allocate room reservation to their room by roomType
+    private void allocateRoomToday(LocalDate checkInDate, RoomTypeEntity typeOfRoom) {
+
+        List<RoomEntity> availableRooms = retrieveListOfAvailableRoom(typeOfRoom, checkInDate);
+        System.out.println("***Retrieving available room... for " + typeOfRoom.getName() + "***");
+
+        //retrieve list of reservation which request for that room type y, check in date x
+        String reservationQuery = " SELECT rr FROM RoomReservationLineItemEntity rr WHERE "
+                + "rr.roomTypeEntity = :iRoomType AND rr.checkInDate = :iCheckInDate";
+        Query reservationDatabaseQuery = em.createQuery(reservationQuery);
+        reservationDatabaseQuery.setParameter("iRoomType", typeOfRoom);
+        reservationDatabaseQuery.setParameter("iCheckInDate", checkInDate);
+        System.out.println("***Retrieving all room reservations requiring the room type" + typeOfRoom.getName() + "***");
+
+        List<RoomReservationLineItemEntity> toBeAllocated = reservationDatabaseQuery.getResultList();
+        
+        mainAllocationAlgorithm(toBeAllocated,checkInDate, typeOfRoom);
+
     }
 
     private void handlingTypeOneException(RoomReservationLineItemEntity roomReservation,
@@ -175,22 +175,13 @@ public class RoomAllocationSessionBean implements RoomAllocationSessionBeanRemot
         query.setParameter("iRoomRanking", nextRoomRank);
 
         List<RoomTypeEntity> listOfRoomTypeOfHigherRank = query.getResultList();
-        /*
-        listOfRoomTypeOfHigherRank
-                .stream()
-                .forEach(System.out::println);
-         */
+
         RoomTypeEntity higherRoomType = listOfRoomTypeOfHigherRank.get(0);
         LocalDate checkinDate = roomReservation.getCheckInDate();
 
         List<RoomEntity> listOfAvailableRoom = retrieveListOfAvailableRoom(higherRoomType, checkinDate);
         System.out.println("No. of available room " + listOfAvailableRoom.size());
-        //System.out.println("Reach R");
-        /*
-        listOfAvailableRoom
-                .stream()
-                .forEach(System.out::println);
-         */
+
         if (!listOfAvailableRoom.isEmpty()) {
             RoomEntity roomAssigned = listOfAvailableRoom.get(0);
             roomReservation.setRoomAllocation(roomAssigned);
@@ -228,12 +219,7 @@ public class RoomAllocationSessionBean implements RoomAllocationSessionBeanRemot
         Query databaseQuery = em.createQuery(databaseQueryInString);
         databaseQuery.setParameter("iRoomType", roomType);
         databaseQuery.setParameter("iRoomStatus", RoomStatusEnum.AVAILABLE);
-        //System.out.println("Reach H");
-        /*
-        databaseQuery.getResultList()
-                .stream()
-                .forEach(System.out::println);
-         */
+
         return databaseQuery.getResultList();
     }
 
@@ -243,19 +229,14 @@ public class RoomAllocationSessionBean implements RoomAllocationSessionBeanRemot
             LocalDate checkInDate) {
         List<RoomEntity> listOfAvailableRoomThatDay = new ArrayList<>();
         List<RoomEntity> listOfAvailableRoom = retrieveListOfAvailableRoomsByType(roomType);
-        //System.out.println("Reach here N");
-        /*
-        listOfAvailableRoom
-                .stream()
-                .forEach(System.out::println);
-         */
+
         for (RoomEntity room : listOfAvailableRoom) {
 
             // finding all the  reservations that are using a certain room
             String databaseQueryInString = "SELECT r FROM RoomReservationLineItemEntity r WHERE r.roomAllocation = :iRoomEntity";
             Query databaseQuery = em.createQuery(databaseQueryInString);
             databaseQuery.setParameter("iRoomEntity", room);
-            //System.out.println("Reach I");
+
             //checking if there is any reservation using that room on the check in day
             List<RoomReservationLineItemEntity> listOfReservationUsingThatRoom = databaseQuery.getResultList();
             Boolean theRoomIsNotAvailable = listOfReservationUsingThatRoom
@@ -264,19 +245,18 @@ public class RoomAllocationSessionBean implements RoomAllocationSessionBeanRemot
                     checkInDate))
                     .findAny()
                     .isPresent();
-            //System.out.println("Used: " + theRoomIsNotAvailable);
-            //System.out.println("Reach J");
+
             if (!theRoomIsNotAvailable) {
                 listOfAvailableRoomThatDay.add(room);
             }
-            //System.out.println("Reach K");
+
         }
         return listOfAvailableRoomThatDay;
     }
 
     private Boolean reservationIsUsingTheRoomOnThatDate(RoomReservationLineItemEntity roomReservation,
             LocalDate checkInDate) {
-        //System.out.println("Reach L");
+
         LocalDate checkInDateOfReservation = roomReservation.getCheckInDate();
         LocalDate checkOutDateOfReservation = roomReservation.getCheckoutDate();
         return (checkInDateOfReservation.isBefore(checkInDate) || checkInDateOfReservation.isEqual(checkInDate))

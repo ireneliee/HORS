@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.RoomAllocationExceptionEntity;
+import entity.RoomReservationEntity;
 import java.time.LocalDate;
 import javax.ejb.Remote;
 import util.exception.RoomAllocationExceptionReportDoesNotExistException;
@@ -22,5 +23,7 @@ public interface RoomAllocationSessionBeanRemote {
    
     
     public RoomAllocationExceptionEntity retrieveReportByDate(LocalDate reportDate) throws RoomAllocationExceptionReportDoesNotExistException;
+    
+    public void allocateRoomNow(RoomReservationEntity roomReservation);
     
 }

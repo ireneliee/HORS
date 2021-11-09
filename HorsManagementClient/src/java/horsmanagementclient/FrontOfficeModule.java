@@ -7,9 +7,11 @@ package horsmanagementclient;
 
 import ejb.session.stateless.HorsManagementControllerSessionBeanRemote;
 import entity.EmployeeEntity;
+import entity.PaymentEntity;
 import entity.RoomEntity;
 import entity.RoomTypeEntity;
 import java.math.BigDecimal;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -17,14 +19,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import util.enumeration.AccessRightEnum;
+import util.enumeration.PaymentMethodEnum;
 import util.exception.GuestHasNotCheckedInException;
 import util.exception.InvalidAccessRightException;
 import util.exception.InvalidRoomReservationEntityException;
+import util.exception.LineItemExistException;
+import util.exception.NoAvailableRoomOptionException;
 import util.exception.NoMoreRoomToAccomodateException;
 import util.exception.RateNotFoundException;
 import util.exception.RoomTypeNotFoundException;
+import util.exception.UnknownPersistenceException;
 import util.exception.WrongCheckInDate;
 import util.exception.WrongCheckoutDate;
+import util.reservation.Pair;
 
 /**
  *
@@ -68,7 +75,7 @@ public class FrontOfficeModule {
                 response = sc.nextInt();
 
                 if (response == 1) {
-
+                    doSearchHotel();
                 } else if (response == 2) {
                     doCheckIn();
                 } else if (response == 3) {
@@ -223,5 +230,119 @@ public class FrontOfficeModule {
         LocalDate date = LocalDate.parse(userInput, dateFormat);
 
         return date;
+    }
+    
+    public void doSearchHotel() {
+        Scanner scanner = new Scanner(System.in);
+        Integer cinDay = 0;
+        Integer cinMonth = 0;
+        Integer cinYear = 0;
+        Integer coutDay = 0;
+        Integer coutMonth = 0;
+        Integer coutYear = 0;
+        Integer numberOfRooms = 0;
+        Integer i = 0;
+        String confirmReserve = "";
+        Integer option = 0;
+        PaymentEntity newPaymentEntity = new PaymentEntity();
+        
+        
+        System.out.println("*** HORS Reservation  :: Search Room ***\n");
+        System.out.print("Enter Day of Check In> ");
+        cinDay = scanner.nextInt();
+        System.out.print("Enter Month of Check In> ");
+        cinMonth = scanner.nextInt();
+        System.out.print("Enter Year of Check In> ");
+        cinYear = scanner.nextInt();
+        System.out.print("Enter Day of Check Out> ");
+        coutDay = scanner.nextInt();
+        System.out.print("Enter Month of Check Out> ");
+        coutMonth = scanner.nextInt();
+        System.out.print("Enter Year of Check Out> ");
+        coutYear = scanner.nextInt();
+        System.out.print("Enter number of room(s)> ");
+        numberOfRooms = scanner.nextInt();
+        scanner.nextLine();
+        
+        try {
+            LocalDate checkinDate = LocalDate.of(cinYear, cinMonth, cinDay);
+            LocalDate checkoutDate = LocalDate.of(coutYear, coutMonth, coutDay);
+            
+            List<Pair> availableRooms = 
+                    horsManagementControllerSessionBeanRemote.searchRoom(4, checkinDate, checkoutDate, numberOfRooms);
+            System.out.printf("\n%3s%10s%10s", "No", "Room Type", "Total Price");
+            
+            for(Pair pair: availableRooms)
+            {
+                i++;
+                System.out.printf("\n%3s%10s%10s", i, pair.getRoomType().getName(), pair.getPrice());
+                
+            }            
+            
+            System.out.println("");
+            System.out.println("------------------------");
+           
+            System.out.print("Reserve Room(s)? (Enter 'Y' to reserve)> ");
+            confirmReserve = scanner.nextLine().trim();
+
+            if(confirmReserve.equals("Y"))
+            {
+                while(true) {
+
+                    System.out.println("Select the option.");
+                    option = scanner.nextInt();
+                    if(option >= 1 || option <= availableRooms.size()) {
+
+                        while(true)
+                        {
+                            System.out.println("The fee is $" + availableRooms.get(option - 1).getPrice() + ". Please choose the payment option");
+                            System.out.println("1: AMEX; 2:MASTERCARD; 3:VISA");
+                            Integer payment = scanner.nextInt();
+
+                            if(payment >= 1 && payment <= 3)
+                            {
+                                newPaymentEntity.setPaymentMethod(PaymentMethodEnum.values()[payment - 1]);
+                                newPaymentEntity.setAmountPaid(availableRooms.get(option - 1).getPrice());
+                                break;
+                            }
+                            else
+                            {
+                                System.out.println("Invalid option, please try again!\n");
+                            }
+                        }
+
+                        horsManagementControllerSessionBeanRemote.makeReservation(currentEmployeeEntity
+                                , availableRooms, option-1, newPaymentEntity);
+                        break;
+                    } else {
+                        System.out.println("Invalid option, please try again!");
+                    }
+                }
+
+            }
+            
+        }
+        catch (DateTimeException ex){
+            System.out.println("Invalid Date input");
+            
+        }
+        catch (NoAvailableRoomOptionException ex) {
+            System.out.println("No room available");
+        }
+        catch (RoomTypeNotFoundException ex){
+            System.out.println("Room type not available!");
+        }
+        catch (InvalidRoomReservationEntityException ex) {
+            System.out.println("Invalid Reservation!");
+        }
+        catch (LineItemExistException ex){
+            System.out.println("Invalid Reservation");
+        }
+        catch (UnknownPersistenceException ex) {
+            System.out.println("Reservation failed");
+        }
+        
+       
+                
     }
 }

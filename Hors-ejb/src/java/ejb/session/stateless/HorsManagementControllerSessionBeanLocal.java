@@ -4,6 +4,7 @@ package ejb.session.stateless;
 import entity.EmployeeEntity;
 import entity.NormalRateEntity;
 import entity.PartnerEntity;
+import entity.PaymentEntity;
 import entity.PeakRateEntity;
 import entity.PromotionRateEntity;
 import entity.PublishedRateEntity;
@@ -11,6 +12,7 @@ import entity.RoomAllocationExceptionEntity;
 import entity.RoomEntity;
 import entity.RoomRateEntity;
 import entity.RoomTypeEntity;
+import entity.UserEntity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -21,6 +23,8 @@ import util.exception.GuestHasNotCheckedInException;
 import util.exception.InputDataValidationException;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.InvalidRoomReservationEntityException;
+import util.exception.LineItemExistException;
+import util.exception.NoAvailableRoomOptionException;
 import util.exception.NoMoreRoomToAccomodateException;
 import util.exception.NormalRateHasAlreadyExistedException;
 import util.exception.PartnerNotFoundException;
@@ -40,6 +44,7 @@ import util.exception.UpdateRoomException;
 import util.exception.UsernameExistException;
 import util.exception.WrongCheckInDate;
 import util.exception.WrongCheckoutDate;
+import util.reservation.Pair;
 
 
 @Local
@@ -114,6 +119,10 @@ public interface HorsManagementControllerSessionBeanLocal {
     public BigDecimal calculatePublishedRate(LocalDate checkIn, LocalDate checkOut, RoomTypeEntity roomType) throws RateNotFoundException;
     
     public BigDecimal calculateNonPublishedRate(LocalDate checkIn, LocalDate checkOut, RoomTypeEntity roomType) throws RateNotFoundException;
+
+    public List<Pair> searchRoom(int reserveType, LocalDate checkinDate, LocalDate checkoutDate, Integer numberOfRooms) throws NoAvailableRoomOptionException;
+
+    public Long makeReservation(UserEntity username, List<Pair> roomResults, int response, PaymentEntity payment) throws RoomTypeNotFoundException, InvalidRoomReservationEntityException, LineItemExistException, UnknownPersistenceException;
 
     
 }
