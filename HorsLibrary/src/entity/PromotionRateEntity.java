@@ -24,13 +24,13 @@ public class PromotionRateEntity extends RoomRateEntity implements Serializable 
    
     public PromotionRateEntity(){
         super();
-        this.roomRank = 3;
+        this.roomRank = 4;
     }
     
     public PromotionRateEntity (String name, LocalDate startValidityDate, LocalDate endValidityDate,
             BigDecimal rate, RoomTypeEntity roomType) {
         super(name, rate, roomType, startValidityDate, endValidityDate);
-        this.roomRank = 3;
+        this.roomRank = 4;
     }
 
     @Override
