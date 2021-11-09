@@ -26,7 +26,7 @@ import util.reservation.Pair;
 @Local
 public interface ReserveOperationSessionBeanLocal {
 
-    public List<Pair<RoomTypeEntity, BigDecimal>> searchRoom(int reserveType, LocalDate checkinDate, LocalDate checkoutDate, Integer numberOfRooms);
+    public List<Pair> searchRoom(int reserveType, LocalDate checkinDate, LocalDate checkoutDate, Integer numberOfRooms);
 
     public Long makeReservation(UserEntity username, int response, PaymentEntity payment) throws RoomTypeNotFoundException, InvalidRoomReservationEntityException;
 

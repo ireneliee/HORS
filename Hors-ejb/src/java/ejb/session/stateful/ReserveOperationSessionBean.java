@@ -21,6 +21,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import util.enumeration.RoomStatusEnum;
@@ -46,7 +47,7 @@ public class ReserveOperationSessionBean implements ReserveOperationSessionBeanR
     @EJB(name = "RoomEntitySessionBeanLocal")
     private RoomEntitySessionBeanLocal roomEntitySessionBeanLocal;
     
-    private List<Pair<RoomTypeEntity, BigDecimal>> roomResults;
+    private List<Pair> roomResults;
     private LocalDate checkinDate;
     private LocalDate checkoutDate; 
     private Integer numberOfRooms;
@@ -55,7 +56,7 @@ public class ReserveOperationSessionBean implements ReserveOperationSessionBeanR
         roomResults = new ArrayList<>();
     }
 
-    public ReserveOperationSessionBean(List<Pair<RoomTypeEntity, BigDecimal>> roomResults, LocalDate checkinDate, LocalDate checkoutDate, Integer numberOfRooms) {
+    public ReserveOperationSessionBean(List<Pair> roomResults, LocalDate checkinDate, LocalDate checkoutDate, Integer numberOfRooms) {
         this.roomResults = roomResults;
         this.checkinDate = checkinDate;
         this.checkoutDate = checkoutDate;
@@ -72,7 +73,7 @@ public class ReserveOperationSessionBean implements ReserveOperationSessionBeanR
     
 
     @Override
-    public List<Pair<RoomTypeEntity, BigDecimal>> searchRoom(int reserveType, LocalDate checkinDate, LocalDate checkoutDate, Integer numberOfRooms) {
+    public List<Pair> searchRoom(int reserveType, LocalDate checkinDate, LocalDate checkoutDate, Integer numberOfRooms) {
         
         this.checkinDate = checkinDate;
         this.checkoutDate = checkoutDate;
@@ -86,21 +87,20 @@ public class ReserveOperationSessionBean implements ReserveOperationSessionBeanR
             Integer lowestRoomAvailibity = 1000;
             for(LocalDate date = checkinDate; date.isBefore(checkoutDate); date = date.plusDays(1)) {
                 Integer roomAvailibility = calculateRoomAvailibility(roomType, date);
-                if(lowestRoomAvailibity > roomAvailibility) {
-                    lowestRoomAvailibity = roomAvailibility;
-                }
+                lowestRoomAvailibity = Math.min(lowestRoomAvailibity, roomAvailibility);
             }
             if(lowestRoomAvailibity >= numberOfRooms) {
                 BigDecimal totalFare = new BigDecimal(0);
                 for(LocalDate date = checkinDate; date.isBefore(checkoutDate); date = date.plusDays(1)) {
                     if(reserveType == 1) {
                         totalFare = totalFare.add(computeFarePerNight(1, roomType, date));
+                        System.out.println(totalFare);
                     }
                     else {
                         totalFare = totalFare.add(computeFarePerNight(4, roomType, date));
                     }
                 }
-                this.getRoomResults().add(new Pair(roomType, totalFare));
+                this.getRoomResults().add(new Pair(roomType, totalFare.multiply(new BigDecimal(numberOfRooms))));
                 
                 
             }
@@ -135,29 +135,34 @@ public class ReserveOperationSessionBean implements ReserveOperationSessionBeanR
     private BigDecimal computeFarePerNight(Integer highestRank, RoomTypeEntity roomType, LocalDate date) {
         
         if(highestRank == 1) {
-            String databaseQueryString = "SELECT rr FROM RoomRateEntity rr WHERE rr.rank = 1 AND rr.roomType.name = :iName";
+            String databaseQueryString = "SELECT rr FROM RoomRateEntity rr WHERE rr.roomRank = 1 AND rr.roomType.name = :iName AND rr.disabled = false";
             Query query = em.createQuery(databaseQueryString);
-            query.setParameter("iName", roomType);
+            query.setParameter("iName", roomType.getName());
             
             RoomRateEntity roomRate = (RoomRateEntity)query.getSingleResult();
             return roomRate.getRate();
             
         }else {
-            String databaseQueryString = "SELECT max(rr.rank) FROM RoomRateEntity rr WHERE rr.roomType.name = :iName AND rr.startValidityDate <= :iDate AND rr.endValidityDate > :iDate ";
+            String databaseQueryString = "SELECT rr FROM RoomRateEntity rr WHERE rr.roomRank = (SELECT max(r.roomRank) FROM RoomRateEntity r WHERE rr.roomType.name = :iName) "
+                                            + "AND rr.roomType.name = :iName AND rr.startValidityDate <= :iDate AND rr.endValidityDate > :iDate";
             Query query = em.createQuery(databaseQueryString);
-            query.setParameter("iName", roomType);
+            query.setParameter("iName", roomType.getName());
             query.setParameter("iDate" , date);
             
+           
+            
             RoomRateEntity roomRate = (RoomRateEntity)query.getSingleResult();
+           
             return roomRate.getRate();
         }
+        
     }
     
     @Override
     public Long makeReservation(UserEntity username,int response, PaymentEntity payment) throws RoomTypeNotFoundException, InvalidRoomReservationEntityException{
         
         RoomReservationEntity newReservation = new RoomReservationEntity();
-        BigDecimal price = this.getRoomResults().get(response - 1).getPrice();
+        BigDecimal price = this.getRoomResults().get(response).getPrice();
         newReservation.setTotalAmount(price);
         newReservation.setPayment(payment);
         newReservation.setReservationDate(LocalDate.now());
@@ -181,14 +186,14 @@ public class ReserveOperationSessionBean implements ReserveOperationSessionBeanR
     /**
      * @return the roomResults
      */
-    private List<Pair<RoomTypeEntity, BigDecimal>> getRoomResults() {
+    private List<Pair> getRoomResults() {
         return roomResults;
     }
 
     /**
      * @param roomResults the roomResults to set
      */
-    private void setRoomResults(List<Pair<RoomTypeEntity, BigDecimal>> roomResults) {
+    private void setRoomResults(List<Pair> roomResults) {
         this.roomResults = roomResults;
     }
 
