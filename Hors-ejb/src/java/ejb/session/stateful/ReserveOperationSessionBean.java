@@ -142,7 +142,7 @@ public class ReserveOperationSessionBean implements ReserveOperationSessionBeanR
             RoomRateEntity roomRate = (RoomRateEntity)query.getSingleResult();
             return roomRate.getRate();
             
-        }else {
+        } else {
             String databaseQueryString = "SELECT rr FROM RoomRateEntity rr WHERE rr.roomRank = (SELECT max(r.roomRank) FROM RoomRateEntity r WHERE rr.roomType.name = :iName) "
                                             + "AND rr.roomType.name = :iName AND rr.startValidityDate <= :iDate AND rr.endValidityDate > :iDate";
             Query query = em.createQuery(databaseQueryString);
@@ -151,7 +151,7 @@ public class ReserveOperationSessionBean implements ReserveOperationSessionBeanR
             
            
             
-            RoomRateEntity roomRate = (RoomRateEntity)query.getSingleResult();
+            RoomRateEntity roomRate = (RoomRateEntity) query.getSingleResult();
            
             return roomRate.getRate();
         }
