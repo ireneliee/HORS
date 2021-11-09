@@ -33,6 +33,9 @@ import util.reservation.Pair;
 public class HorsReservationClientController implements HorsReservationClientControllerRemote, HorsReservationClientControllerLocal {
 
     @EJB
+    private SearchSessionBeanLocal searchSessionBean;
+
+    @EJB
     private RoomReservationEntitySessionBeanLocal roomReservationEntitySessionBean;
 
     @EJB
@@ -65,13 +68,13 @@ public class HorsReservationClientController implements HorsReservationClientCon
     }
     
     @Override
-    public Long makeReservation(UserEntity username,int response, PaymentEntity payment) throws RoomTypeNotFoundException, InvalidRoomReservationEntityException {
-        return reserveOperationSessionBean.makeReservation(username, response, payment);
+    public Long makeReservation(UserEntity username,List<Pair> roomResults,int response, PaymentEntity payment) throws RoomTypeNotFoundException, InvalidRoomReservationEntityException {
+        return reserveOperationSessionBean.makeReservation(username, roomResults, response, payment);
     }
     
     @Override
-    public List<RoomReservationEntity> viewAllReservation(String username) throws ReservationNotFoundException, GuestNotFoundException{
-        return roomReservationEntitySessionBean.viewAllMyReservation(username);
+    public List<RoomReservationEntity> viewAllReservation(Long userId) throws ReservationNotFoundException, GuestNotFoundException{
+        return roomReservationEntitySessionBean.viewAllMyReservation(userId);
     }
     
     public RoomReservationEntity viewReservationDetails(Long reservationId) throws ReservationNotFoundException{

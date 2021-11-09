@@ -9,10 +9,12 @@ import entity.NormalRateEntity;
 import entity.PeakRateEntity;
 import entity.PromotionRateEntity;
 import entity.PublishedRateEntity;
+import entity.RoomRateEntity;
 import entity.RoomReservationLineItemEntity;
 import entity.RoomTypeEntity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +29,7 @@ import util.enumeration.RoomStatusEnum;
 import util.exception.PeakRateNotFoundException;
 import util.exception.PromotionRateNotFoundException;
 import util.exception.RateNotFoundException;
+import util.reservation.Pair;
 
 /**
  *
@@ -287,6 +290,90 @@ public class SearchSessionBean implements SearchSessionBeanRemote, SearchSession
         LocalDate checkOutDateOfReservation = roomReservation.getCheckoutDate();
         return (checkInDateOfReservation.isBefore(usingDate) || checkInDateOfReservation.isEqual(usingDate))
                 && checkOutDateOfReservation.isAfter(usingDate);
+    }
+    
+    
+     public List<Pair> searchRoom(int reserveType, LocalDate checkinDate, LocalDate checkoutDate, Integer numberOfRooms) {
+        
+        List<Pair> roomResults = new ArrayList<Pair>();
+     
+        String queryString = "SELECT DISTINCT rt FROM RoomTypeEntity rt WHERE rt.disabled = false";
+        Query query = em.createQuery(queryString);
+        List<RoomTypeEntity> allRoomTypesAvailable = query.getResultList();
+        
+        for(RoomTypeEntity roomType : allRoomTypesAvailable) {
+            Integer lowestRoomAvailibity = 1000;
+            for(LocalDate date = checkinDate; date.isBefore(checkoutDate); date = date.plusDays(1)) {
+                Integer roomAvailibility = calculateRoomAvailibility(roomType, date);
+                lowestRoomAvailibity = Math.min(lowestRoomAvailibity, roomAvailibility);
+            }
+            if(lowestRoomAvailibity >= numberOfRooms) {
+                BigDecimal totalFare = new BigDecimal(0);
+                for(LocalDate date = checkinDate; date.isBefore(checkoutDate); date = date.plusDays(1)) {
+                    if(reserveType == 1) {
+                        totalFare = totalFare.add(computeFarePerNight(1, roomType, date));
+                        System.out.println(totalFare);
+                    }
+                    else {
+                        totalFare = totalFare.add(computeFarePerNight(4, roomType, date));
+                    }
+                }
+                roomResults.add(new Pair(roomType, totalFare.multiply(new BigDecimal(numberOfRooms))));
+                
+                
+            }
+        }
+        
+         return roomResults;
+     
+    }
+    
+    private Integer calculateRoomAvailibility(RoomTypeEntity roomType, LocalDate date){
+        
+        String databaseQueryString = "SELECT rt FROM RoomEntity rt WHERE rt.roomType = :iRoomType AND rt.roomStatus = :iRoomStatus";
+        Query query = em.createQuery(databaseQueryString);
+        query.setParameter("iRoomType", roomType);
+        query.setParameter("iRoomStatus", RoomStatusEnum.AVAILABLE);
+        
+        Integer totalRoomAvailableOfType = query.getResultList().size();
+        
+        databaseQueryString = "SELECT rrl FROM RoomReservationLineItemEntity rrl WHERE rrl.roomTypeEntity = :iRoomType AND rrl.checkInDate <= :iDate AND rrl.checkoutDate > :iDate";
+        query = em.createQuery(databaseQueryString);
+        query.setParameter("iRoomType", roomType);
+        query.setParameter("iDate" , date);
+        
+        Integer totalRoomBooked = query.getResultList().size();
+        
+            
+        
+        return totalRoomAvailableOfType - totalRoomBooked;
+    }
+    
+    
+    private BigDecimal computeFarePerNight(Integer highestRank, RoomTypeEntity roomType, LocalDate date) {
+        
+        if(highestRank == 1) {
+            String databaseQueryString = "SELECT rr FROM RoomRateEntity rr WHERE rr.roomRank = 1 AND rr.roomType.name = :iName AND rr.disabled = false ORDER BY rr.rate ASC";
+            Query query = em.createQuery(databaseQueryString);
+            query.setParameter("iName", roomType.getName());
+            
+            RoomRateEntity roomRate = (RoomRateEntity)query.getResultList().get(0);
+            return roomRate.getRate();
+            
+        }else {
+            String databaseQueryString = "SELECT rr FROM RoomRateEntity rr WHERE rr.roomRank = (SELECT max(r.roomRank) FROM RoomRateEntity r WHERE rr.roomType.name = :iName) "
+                                            + "AND rr.roomType.name = :iName AND rr.startValidityDate <= :iDate AND rr.endValidityDate > :iDate ORDER BY rr.rate ASC";
+            Query query = em.createQuery(databaseQueryString);
+            query.setParameter("iName", roomType.getName());
+            query.setParameter("iDate" , date);
+            
+           
+            
+            RoomRateEntity roomRate = (RoomRateEntity)query.getResultList().get(0);
+           
+            return roomRate.getRate();
+        }
+        
     }
 
 }

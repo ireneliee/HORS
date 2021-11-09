@@ -8,9 +8,11 @@ package ejb.session.stateless;
 import entity.RoomTypeEntity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 import javax.ejb.Local;
 import util.exception.RateNotFoundException;
+import util.reservation.Pair;
 
 /**
  *
@@ -24,5 +26,7 @@ public interface SearchSessionBeanLocal {
     public BigDecimal calculatePublishedRate(LocalDate checkIn, LocalDate checkOut, RoomTypeEntity roomType) throws RateNotFoundException;
 
     public BigDecimal calculateNonPublishedRate(LocalDate checkIn, LocalDate checkOut, RoomTypeEntity roomType) throws RateNotFoundException;
+
+    public List<Pair> searchRoom(int reserveType, LocalDate checkinDate, LocalDate checkoutDate, Integer numberOfRooms);
     
 }
