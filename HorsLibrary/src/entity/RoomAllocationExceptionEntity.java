@@ -35,7 +35,7 @@ public class RoomAllocationExceptionEntity implements Serializable {
     private List<RoomReservationLineItemEntity> typeOneException;
     
     @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false)
+    @JoinTable
     private List<RoomReservationLineItemEntity> typeTwoException;
     
     private LocalDate dateOfAllocation;

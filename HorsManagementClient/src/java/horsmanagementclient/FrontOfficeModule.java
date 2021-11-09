@@ -289,7 +289,7 @@ public class FrontOfficeModule {
             {
                 while(true) {
 
-                    System.out.println("Select the option.");
+                    System.out.print("Select the option>");
                     option = scanner.nextInt();
                     if(option >= 1 || option <= availableRooms.size()) {
 
@@ -303,6 +303,7 @@ public class FrontOfficeModule {
                             {
                                 newPaymentEntity.setPaymentMethod(PaymentMethodEnum.values()[payment - 1]);
                                 newPaymentEntity.setAmountPaid(availableRooms.get(option - 1).getPrice());
+                                System.out.println("Reservation is successfully created.");
                                 break;
                             }
                             else

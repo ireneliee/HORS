@@ -330,6 +330,7 @@ public class MainApp {
             {
                 i++;
                 System.out.printf("\n%3s%10s%10s", i, pair.getRoomType().getName(), pair.getPrice());
+                System.out.print(">");
                 
             }            
             
@@ -343,7 +344,7 @@ public class MainApp {
             {
                 while(true) {
 
-                    System.out.println("Select the option.");
+                    System.out.print("Select the option>");
                     option = scanner.nextInt();
                     if(option >= 1 || option <= availableRooms.size()) {
 
@@ -366,6 +367,7 @@ public class MainApp {
                         }
 
                         horsReservationClientController.makeReservation(currentGuestEntity, availableRooms, option-1, newPaymentEntity);
+                        System.out.println("Reservation is successfully created!");
                         break;
                     } else {
                         System.out.println("Invalid option, please try again!");

@@ -209,10 +209,9 @@ public class ReserveOperationSessionBean implements ReserveOperationSessionBeanR
 
             for(int i = 0; i < numberOfRooms; i++) {
                 RoomReservationLineItemEntity newLineItem = new RoomReservationLineItemEntity(roomTypeEntity, new BigDecimal(10000),checkinDate, checkoutDate);
-                em.persist(newLineItem);
-                em.flush();
+                System.out.println("Reach A");
                 newReservation.getRoomReservationLineItems().add(newLineItem);
-
+                System.out.println("Reach B");
             }
             return roomReservationEntitySessionBeanLocal.createNewRoomReservationEntity(newReservation);
         }
@@ -223,7 +222,7 @@ public class ReserveOperationSessionBean implements ReserveOperationSessionBeanR
                     if(ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException"))
                     {
                         eJBContext.setRollbackOnly();
-                        throw new LineItemExistException("Username exist in the system");
+                        throw new LineItemExistException("Line item exist in the system");
                         
                     }
                     else

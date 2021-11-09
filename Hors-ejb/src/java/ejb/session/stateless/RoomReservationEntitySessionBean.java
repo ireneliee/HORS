@@ -49,7 +49,7 @@ public class RoomReservationEntitySessionBean implements RoomReservationEntitySe
             RoomReservationEntity newRoomReservationEntity) throws InvalidRoomReservationEntityException {
 
         if (newRoomReservationEntity == null) {
-
+            System.out.println("Reach C");
             throw new InvalidRoomReservationEntityException("Room reservation information not provided.");
 
         }
@@ -58,8 +58,10 @@ public class RoomReservationEntitySessionBean implements RoomReservationEntitySe
         user.getRoomReservations().add(newRoomReservationEntity);
 
         newRoomReservationEntity.setBookingAccount(user);
+        System.out.println("Reach D");
 
         em.persist(newRoomReservationEntity);
+        System.out.println("Reach C");
 
         em.flush();
 
