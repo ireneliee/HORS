@@ -15,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
 
 /**
  *
@@ -35,7 +36,7 @@ public class RoomRateEntity implements Serializable {
     @Column(nullable = false, precision = 11, scale = 2)
     protected BigDecimal rate;
     
-    @Column(nullable = false, length = 32)
+    @JoinColumn(nullable = false)
     protected RoomTypeEntity roomType;
     
     @Column(nullable = false)

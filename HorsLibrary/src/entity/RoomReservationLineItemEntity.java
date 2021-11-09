@@ -15,6 +15,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -31,7 +32,7 @@ public class RoomReservationLineItemEntity implements Serializable {
     private Long roomReservationLineItemId;
     
     @OneToOne (optional = false)
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     private RoomTypeEntity roomTypeEntity;
     
     @OneToMany
