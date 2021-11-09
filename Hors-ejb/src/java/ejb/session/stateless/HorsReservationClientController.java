@@ -19,6 +19,8 @@ import javax.ejb.Stateless;
 import util.exception.GuestNotFoundException;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.InvalidRoomReservationEntityException;
+import util.exception.LineItemExistException;
+import util.exception.NoAvailableRoomOptionException;
 import util.exception.ReservationNotFoundException;
 import util.exception.RoomTypeNotFoundException;
 import util.exception.UnknownPersistenceException;
@@ -63,12 +65,12 @@ public class HorsReservationClientController implements HorsReservationClientCon
     }
     
     @Override
-    public List<Pair> searchRoom(int reserveType, LocalDate checkinDate, LocalDate checkoutDate, Integer numberOfRooms){
+    public List<Pair> searchRoom(int reserveType, LocalDate checkinDate, LocalDate checkoutDate, Integer numberOfRooms)  throws NoAvailableRoomOptionException{
         return reserveOperationSessionBean.searchRoom(reserveType, checkinDate, checkoutDate, numberOfRooms);
     }
     
     @Override
-    public Long makeReservation(UserEntity username,List<Pair> roomResults,int response, PaymentEntity payment) throws RoomTypeNotFoundException, InvalidRoomReservationEntityException {
+    public Long makeReservation(UserEntity username,List<Pair> roomResults,int response, PaymentEntity payment) throws RoomTypeNotFoundException, InvalidRoomReservationEntityException, LineItemExistException, UnknownPersistenceException {
         return reserveOperationSessionBean.makeReservation(username, roomResults, response, payment);
     }
     
