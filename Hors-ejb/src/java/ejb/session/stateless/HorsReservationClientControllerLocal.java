@@ -38,9 +38,9 @@ public interface HorsReservationClientControllerLocal {
 
     public List<Pair> searchRoom(int reserveType, LocalDate checkinDate, LocalDate checkoutDate, Integer numberOfRooms);
     
-    public Long makeReservation(UserEntity username,int response, PaymentEntity payment) throws RoomTypeNotFoundException, InvalidRoomReservationEntityException;
+    public Long makeReservation(UserEntity username,List<Pair> roomResults, int response, PaymentEntity payment) throws RoomTypeNotFoundException, InvalidRoomReservationEntityException;
 
-    public List<RoomReservationEntity> viewAllReservation(String username) throws ReservationNotFoundException, GuestNotFoundException;
+    public List<RoomReservationEntity> viewAllReservation(Long userId) throws ReservationNotFoundException, GuestNotFoundException;
 
     public RoomReservationEntity viewReservationDetails(Long reservationId) throws ReservationNotFoundException;
 }
