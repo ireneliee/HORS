@@ -29,11 +29,11 @@ public interface RoomEntitySessionBeanRemote {
         
         public List<RoomEntity> retrieveAllRooms();
         
-        public Boolean checkIfTheRoomIsUsed(Integer roomNumber);
+        public Boolean checkIfTheRoomIsUsed(String roomNumber);
         
-        public RoomEntity retrieveRoomByRoomNumber(Integer roomNumber) throws RoomNotFoundException;
+        public RoomEntity retrieveRoomByRoomNumber(String roomNumber) throws RoomNotFoundException;
         
-        public void deleteRoom(Integer roomNumber) throws RoomNotFoundException;
+        public void deleteRoom(String roomNumber) throws RoomNotFoundException;
         
         public void createNewRoom(RoomEntity newRoomEntity,  List<RoomEntity> listOfRoomEntities);
 

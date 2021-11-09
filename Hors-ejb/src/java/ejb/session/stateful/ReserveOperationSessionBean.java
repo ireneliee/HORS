@@ -191,16 +191,17 @@ public class ReserveOperationSessionBean implements ReserveOperationSessionBeanR
 
     
     @Override
-    public Long makeReservation(UserEntity username,List<Pair> roomResults, int response, PaymentEntity payment) throws RoomTypeNotFoundException, InvalidRoomReservationEntityException,
+    public Long makeReservation(UserEntity user,List<Pair> roomResults, int response, PaymentEntity payment) throws RoomTypeNotFoundException, InvalidRoomReservationEntityException,
             LineItemExistException, UnknownPersistenceException{
         
         try {
+            user = em.find(UserEntity.class, user.getUserId());
             RoomReservationEntity newReservation = new RoomReservationEntity();
             BigDecimal price = this.getRoomResults().get(response).getPrice();
             newReservation.setTotalAmount(price);
             newReservation.setPayment(payment);
             newReservation.setReservationDate(LocalDate.now());
-            newReservation.setBookingAccount(username);
+            newReservation.setBookingAccount(user);
 
 
             RoomTypeEntity roomType = this.getRoomResults().get(response).getRoomType();
@@ -213,7 +214,7 @@ public class ReserveOperationSessionBean implements ReserveOperationSessionBeanR
                 newReservation.getRoomReservationLineItems().add(newLineItem);
                 System.out.println("Reach B");
             }
-            return roomReservationEntitySessionBeanLocal.createNewRoomReservationEntity(newReservation);
+            return roomReservationEntitySessionBeanLocal.createNewRoomReservationEntity(user.getUserId(), newReservation);
         }
          catch(PersistenceException ex)
             {

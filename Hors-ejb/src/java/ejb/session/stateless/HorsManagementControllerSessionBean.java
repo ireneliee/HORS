@@ -173,7 +173,7 @@ public class HorsManagementControllerSessionBean implements HorsManagementContro
     }
 
     @Override
-    public RoomEntity retrieveRoomByRoomNumber(Integer roomNumber) throws RoomNotFoundException {
+    public RoomEntity retrieveRoomByRoomNumber(String roomNumber) throws RoomNotFoundException {
         return roomEntitySessionBean.retrieveRoomByRoomNumber(roomNumber);
     }
 
@@ -184,7 +184,7 @@ public class HorsManagementControllerSessionBean implements HorsManagementContro
     }
 
     @Override
-    public void deleteRoom(Integer roomNumber) throws RoomNotFoundException {
+    public void deleteRoom(String roomNumber) throws RoomNotFoundException {
         roomEntitySessionBean.deleteRoom(roomNumber);
     }
 

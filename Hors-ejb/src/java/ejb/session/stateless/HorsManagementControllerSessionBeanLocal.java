@@ -78,12 +78,12 @@ public interface HorsManagementControllerSessionBeanLocal {
 
     public Long createNewRoom(RoomEntity newRoomEntity) throws RoomNumberExistException, UnknownPersistenceException, InputDataValidationException;
 
-    public RoomEntity retrieveRoomByRoomNumber(Integer roomNumber) throws RoomNotFoundException;
+    public RoomEntity retrieveRoomByRoomNumber(String roomNumber) throws RoomNotFoundException;
     
      public void updateRoom(RoomEntity roomEntity) throws RoomNotFoundException,
             UpdateRoomException, InputDataValidationException;
      
-     public void deleteRoom(Integer roomNumber) throws RoomNotFoundException;
+     public void deleteRoom(String roomNumber) throws RoomNotFoundException;
 
     public List<RoomEntity> retrieveAllRooms();
 

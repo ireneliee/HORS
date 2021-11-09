@@ -59,7 +59,6 @@ public class HotelOperationModule {
         this.horsManagementControllerSessionBeanRemote = horsManagementControllerSessionBeanRemote;
         this.currentEmployee = currentEmployee;
     }
-    
 
     public void operationManagerMenu() throws InvalidAccessRightException {
 
@@ -219,14 +218,14 @@ public class HotelOperationModule {
 
         System.out.println("*** HORS Management System :: Type One Exception***\n");
         List<RoomReservationLineItemEntity> typeOneException = reportRetrieved.getTypeOneException();
-        
+
         for (RoomReservationLineItemEntity roomReservation : typeOneException) {
             System.out.println("Room reservation line item: " + roomReservation.getRoomReservationLineItemId()
                     + "\n" + "Room reserved: " + roomReservation.getRoomTypeEntity().getName());
             System.out.println("Status: Room of higher rank has been allocated");
         }
-        
-        if(reportRetrieved.getTypeOneException().isEmpty()) {
+
+        if (reportRetrieved.getTypeOneException().isEmpty()) {
             System.out.println("No exception.\n");
         }
 
@@ -237,8 +236,8 @@ public class HotelOperationModule {
                     + "\n" + "Room reserved: " + roomReservation.getRoomTypeEntity().getName());
             System.out.println("Status: Room has not been allocated. Please handle this manually.\n");
         }
-        
-        if(reportRetrieved.getTypeTwoException().isEmpty()) {
+
+        if (reportRetrieved.getTypeTwoException().isEmpty()) {
             System.out.println("No exception.");
         }
 
@@ -455,7 +454,7 @@ public class HotelOperationModule {
 
                         newPeakRate.setStartValidityDate(dateToPutStart);
                         newPeakRate.setEndValidityDate(dateToPutEnd);
-                        
+
                         System.out.print("Enter the name of the promotion rate>");
                         String roomRateName = scanner.nextLine();
                         newPeakRate.setName(roomRateName);
@@ -493,7 +492,7 @@ public class HotelOperationModule {
         System.out.println("*** HORS Management System :: Hotel Operation :: Operation Manager :: Delete a room ***\n");
         try {
             System.out.print("Enter the 4 digits room number that you want to update>");
-            Integer roomNumber = Integer.parseInt(scanner.nextLine());
+            String roomNumber = scanner.nextLine();
             try {
                 horsManagementControllerSessionBeanRemote.deleteRoom(roomNumber);
                 System.out.println("Room with room number " + roomNumber + " has been deleted");
@@ -512,7 +511,7 @@ public class HotelOperationModule {
 
         try {
             System.out.print("Enter the 4 digits room number that you want to update>");
-            Integer roomNumber = Integer.parseInt(scanner.nextLine());
+            String roomNumber = scanner.nextLine();
             newRoomEntity.setRoomNumber(roomNumber);
             System.out.print("Enter the new room type: ");
             String roomTypeName = scanner.nextLine();
@@ -557,7 +556,7 @@ public class HotelOperationModule {
             newRoomEntity.setRoomType(roomTypeOfTheNewRoom);
             try {
                 System.out.print("Enter the 4 digits room number>");
-                Integer roomNumber = scanner.nextInt();
+                String roomNumber = scanner.nextLine();
                 newRoomEntity.setRoomNumber(roomNumber);
             } catch (InputMismatchException ex) {
                 System.out.println("Error in creating a new room: " + "wrong input given.");
