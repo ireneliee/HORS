@@ -24,6 +24,8 @@ import util.enumeration.PaymentMethodEnum;
 import util.exception.GuestNotFoundException;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.InvalidRoomReservationEntityException;
+import util.exception.LineItemExistException;
+import util.exception.NoAvailableRoomOptionException;
 import util.exception.ReservationNotFoundException;
 import util.exception.RoomTypeNotFoundException;
 import util.exception.UnknownPersistenceException;
@@ -227,6 +229,9 @@ public class MainApp {
             System.out.println("Invalid Date input");
             
         }
+        catch (NoAvailableRoomOptionException ex) {
+            System.out.println("No room available");
+        }
            
     }
     
@@ -374,11 +379,20 @@ public class MainApp {
             System.out.println("Invalid Date input");
             
         }
+        catch (NoAvailableRoomOptionException ex) {
+            System.out.println("No room available");
+        }
         catch (RoomTypeNotFoundException ex){
             System.out.println("Room type not available!");
         }
         catch (InvalidRoomReservationEntityException ex) {
             System.out.println("Invalid Reservation!");
+        }
+        catch (LineItemExistException ex){
+            System.out.println("Invalid Reservation");
+        }
+        catch (UnknownPersistenceException ex) {
+            System.out.println("Reservation failed");
         }
         
        
@@ -444,63 +458,7 @@ public class MainApp {
                 
     }
     
-    private void searchFunction(){
-    Scanner scanner = new Scanner(System.in);
-        Integer cinDay = 0;
-        Integer cinMonth = 0;
-        Integer cinYear = 0;
-        Integer coutDay = 0;
-        Integer coutMonth = 0;
-        Integer coutYear = 0;
-        Integer numberOfRooms = 0;
-        Integer i = 0;
-       
-        
-        
-        System.out.println("*** HORS Reservation  :: Search Room ***\n");
-        System.out.print("Enter Day of Check In> ");
-        cinDay = scanner.nextInt();
-        System.out.print("Enter Month of Check In> ");
-        cinMonth = scanner.nextInt();
-        System.out.print("Enter Year of Check In> ");
-        cinYear = scanner.nextInt();
-        System.out.print("Enter Day of Check Out> ");
-        coutDay = scanner.nextInt();
-        System.out.print("Enter Month of Check Out> ");
-        coutMonth = scanner.nextInt();
-        System.out.print("Enter Year of Check Out> ");
-        coutYear = scanner.nextInt();
-        System.out.print("Enter number of room(s)> ");
-        numberOfRooms = scanner.nextInt();
-        scanner.nextLine();
-        
-        try {
-            LocalDate checkinDate = LocalDate.of(cinYear, cinMonth, cinDay);
-            LocalDate checkoutDate = LocalDate.of(coutYear, coutMonth, coutDay);
-            if(checkoutDate.isBefore(checkinDate)) {
-                throw new DateTimeException("Invalid Date Input");
-            }
-            
-            List<Pair> availableRooms = horsReservationClientController.searchRoom(4, checkinDate, checkoutDate, numberOfRooms);
-            System.out.printf("\n%3s%10s%10s", "No", "Room Type", "Total Price");
-            
-            for(Pair pair: availableRooms)
-            {
-                i++;
-                System.out.printf("\n%3s%10s%10s", i, pair.getRoomType().getName(), pair.getPrice());
-                
-            }            
-            
-            System.out.println("");
-            System.out.println("------------------------");
-           
-        }
-        catch (DateTimeException ex){
-            System.out.println("Invalid Date input");
-            
-        }
-           
-        }
+    
 
    
 }
