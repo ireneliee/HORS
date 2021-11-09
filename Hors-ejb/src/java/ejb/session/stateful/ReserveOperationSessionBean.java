@@ -170,8 +170,9 @@ public class ReserveOperationSessionBean implements ReserveOperationSessionBeanR
             return roomRate.getRate();
             
         } else {
-            String databaseQueryString = "SELECT rr FROM RoomRateEntity rr WHERE rr.roomRank = (SELECT max(r.roomRank) FROM RoomRateEntity r WHERE rr.roomType.name = :iName) "
-                                            + "AND rr.roomType.name = :iName AND rr.startValidityDate <= :iDate AND rr.endValidityDate > :iDate ORDER BY rr.rate ASC";
+            String databaseQueryString = "SELECT rr FROM RoomRateEntity rr WHERE rr.roomRank = (SELECT max(r.roomRank) FROM RoomRateEntity r "
+                    + "WHERE r.startValidityDate <= :iDate AND r.endValidityDate > :iDate AND  r.roomType.name = :iName) "
+                    + "AND rr.roomType.name = :iName AND rr.startValidityDate <= :iDate AND rr.endValidityDate > :iDate ORDER BY rr.rate ASC" ;
             Query query = em.createQuery(databaseQueryString);
             query.setParameter("iName", roomType.getName());
             query.setParameter("iDate" , date);
