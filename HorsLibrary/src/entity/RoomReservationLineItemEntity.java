@@ -32,7 +32,6 @@ public class RoomReservationLineItemEntity implements Serializable {
     private Long roomReservationLineItemId;
     
     @OneToOne (optional = false)
-    @JoinColumn(nullable = false)
     private RoomTypeEntity roomTypeEntity;
     
     @OneToMany
@@ -44,7 +43,7 @@ public class RoomReservationLineItemEntity implements Serializable {
     @Column(nullable = false)
     private LocalDate checkInDate;
     
-    @Column(nullable = false, precision = 11, scale = 2)
+    @Column(nullable = false)
     private LocalDate checkoutDate;
     
     @OneToOne

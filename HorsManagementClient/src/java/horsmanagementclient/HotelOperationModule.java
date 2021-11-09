@@ -455,6 +455,10 @@ public class HotelOperationModule {
 
                         newPeakRate.setStartValidityDate(dateToPutStart);
                         newPeakRate.setEndValidityDate(dateToPutEnd);
+                        
+                        System.out.print("Enter the name of the promotion rate>");
+                        String roomRateName = scanner.nextLine();
+                        newPeakRate.setName(roomRateName);
 
                         try {
                             Long roomRateId = horsManagementControllerSessionBeanRemote
