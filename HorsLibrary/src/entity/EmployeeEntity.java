@@ -10,6 +10,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import util.enumeration.AccessRightEnum;
 
 
@@ -17,16 +19,25 @@ import util.enumeration.AccessRightEnum;
 public class EmployeeEntity extends UserEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    
     @Column(nullable = false, length = 32)
+    @Size(min = 1, max = 32)
+    @NotNull
     private String firstName;
     
+    @Size(min = 1, max = 32)
+    @NotNull
     @Column(nullable = false, length = 32)
     private String lastName;
     
     @Column(nullable = false, length = 32, unique = true)
+    @Size(min = 1, max = 32)
+    @NotNull
     private String username;
     
     @Column(nullable = false, length = 32)
+    @Size(min = 1, max = 32)
+    @NotNull
     private String password;
     
     @Enumerated(EnumType.STRING)

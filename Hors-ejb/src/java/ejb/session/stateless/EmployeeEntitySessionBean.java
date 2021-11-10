@@ -7,6 +7,9 @@ package ejb.session.stateless;
 
 import entity.EmployeeEntity;
 import java.util.List;
+import java.util.Set;
+import javax.annotation.Resource;
+import javax.ejb.EJBContext;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -14,6 +17,10 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import util.exception.EmployeeNotFoundException;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.UnknownPersistenceException;
@@ -25,12 +32,27 @@ public class EmployeeEntitySessionBean implements EmployeeEntitySessionBeanRemot
 
     @PersistenceContext(unitName = "Hors-ejbPU")
     private EntityManager em;
-
-    public EmployeeEntitySessionBean(){}
+    
+    @Resource
+    private EJBContext eJBContext;
+    
+    private final ValidatorFactory validatorFactory;
+    private final Validator validator;
+    
+    public EmployeeEntitySessionBean(){
+        validatorFactory = Validation.buildDefaultValidatorFactory();
+        validator = validatorFactory.getValidator();
+    }
     
     @Override
     public Long createNewEmployee(EmployeeEntity newEmployeeEntity) throws UsernameExistException, 
             UnknownPersistenceException {
+        
+        Set<ConstraintViolation<EmployeeEntity>> constraintViolations = validator.validate(newEmployeeEntity);
+        if(!constraintViolations.isEmpty()) {
+            throw new UnknownPersistenceException("Wrong data input.");
+        }
+        
         try {
             em.persist(newEmployeeEntity);
             em.flush();

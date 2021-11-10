@@ -8,7 +8,8 @@ package entity;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -18,17 +19,23 @@ import javax.persistence.Entity;
 public class PartnerEntity extends UserEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
-    @Column(nullable = false, length = 32)
+
+    @Column(nullable = false, length = 64)
+    @NotNull
+    @Size(min = 1, max = 64)
     private String partnerName;
-    
+
     @Column(nullable = false, length = 32, unique = true)
+    @NotNull
+    @Size(min = 1, max = 32)
     private String username;
-    
+
     @Column(nullable = false, length = 32)
+    @NotNull
+    @Size(min = 1, max = 64)
     private String password;
-    
-    public PartnerEntity(){
+
+    public PartnerEntity() {
         super();
     }
 
@@ -37,8 +44,6 @@ public class PartnerEntity extends UserEntity implements Serializable {
         this.username = username;
         this.password = password;
     }
-    
-    
 
     @Override
     public int hashCode() {
@@ -54,7 +59,7 @@ public class PartnerEntity extends UserEntity implements Serializable {
             return false;
         }
         PartnerEntity other = (PartnerEntity) object;
-        if ((this.getUserId()== null && other.getUserId() != null) || (this.getUserId()!= null && !this.userId.equals(other.userId))) {
+        if ((this.getUserId() == null && other.getUserId() != null) || (this.getUserId() != null && !this.userId.equals(other.userId))) {
             return false;
         }
         return true;
@@ -88,5 +93,5 @@ public class PartnerEntity extends UserEntity implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-    
+
 }

@@ -351,7 +351,9 @@ public class MainApp {
                         while(true)
                         {
                             System.out.println("The fee is $" + availableRooms.get(option - 1).getPrice() + ". Please choose the payment option");
-                            System.out.println("1: AMEX; 2:MASTERCARD; 3:VISA");
+                            System.out.println("1: AMEX");
+                            System.out.println("2: MasterCard");
+                            System.out.println("3: Visa");
                             Integer payment = scanner.nextInt();
 
                             if(payment >= 1 && payment <= 3)
@@ -439,9 +441,7 @@ public class MainApp {
             System.out.printf("%10s%10s%10s%10s%10s%10s\n", "Reservation Id", "Booking Account", "Reservation Date", "Number of Rooms", "Check-in Date", "Check-out Date");
             if(reservations.isEmpty() == false) {
                 for(RoomReservationEntity roomReservation : reservations) {
-                    System.out.printf("%10s%10s%10s\n", roomReservation.getRoomReservationId(), roomReservation.getBookingAccount(), roomReservation.getReservationDate()
-                                                                    /*,roomReservation.getRoomReservationLineItems().size(), roomReservation.getRoomReservationLineItems().get(0).getCheckInDate(),
-                                                                    roomReservation.getRoomReservationLineItems().get(0).getCheckoutDate()*/);
+                    System.out.println(roomReservation);
                 } 
 
             }

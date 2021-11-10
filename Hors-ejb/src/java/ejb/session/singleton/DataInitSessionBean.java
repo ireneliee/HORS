@@ -79,12 +79,6 @@ public class DataInitSessionBean {
         if (em.find(RoomTypeEntity.class, 1L) == null) {
             doDataInitialisationRoomTypeEntity();
         }
-
-        
-        if (em.find(GuestEntity.class, 1L) == null) {
-            doDataInitialisationGuestEntity();
-        } 
-        
         
          
     }
@@ -331,26 +325,6 @@ public class DataInitSessionBean {
         }
     }
 
-
-
-
-    private void doDataInitialisationGuestEntity() {
-            try {   
-            
-            //Create guest
-            GuestEntity guestOne = new GuestEntity("Guest","One", "guestOne","password", "email1", "11111","1111");
-            guestEntitySessionBean.guestRegister(guestOne);
-            
-            GuestEntity guestTwo = new GuestEntity("Guest","Two", "guestTwo","password", "email2", "22222","2222");
-            guestEntitySessionBean.guestRegister(guestTwo);
-            
-            GuestEntity guestThree = new GuestEntity("Guest","Three", "guestThree","password", "email3", "33333","3333");
-            guestEntitySessionBean.guestRegister(guestThree);
-            
-            } catch (UsernameExistException | UnknownPersistenceException ex) {
-            System.out.println(ex.getMessage());
-        }
-    }
 }
      // room reservation created. 4 deluxe room, 2 premium room, all in the same check in and check out date :)
             // reservation 1

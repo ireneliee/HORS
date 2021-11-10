@@ -106,8 +106,9 @@ public class SystemAdministrationModule {
                     newEmployeeId = horsManagementControllerSessionBeanRemote.createNewEmployee(newEmployeeEntity);
                 } catch (UsernameExistException | UnknownPersistenceException ex) {
                     System.out.println(ex.getMessage());
+                    System.out.println("A new employee with employeeId " + newEmployeeId + " is created");
                 }
-                System.out.println("A new employee with employeeId " + newEmployeeId + " is created");
+                
                 
                 break;
             }

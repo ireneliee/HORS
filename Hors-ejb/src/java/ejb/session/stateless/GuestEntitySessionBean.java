@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.GuestEntity;
+import java.util.Set;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -13,23 +14,29 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import util.exception.GuestNotFoundException;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UsernameExistException;
 
 
-/**
- *
- * @author zenyew
- */
+
 @Stateless
 public class GuestEntitySessionBean implements GuestEntitySessionBeanRemote, GuestEntitySessionBeanLocal {
 
     @PersistenceContext(unitName = "Hors-ejbPU")
     private EntityManager em;
-
+    
+    private final ValidatorFactory validatorFactory;
+    private final Validator validator;
+    
     public GuestEntitySessionBean() {
+        validatorFactory = Validation.buildDefaultValidatorFactory();
+        validator = validatorFactory.getValidator();
     }
     
     
@@ -70,9 +77,11 @@ public class GuestEntitySessionBean implements GuestEntitySessionBeanRemote, Gue
     
     
     public Long guestRegister(GuestEntity newGuestEntity) throws UsernameExistException, UnknownPersistenceException{
-        
-        try
-            {
+        Set<ConstraintViolation<GuestEntity>>constraintViolations = validator.validate(newGuestEntity);
+        if(!constraintViolations.isEmpty()) {
+            throw new UnknownPersistenceException("Wrong data input. Please check your data again.");
+        }
+            try {
                 em.persist(newGuestEntity);
                 em.flush();
 
@@ -84,7 +93,7 @@ public class GuestEntitySessionBean implements GuestEntitySessionBeanRemote, Gue
                 {
                     if(ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException"))
                     {
-                        throw new UsernameExistException("Username exist in the system");
+                        throw new UsernameExistException("Username, pasport number, or mobile phone exist in the system");
                     }
                     else
                     {
