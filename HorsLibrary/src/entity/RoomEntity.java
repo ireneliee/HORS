@@ -52,7 +52,6 @@ public class RoomEntity implements Serializable {
     }
 
     public RoomEntity(String roomNumber, RoomStatusEnum roomStatus, RoomTypeEntity roomType) {
-        this();
         this.roomType = roomType;
         this.roomNumber = roomNumber;
         this.roomStatus = roomStatus;

@@ -26,6 +26,7 @@ import util.exception.InputDataValidationException;
 import util.exception.RoomIsCurrentlyUsedException;
 import util.exception.RoomNotFoundException;
 import util.exception.RoomNumberExistException;
+import util.exception.RoomTypeHasBeenDisabledException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UpdateRoomException;
 
@@ -42,19 +43,25 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
         //validator = validatorFactory.getValidator();
     }
 
+    
     @Override
     public Long createNewRoom(RoomEntity newRoomEntity) throws RoomNumberExistException,
-            UnknownPersistenceException, InputDataValidationException {
+            UnknownPersistenceException, InputDataValidationException, RoomTypeHasBeenDisabledException {
         
         em.persist(newRoomEntity);
         em.flush();
 
         RoomTypeEntity roomTypeOfTheNewRoom = em.find(RoomTypeEntity.class, 
                 newRoomEntity.getRoomType().getRoomTypeId());
+        if(roomTypeOfTheNewRoom.getDisabled()) {
+            throw new RoomTypeHasBeenDisabledException("Room type has been disabled.");
+            
+        }
 
         try {
 
             roomTypeOfTheNewRoom.getRoomEntities().add(newRoomEntity);
+            newRoomEntity.setRoomType(roomTypeOfTheNewRoom);
 
             return newRoomEntity.getRoomEntityId();
         } catch (PersistenceException ex) {

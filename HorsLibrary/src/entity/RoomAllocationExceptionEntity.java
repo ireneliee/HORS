@@ -31,11 +31,11 @@ public class RoomAllocationExceptionEntity implements Serializable {
     private Long roomAllocationExceptionId;
     
     @OneToMany(fetch = FetchType.EAGER)
-    @JoinTable
+    @JoinColumn(nullable = true)
     private List<RoomReservationLineItemEntity> typeOneException;
     
     @OneToMany(fetch = FetchType.EAGER)
-    @JoinTable
+    @JoinColumn(nullable = true)
     private List<RoomReservationLineItemEntity> typeTwoException;
     
     private LocalDate dateOfAllocation;

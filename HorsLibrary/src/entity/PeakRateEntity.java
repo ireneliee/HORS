@@ -18,23 +18,22 @@ import javax.persistence.Entity;
 public class PeakRateEntity extends RoomRateEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
-    public PeakRateEntity(){
+
+    public PeakRateEntity() {
         super();
         this.roomRank = 3;
     }
-    
+
     public PeakRateEntity(String name, LocalDate startValidityDate, LocalDate endValidityDate,
             BigDecimal rate, RoomTypeEntity roomType) {
         super(name, rate, roomType, startValidityDate, endValidityDate);
         this.roomRank = 3;
     }
 
-
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (this.getRoomRateId()!= null ? this.getRoomRateId().hashCode() : 0);
+        hash += (this.getRoomRateId() != null ? this.getRoomRateId().hashCode() : 0);
         return hash;
     }
 
@@ -45,8 +44,8 @@ public class PeakRateEntity extends RoomRateEntity implements Serializable {
             return false;
         }
         PeakRateEntity other = (PeakRateEntity) object;
-        if ((this.getRoomRateId() == null && other.getRoomRateId() != null) ||
-                (this.getRoomRateId() != null && !this.getRoomRateId().equals(other.getRoomRateId()))) {
+        if ((this.getRoomRateId() == null && other.getRoomRateId() != null)
+                || (this.getRoomRateId() != null && !this.getRoomRateId().equals(other.getRoomRateId()))) {
             return false;
         }
         return true;
@@ -54,9 +53,10 @@ public class PeakRateEntity extends RoomRateEntity implements Serializable {
 
     @Override
     public String toString() {
-        
-        return super.toString() + "Start validity date: " + this.getStartValidityDate().toString() + ";\n" +
-                "End validity date: " + this.getEndValidityDate().toString() + ";\n";
+
+        return "Room rate name: " + this.getName() + ";\n" + "Rating at: " + this.getRate().toString() + ";\n"
+                + "Room type: " + this.getRoomType().getClass().getSimpleName() + "\n" + "Start validity date: " + this.getStartValidityDate().toString() + ";\n"
+                + "End validity date: " + this.getEndValidityDate().toString() + ";\n";
     }
-    
+
 }

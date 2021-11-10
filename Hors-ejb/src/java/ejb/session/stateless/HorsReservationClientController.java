@@ -34,8 +34,6 @@ import util.reservation.Pair;
 @Stateless
 public class HorsReservationClientController implements HorsReservationClientControllerRemote, HorsReservationClientControllerLocal {
 
-    @EJB
-    private SearchSessionBeanLocal searchSessionBean;
 
     @EJB
     private RoomReservationEntitySessionBeanLocal roomReservationEntitySessionBean;

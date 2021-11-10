@@ -29,7 +29,7 @@ public class RoomTypeEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long RoomTypeId;
     
-    @Column(unique = true)
+    @Column(nullable = false, length = 300)
     private String name;
     
     @Column(nullable = false, length = 300)

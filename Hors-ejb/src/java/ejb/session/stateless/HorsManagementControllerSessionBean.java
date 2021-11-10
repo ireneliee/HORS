@@ -18,10 +18,8 @@ import entity.RoomEntity;
 import entity.RoomRateEntity;
 import entity.RoomTypeEntity;
 import entity.UserEntity;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import util.exception.DeleteRoomRateException;
@@ -38,13 +36,13 @@ import util.exception.PartnerNotFoundException;
 import util.exception.PeakRateHasAlreadyExistedException;
 import util.exception.PromotionRateHasAlreadyExistedException;
 import util.exception.PublishedRateHasAlreadyExistedException;
-import util.exception.RateNotFoundException;
 import util.exception.RoomAllocationExceptionReportDoesNotExistException;
 import util.exception.RoomAllocationIsDoneException;
 import util.exception.RoomNotFoundException;
 import util.exception.RoomNumberExistException;
 import util.exception.RoomRateEntityNotFoundException;
 import util.exception.RoomTypeExistException;
+import util.exception.RoomTypeHasBeenDisabledException;
 import util.exception.RoomTypeNotFoundException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UpdateRoomException;
@@ -59,9 +57,6 @@ public class HorsManagementControllerSessionBean implements HorsManagementContro
 
     @EJB
     private ReserveOperationSessionBeanLocal reserveOperationSessionBean;
-
-    @EJB
-    private SearchSessionBeanLocal searchSessionBean;
 
     @EJB
     private RoomReservationEntitySessionBeanLocal roomReservationEntitySessionBean;
@@ -167,8 +162,8 @@ public class HorsManagementControllerSessionBean implements HorsManagementContro
     }
 
     @Override
-    public Long createNewRoom(RoomEntity newRoomEntity) throws RoomNumberExistException,
-            UnknownPersistenceException, InputDataValidationException {
+   public Long createNewRoom(RoomEntity newRoomEntity) throws RoomNumberExistException,
+            UnknownPersistenceException, InputDataValidationException, RoomTypeHasBeenDisabledException {
         return roomEntitySessionBean.createNewRoom(newRoomEntity);
     }
 
@@ -264,21 +259,6 @@ public class HorsManagementControllerSessionBean implements HorsManagementContro
         return roomReservationEntitySessionBean.checkIn(roomReservationId, date);
     }
 
-    @Override
-    public Map<RoomTypeEntity, Integer> findAvailableRoomTypes(LocalDate checkIn, LocalDate checkOut) {
-        return searchSessionBean.findAvailableRoomTypes(checkIn, checkOut);
-    }
-
-    @Override
-    public BigDecimal calculatePublishedRate(LocalDate checkIn, LocalDate checkOut, RoomTypeEntity roomType) throws RateNotFoundException {
-        return searchSessionBean.calculatePublishedRate(checkIn, checkOut, roomType);
-    }
-
-    @Override
-    public BigDecimal calculateNonPublishedRate(LocalDate checkIn, LocalDate checkOut, RoomTypeEntity roomType) throws RateNotFoundException {
-        return searchSessionBean.calculateNonPublishedRate(checkIn, checkOut, roomType);
-    }
-    
     @Override
     public List<Pair> searchRoom(int reserveType, LocalDate checkinDate, LocalDate checkoutDate, Integer numberOfRooms)  throws NoAvailableRoomOptionException{
         return reserveOperationSessionBean.searchRoom(reserveType, checkinDate, checkoutDate, numberOfRooms);

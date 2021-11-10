@@ -56,7 +56,7 @@ public class MainApp {
         
         while(true)
         {
-            System.out.println("*** Welcome Hors Reservation (v4.1) ***\n");
+            System.out.println("*** Welcome Hors Reservation  ***\n");
             System.out.println("1: Login");
             System.out.println("2: Register");
             System.out.println("3: Search Hotel Room");
