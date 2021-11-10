@@ -13,12 +13,17 @@ import entity.RoomRateEntity;
 import entity.RoomReservationLineItemEntity;
 import entity.RoomTypeEntity;
 import java.util.List;
+import java.util.Set;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import util.exception.DeleteRoomRateException;
 import util.exception.NormalRateHasAlreadyExistedException;
 import util.exception.PeakRateHasAlreadyExistedException;
@@ -37,13 +42,22 @@ public class RoomRateEntitySessionBean implements RoomRateEntitySessionBeanRemot
     @PersistenceContext(unitName = "Hors-ejbPU")
     private EntityManager em;
 
+    private final ValidatorFactory validatorFactory;
+    private final Validator validator;
+
     public RoomRateEntitySessionBean() {
+        validatorFactory = Validation.buildDefaultValidatorFactory();
+        validator = validatorFactory.getValidator();
     }
 
     @Override
     public Long createNewPublishedRateEntity(PublishedRateEntity newPublishedRateEntity) throws PublishedRateHasAlreadyExistedException,
             UnknownPersistenceException {
 
+        Set<ConstraintViolation<RoomRateEntity>> constraintViolations = validator.validate(newPublishedRateEntity);
+        if (!constraintViolations.isEmpty()) {
+            throw new UnknownPersistenceException("Wrong data input.");
+        }
         try {
             em.persist(newPublishedRateEntity);
             em.flush();
@@ -55,85 +69,78 @@ public class RoomRateEntitySessionBean implements RoomRateEntitySessionBeanRemot
         }
     }
 
-        @Override
-        public Long createNewNormalRateEntity
-        (NormalRateEntity newNormalRateEntity) throws NormalRateHasAlreadyExistedException,
+    @Override
+    public Long createNewNormalRateEntity(NormalRateEntity newNormalRateEntity) throws NormalRateHasAlreadyExistedException,
             UnknownPersistenceException {
-
-            try {
-                em.persist(newNormalRateEntity);
-                em.flush();
-
-                return newNormalRateEntity.getRoomRateId();
-            } catch (PersistenceException ex) {
-                throw new PersistenceException("A persistence error occurs.");
-            }
-
+        Set<ConstraintViolation<RoomRateEntity>> constraintViolations = validator.validate(newNormalRateEntity);
+        if (!constraintViolations.isEmpty()) {
+            throw new UnknownPersistenceException("Wrong data input.");
         }
 
-        @Override
-        public Long createNewPeakRateEntity
-        (PeakRateEntity newPeakRateEntity) throws PeakRateHasAlreadyExistedException,
-            UnknownPersistenceException {
-            em.persist(newPeakRateEntity);
+        try {
+            em.persist(newNormalRateEntity);
             em.flush();
 
-            return newPeakRateEntity.getRoomRateId();
-
+            return newNormalRateEntity.getRoomRateId();
+        } catch (PersistenceException ex) {
+            throw new PersistenceException("A persistence error occurs.");
         }
 
-        @Override
-        public Long createNewPromotionRateEntity
-        (PromotionRateEntity newPromotionRateEntity) throws PromotionRateHasAlreadyExistedException,
+    }
+
+    @Override
+    public Long createNewPeakRateEntity(PeakRateEntity newPeakRateEntity) throws PeakRateHasAlreadyExistedException,
             UnknownPersistenceException {
-            try {
-                em.persist(newPromotionRateEntity);
-                em.flush();
-
-                return newPromotionRateEntity.getRoomRateId();
-            } catch (PersistenceException ex) {
-                if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
-                    if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
-                        throw new PromotionRateHasAlreadyExistedException("Normal rate has already existed.");
-                    } else {
-                        throw new UnknownPersistenceException(ex.getMessage());
-                    }
-                } else {
-                    throw new UnknownPersistenceException(ex.getMessage());
-                }
-            }
+        Set<ConstraintViolation<RoomRateEntity>> constraintViolations = validator.validate(newPeakRateEntity);
+        if (!constraintViolations.isEmpty()) {
+            throw new UnknownPersistenceException("Wrong data input.");
         }
+        em.persist(newPeakRateEntity);
+        em.flush();
 
-        @Override
-        public void updatePublishedAndNormalRate
-        (RoomRateEntity roomRate
-        
-            ) {
+        return newPeakRateEntity.getRoomRateId();
+
+    }
+
+    @Override
+    public Long createNewPromotionRateEntity(PromotionRateEntity newPromotionRateEntity) throws PromotionRateHasAlreadyExistedException,
+            UnknownPersistenceException {
+        Set<ConstraintViolation<RoomRateEntity>> constraintViolations = validator.validate(newPromotionRateEntity);
+        if (!constraintViolations.isEmpty()) {
+            throw new UnknownPersistenceException("Wrong data input.");
+        }
+        try {
+            em.persist(newPromotionRateEntity);
+            em.flush();
+
+            return newPromotionRateEntity.getRoomRateId();
+        } catch (PersistenceException ex) {
+            throw new UnknownPersistenceException("Unknown persistence has occured.");
+        }
+    }
+
+    @Override
+    public void updatePublishedAndNormalRate(RoomRateEntity roomRate
+    ) {
         RoomRateEntity roomRateToBeUpdated = em.find(RoomRateEntity.class, roomRate.getRoomRateId());
-            roomRateToBeUpdated.setRate(roomRate.getRate());
-        }
+        roomRateToBeUpdated.setRate(roomRate.getRate());
+    }
 
-        @Override
-        public void updatePromotionAndPeakRate
-        (RoomRateEntity roomRate
-        
-            ) {
+    @Override
+    public void updatePromotionAndPeakRate(RoomRateEntity roomRate
+    ) {
         RoomRateEntity roomRateToBeUpdated = em.find(RoomRateEntity.class, roomRate.getRoomRateId());
-            roomRateToBeUpdated.setStartValidityDate(roomRate.getStartValidityDate());
-            roomRateToBeUpdated.setEndValidityDate(roomRate.getEndValidityDate());
-            roomRateToBeUpdated.setRate(roomRate.getRate());
-        }
+        roomRateToBeUpdated.setStartValidityDate(roomRate.getStartValidityDate());
+        roomRateToBeUpdated.setEndValidityDate(roomRate.getEndValidityDate());
+        roomRateToBeUpdated.setRate(roomRate.getRate());
+    }
 
-        @Override
-        public List<RoomRateEntity> retrieveAllRoomRate
-        
-            (){
+    @Override
+    public List<RoomRateEntity> retrieveAllRoomRate() {
         String queryString = "SELECT s FROM RoomRateEntity s";
-            Query query = em.createQuery(queryString);
-            return query.getResultList();
-        }
-    
-    
+        Query query = em.createQuery(queryString);
+        return query.getResultList();
+    }
 
     public void deleteRoomRateEntity(RoomRateEntity roomRate) throws DeleteRoomRateException {
         RoomRateEntity roomRateToBeRemoved = em.find(RoomRateEntity.class, roomRate.getRoomRateId());
