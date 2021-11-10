@@ -90,7 +90,7 @@
 <xs:complexType name="roomEntity">
 <xs:sequence>
 <xs:element name="roomEntityId" type="xs:long" minOccurs="0"/>
-<xs:element name="roomNumber" type="xs:int" minOccurs="0"/>
+<xs:element name="roomNumber" type="xs:string" minOccurs="0"/>
 <xs:element name="roomStatus" type="tns:roomStatusEnum" minOccurs="0"/>
 <xs:element name="roomType" type="tns:roomTypeEntity" minOccurs="0"/>
 </xs:sequence>
@@ -116,8 +116,8 @@
 <xs:element name="disabled" type="xs:boolean" minOccurs="0"/>
 <xs:element name="endValidityDate" type="tns:localDate" minOccurs="0"/>
 <xs:element name="name" type="xs:string" minOccurs="0"/>
-<xs:element name="rank" type="xs:int" minOccurs="0"/>
 <xs:element name="rate" type="xs:decimal" minOccurs="0"/>
+<xs:element name="roomRank" type="xs:int" minOccurs="0"/>
 <xs:element name="roomRateId" type="xs:long" minOccurs="0"/>
 <xs:element name="roomType" type="tns:roomTypeEntity" minOccurs="0"/>
 <xs:element name="startValidityDate" type="tns:localDate" minOccurs="0"/>
