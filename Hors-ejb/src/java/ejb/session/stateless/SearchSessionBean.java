@@ -26,6 +26,7 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import util.enumeration.RoomStatusEnum;
+import util.exception.NoRoomTypeAvailableException;
 import util.exception.PeakRateNotFoundException;
 import util.exception.PromotionRateNotFoundException;
 import util.exception.RateNotFoundException;
@@ -328,7 +329,7 @@ public class SearchSessionBean implements SearchSessionBeanRemote, SearchSession
      
     }
     
-    private Integer calculateRoomAvailibility(RoomTypeEntity roomType, LocalDate date){
+    public Integer calculateRoomAvailibility(RoomTypeEntity roomType, LocalDate date){
         
         String databaseQueryString = "SELECT rt FROM RoomEntity rt WHERE rt.roomType = :iRoomType AND rt.roomStatus = :iRoomStatus";
         Query query = em.createQuery(databaseQueryString);
@@ -350,7 +351,7 @@ public class SearchSessionBean implements SearchSessionBeanRemote, SearchSession
     }
     
     
-    private BigDecimal computeFarePerNight(Integer highestRank, RoomTypeEntity roomType, LocalDate date) {
+    public BigDecimal computeFarePerNight(Integer highestRank, RoomTypeEntity roomType, LocalDate date) {
         
         if(highestRank == 1) {
             String databaseQueryString = "SELECT rr FROM RoomRateEntity rr WHERE rr.roomRank = 1 AND rr.roomType.name = :iName AND rr.disabled = false ORDER BY rr.rate ASC";
@@ -375,5 +376,22 @@ public class SearchSessionBean implements SearchSessionBeanRemote, SearchSession
         }
         
     }
-
+    
+    public List<RoomTypeEntity> findAvailableRoomTypes() throws NoRoomTypeAvailableException{
+        
+        try
+        {
+            String queryString = "SELECT DISTINCT rt FROM RoomTypeEntity rt WHERE rt.disabled = false";
+            Query query = em.createQuery(queryString);
+            List<RoomTypeEntity> allRoomTypesAvailable = query.getResultList();
+            return allRoomTypesAvailable;
+        }
+        catch(NoResultException ex) {
+            throw new NoRoomTypeAvailableException("No available room type!");
+        }
+            
+        
+    }
+    
+    
 }

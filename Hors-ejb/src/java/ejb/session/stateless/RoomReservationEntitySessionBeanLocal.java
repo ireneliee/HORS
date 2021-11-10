@@ -33,7 +33,7 @@ public interface RoomReservationEntitySessionBeanLocal {
     public void checkOut(Long roomReservationId, LocalDate date) throws WrongCheckoutDate, InvalidRoomReservationEntityException,
             GuestHasNotCheckedInException;
 
-    public List<RoomReservationEntity> viewAllMyReservation(Long userId);
+    public List<RoomReservationEntity> viewAllMyReservation(Long userId)throws ReservationNotFoundException;
 
     public RoomReservationEntity viewReservationDetails(Long reservationId) throws ReservationNotFoundException;
     

@@ -2,31 +2,20 @@
 
 <xs:element name="InvalidLoginCredentialException" type="tns:InvalidLoginCredentialException"/>
 
-<xs:element name="PartnerNotFoundException" type="tns:PartnerNotFoundException"/>
-
-<xs:element name="UnknownPersistenceException" type="tns:UnknownPersistenceException"/>
-
-<xs:element name="UsernameExistException" type="tns:UsernameExistException"/>
-
-<xs:element name="createNewPartner" type="tns:createNewPartner"/>
-
-<xs:element name="createNewPartnerResponse" type="tns:createNewPartnerResponse"/>
-
 <xs:element name="partnerLogin" type="tns:partnerLogin"/>
 
 <xs:element name="partnerLoginResponse" type="tns:partnerLoginResponse"/>
 
-<xs:element name="retrieveAllPartner" type="tns:retrieveAllPartner"/>
-
-<xs:element name="retrieveAllPartnerResponse" type="tns:retrieveAllPartnerResponse"/>
-
-<xs:element name="retrievePartnerByUsername" type="tns:retrievePartnerByUsername"/>
-
-<xs:element name="retrievePartnerByUsernameResponse" type="tns:retrievePartnerByUsernameResponse"/>
-
-<xs:complexType name="createNewPartner">
+<xs:complexType name="partnerLogin">
 <xs:sequence>
-<xs:element name="arg0" type="tns:partnerEntity" minOccurs="0"/>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="partnerLoginResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:partnerEntity" minOccurs="0"/>
 </xs:sequence>
 </xs:complexType>
 
@@ -124,66 +113,7 @@
 </xs:sequence>
 </xs:complexType>
 
-<xs:complexType name="createNewPartnerResponse">
-<xs:sequence>
-<xs:element name="return" type="xs:long" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="UsernameExistException">
-<xs:sequence>
-<xs:element name="message" type="xs:string" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="UnknownPersistenceException">
-<xs:sequence>
-<xs:element name="message" type="xs:string" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="retrieveAllPartner">
-<xs:sequence/>
-</xs:complexType>
-
-<xs:complexType name="retrieveAllPartnerResponse">
-<xs:sequence>
-<xs:element name="return" type="tns:partnerEntity" minOccurs="0" maxOccurs="unbounded"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="partnerLogin">
-<xs:sequence>
-<xs:element name="arg0" type="xs:string" minOccurs="0"/>
-<xs:element name="arg1" type="xs:string" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="partnerLoginResponse">
-<xs:sequence>
-<xs:element name="return" type="tns:partnerEntity" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
 <xs:complexType name="InvalidLoginCredentialException">
-<xs:sequence>
-<xs:element name="message" type="xs:string" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="retrievePartnerByUsername">
-<xs:sequence>
-<xs:element name="arg0" type="xs:string" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="retrievePartnerByUsernameResponse">
-<xs:sequence>
-<xs:element name="return" type="tns:partnerEntity" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="PartnerNotFoundException">
 <xs:sequence>
 <xs:element name="message" type="xs:string" minOccurs="0"/>
 </xs:sequence>

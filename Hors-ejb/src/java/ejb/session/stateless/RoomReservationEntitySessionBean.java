@@ -162,15 +162,21 @@ public class RoomReservationEntitySessionBean implements RoomReservationEntitySe
     }
 
     @Override
-    public List<RoomReservationEntity> viewAllMyReservation(Long userId) {
+    public List<RoomReservationEntity> viewAllMyReservation(Long userId) throws ReservationNotFoundException{
 
         String databaseQueryString = "SELECT rr FROM RoomReservationEntity rr WHERE rr.bookingAccount.userId = :iUserId";
         Query query = em.createQuery(databaseQueryString);
         query.setParameter("iUserId", userId);
 
+        try{
         List<RoomReservationEntity> reservations = query.getResultList();
 
         return reservations;
+        }
+        catch(NoResultException ex) {
+            throw new ReservationNotFoundException("No reservation made");
+                    
+        }
     }
 
     @Override

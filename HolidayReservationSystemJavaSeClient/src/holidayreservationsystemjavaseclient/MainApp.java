@@ -5,10 +5,13 @@
  */
 package holidayreservationsystemjavaseclient;
 
+import java.util.List;
 import java.util.Scanner;
 import ws.client.InvalidLoginCredentialException;
 import ws.client.InvalidLoginCredentialException_Exception;
 import ws.client.PartnerEntity;
+import ws.client.roomReservationEntityWebService.RoomReservationEntity;
+import ws.client.roomReservationEntityWebService.ReservationNotFoundException_Exception;
 
 /**
  *
@@ -54,7 +57,7 @@ public class MainApp {
                 }
                 else if (response == 2)
                 {
-                   //search hotel
+                    doViewMyReservationDetails();
                 }
                 else if (response == 3)
                 {
@@ -127,7 +130,7 @@ public class MainApp {
                 }
                 else if (response == 3)
                 {
-                    //view all
+                    doViewAllMyReservations();
                 }
                 else if (response == 4)
                 {
@@ -146,10 +149,81 @@ public class MainApp {
         }
     }
     
-    private static PartnerEntity partnerLogin(String username, String password) throws InvalidLoginCredentialException_Exception {
+    public void doViewMyReservationDetails() {
+        
+        Scanner scanner = new Scanner(System.in);
+        Long reservationId = 0L;
+       
+        System.out.println("*** HORS Reservation  :: View My Reservation Details ***\n");
+        System.out.print("Enter Reservation Id> ");
+        reservationId = scanner.nextLong();
+        
+        try
+        {
+            RoomReservationEntity roomReservation = viewReservationDetails(reservationId);
+            System.out.println("Reservation Id :" + roomReservation.getRoomReservationId());
+            System.out.println("Booking Account :" + roomReservation.getBookingAccount());
+            System.out.println("Reservation Date :" + roomReservation.getReservationDate());
+            /*
+            System.out.println("Number of Rooms :" + roomReservation.getRoomReservationLineItems().size());
+            System.out.println("Check-in Date :" + roomReservation.getRoomReservationLineItems().get(0).getCheckInDate());
+            System.out.println("Check-out Date :" + roomReservation.getRoomReservationLineItems().get(0).getCheckoutDate());
+            */
+            System.out.println("Total Amount :" + roomReservation.getTotalAmount());
+            
+                  
+        } catch (ReservationNotFoundException_Exception ex) {
+            System.out.println("Invalid Reservation Id");
+        }
+    }
+    
+    private void doViewAllMyReservations() {
+        
+        try 
+        {
+            List<RoomReservationEntity> reservations = viewAllMyReservations(currentPartnerEntity.getUserId());
+        
+            System.out.printf("%10s%10s%10s%10s%10s%10s\n", "Reservation Id", "Booking Account", "Reservation Date", "Number of Rooms", "Check-in Date", "Check-out Date");
+            if(reservations.isEmpty() == false) {
+                for(RoomReservationEntity roomReservation : reservations) {
+                    System.out.printf("%10s%10s%10s\n", roomReservation.getRoomReservationId(), roomReservation.getBookingAccount(), roomReservation.getReservationDate()
+                                                                    /*,roomReservation.getRoomReservationLineItems().size(), roomReservation.getRoomReservationLineItems().get(0).getCheckInDate(),
+                                                                    roomReservation.getRoomReservationLineItems().get(0).getCheckoutDate()*/);
+                } 
+
+            }
+            else 
+            {
+                System.out.println("No reservation made");
+            }
+        } 
+        /*catch (GuestNotFoundException_Exception ex) {
+            System.out.println("Guest not found");
+        }*/
+        catch (ReservationNotFoundException_Exception ex) {
+            System.out.println("No reservation made");
+            
+        }
+                
+    }
+    
+    private static PartnerEntity partnerLogin(java.lang.String username, java.lang.String password) throws ws.client.InvalidLoginCredentialException_Exception {
         ws.client.PartnerEntityWebService_Service service = new ws.client.PartnerEntityWebService_Service();
         ws.client.PartnerEntityWebService port = service.getPartnerEntityWebServicePort();
         return port.partnerLogin(username, password);
     }
+    
+    private static java.util.List<ws.client.roomReservationEntityWebService.RoomReservationEntity> viewAllMyReservations(java.lang.Long userId) throws ws.client.roomReservationEntityWebService.ReservationNotFoundException_Exception {
+        ws.client.roomReservationEntityWebService.RoomReservationEntityWebService_Service service = new ws.client.roomReservationEntityWebService.RoomReservationEntityWebService_Service();
+        ws.client.roomReservationEntityWebService.RoomReservationEntityWebService port = service.getRoomReservationEntityWebServicePort();
+        return port.viewAllMyReservations(userId);
+    }
+    
+    private static ws.client.roomReservationEntityWebService.RoomReservationEntity viewReservationDetails(java.lang.Long reservationId) throws ws.client.roomReservationEntityWebService.ReservationNotFoundException_Exception {
+        ws.client.roomReservationEntityWebService.RoomReservationEntityWebService_Service service = new ws.client.roomReservationEntityWebService.RoomReservationEntityWebService_Service();
+        ws.client.roomReservationEntityWebService.RoomReservationEntityWebService port = service.getRoomReservationEntityWebServicePort();
+        return port.viewReservationDetails(reservationId);
+    }
+    
     
 }
