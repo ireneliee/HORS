@@ -6,8 +6,8 @@
 package ejb.session.stateless;
 
 import entity.RoomTypeEntity;
-import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -15,7 +15,10 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
-import util.exception.RoomNotFoundException;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import util.exception.RoomTypeExistException;
 import util.exception.RoomTypeNotFoundException;
 import util.exception.UnknownPersistenceException;
@@ -29,32 +32,34 @@ public class RoomTypeEntitySessionBean implements RoomTypeEntitySessionBeanRemot
 
     @PersistenceContext(unitName = "Hors-ejbPU")
     private EntityManager em;
+    
+    private final ValidatorFactory validatorFactory;
+    private final Validator validator;
 
     public RoomTypeEntitySessionBean() {
+        validatorFactory = Validation.buildDefaultValidatorFactory();
+        validator = validatorFactory.getValidator();
     }
 
     @Override
     public Long createRoomType(RoomTypeEntity newRoomType) throws RoomTypeExistException,
             UnknownPersistenceException {
+        Set<ConstraintViolation<RoomTypeEntity>>constraintViolations = validator.validate(newRoomType);
+        if(!constraintViolations.isEmpty()) {
+            throw new UnknownPersistenceException("Wrong data input.");
+        }
+
         try {
-            //System.out.println("Reach C");
+
             newRoomType.setDisabled(false);
             em.persist(newRoomType);
             em.flush();
             return newRoomType.getRoomTypeId();
 
         } catch (PersistenceException ex) {
-            if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
-                if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
-                    throw new RoomTypeExistException("Room type has already existed.");
-                } else {
-                    throw new UnknownPersistenceException(ex.getMessage());
-                }
-            } else {
-                throw new UnknownPersistenceException(ex.getMessage());
-            }
-        }
+            throw new UnknownPersistenceException("Unknown persistence has occured.");
 
+    }
     }
 
     @Override

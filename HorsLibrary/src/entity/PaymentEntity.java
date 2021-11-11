@@ -7,11 +7,17 @@ package entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import static java.time.temporal.TemporalQueries.precision;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
 import util.enumeration.PaymentMethodEnum;
 
 /**
@@ -26,9 +32,13 @@ public class PaymentEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long paymentId;
     
-    @Column(nullable = false)
+    @Column(nullable = false, precision = 11, scale = 2)
+    @NotNull
+    @DecimalMin("0.00")
+    @Digits(integer = 9, fraction = 2) 
     private BigDecimal amountPaid;
     
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PaymentMethodEnum paymentMethod;
     

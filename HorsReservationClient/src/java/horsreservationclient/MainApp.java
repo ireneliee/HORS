@@ -324,7 +324,7 @@ public class MainApp {
             LocalDate checkoutDate = LocalDate.of(coutYear, coutMonth, coutDay);
             
             List<Pair> availableRooms = horsReservationClientController.searchRoom(4, checkinDate, checkoutDate, numberOfRooms);
-            System.out.printf("\n%3s%10s%10s", "No", "Room Type", "Total Price");
+            System.out.printf("\n%3s%10s%10s", "No. ", "Room Type  ", "Total Price");
             
             for(Pair pair: availableRooms)
             {
@@ -333,7 +333,6 @@ public class MainApp {
                 
                 
             }            
-            System.out.print(">");
             System.out.println("");
             System.out.println("------------------------");
            
@@ -416,7 +415,7 @@ public class MainApp {
         {
             RoomReservationEntity roomReservation = horsReservationClientController.viewReservationDetails(reservationId);
             System.out.println("Reservation Id :" + roomReservation.getRoomReservationId());
-            System.out.println("Booking Account :" + roomReservation.getBookingAccount());
+            System.out.println("Booking Account Email :" + roomReservation.getBookingAccount().getEmail());
             System.out.println("Reservation Date :" + roomReservation.getReservationDate());
             /*
             System.out.println("Number of Rooms :" + roomReservation.getRoomReservationLineItems().size());
@@ -438,10 +437,11 @@ public class MainApp {
         {
             List<RoomReservationEntity> reservations = horsReservationClientController.viewAllReservation(currentGuestEntity.getUserId());
         
-            System.out.printf("%10s%10s%10s%10s%10s%10s\n", "Reservation Id", "Booking Account", "Reservation Date", "Number of Rooms", "Check-in Date", "Check-out Date");
+            //System.out.printf("%10s%10s%10s%10s%10s%10s\n", "Reservation Id ", "Booking Account ", "Reservation Date ", "Number of Rooms ", "Check-in Date", "Check-out Date");
             if(reservations.isEmpty() == false) {
                 for(RoomReservationEntity roomReservation : reservations) {
                     System.out.println(roomReservation);
+                    System.out.println("--------------------------------------------------------------------------------------------------");
                 } 
 
             }

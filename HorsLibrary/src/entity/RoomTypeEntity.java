@@ -16,6 +16,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -26,28 +28,39 @@ public class RoomTypeEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long RoomTypeId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)  
+    private Long RoomTypeId; 
     
     @Column(nullable = false, length = 300)
+    @NotNull
+    @Size(min = 1, max = 300)
     private String name;
     
     @Column(nullable = false, length = 300)
+    @NotNull
+    @Size(min = 1, max = 300)
     private String description;
     
     @Column(nullable = false, length = 7)
+    @NotNull
+    @Size(min = 3, max = 7)
     private String roomSize;
     
     @Column(nullable = false, length = 2)
+    @NotNull
     private Integer bed;
     
     @Column(nullable = false, length = 2)
+    @NotNull
     private Integer capacity;
     
     @Column(nullable = false, length = 300)
+    @NotNull
+    @Size(min = 1, max = 300)
     private String amenities;
     
     @Column(nullable = false, length = 1)
+    @NotNull
     private Integer roomRanking;
     
     private Boolean disabled;
