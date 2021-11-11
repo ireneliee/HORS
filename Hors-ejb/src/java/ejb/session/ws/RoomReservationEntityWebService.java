@@ -6,7 +6,9 @@
 package ejb.session.ws;
 
 import ejb.session.stateless.RoomReservationEntitySessionBeanLocal;
+import entity.RoomEntity;
 import entity.RoomReservationEntity;
+import entity.RoomReservationLineItemEntity;
 import entity.UserEntity;
 import java.util.List;
 import javax.ejb.EJB;
@@ -46,6 +48,14 @@ public class RoomReservationEntityWebService {
             em.detach(reservation);
             
             reservation.setBookingAccount(null);
+            for(RoomReservationLineItemEntity lineItem : reservation.getRoomReservationLineItems()) {
+                em.detach(lineItem);
+                em.detach(lineItem.getRoomTypeEntity());
+                for(RoomEntity room : lineItem.getRoomTypeEntity().getRoomEntities()){
+                    em.detach(room);
+                    room.setRoomType(null);
+                }
+            }
 
         }
         
@@ -63,6 +73,14 @@ public class RoomReservationEntityWebService {
         em.detach(reservation);
 
         reservation.setBookingAccount(null);
+        for(RoomReservationLineItemEntity lineItem : reservation.getRoomReservationLineItems()) {
+                em.detach(lineItem);
+                em.detach(lineItem.getRoomTypeEntity());
+                for(RoomEntity room : lineItem.getRoomTypeEntity().getRoomEntities()){
+                    em.detach(room);
+                    room.setRoomType(null);
+                }
+            }
 
         return reservation;
         

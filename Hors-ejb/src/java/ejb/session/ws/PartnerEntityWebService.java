@@ -7,7 +7,9 @@ package ejb.session.ws;
 
 import ejb.session.stateless.PartnerEntitySessionBeanLocal;
 import entity.PartnerEntity;
+import entity.RoomEntity;
 import entity.RoomReservationEntity;
+import entity.RoomReservationLineItemEntity;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.jws.WebService;
@@ -79,10 +81,20 @@ public class PartnerEntityWebService {
         
         PartnerEntity partner = partnerEntitySessionBean.partnerLogin(username, password);
         
-        /*for(RoomReservationEntity reservation : partner.getRoomReservations()) {
+        em.detach(partner);
+        
+        for(RoomReservationEntity reservation : partner.getRoomReservations()) {
             em.detach(reservation);
             reservation.setBookingAccount(null);
-        }*/
+            for(RoomReservationLineItemEntity lineItem : reservation.getRoomReservationLineItems()) {
+                em.detach(lineItem);
+                em.detach(lineItem.getRoomTypeEntity());
+                for(RoomEntity room : lineItem.getRoomTypeEntity().getRoomEntities()){
+                    em.detach(room);
+                    room.setRoomType(null);
+                }
+            }
+        }
         return partner;
     }
     
