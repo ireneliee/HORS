@@ -15,9 +15,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -38,6 +40,9 @@ public class RoomReservationLineItemEntity implements Serializable {
     private List<RoomRateEntity> roomRatesPerNight;
     
     @Column(nullable = false, precision = 11, scale = 2)
+    @NotNull
+    @DecimalMin("0.00")
+    @Digits(integer = 9, fraction = 2) 
     private BigDecimal subTotal;
     
     @Column(nullable = false)
@@ -98,7 +103,7 @@ public class RoomReservationLineItemEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "RoomType: " + this.getRoomTypeEntity().getName() + "\n" + "Check-in date: " + this.getCheckInDate() + " Check-out date: " + this.getCheckoutDate();
+        return "RoomType: " + this.getRoomTypeEntity().getName() + "\n" + "Check-in date: " + this.getCheckInDate() + " \nCheck-out date: " + this.getCheckoutDate();
     }
 
     public List<RoomRateEntity> getRoomRatesPerNight() {
