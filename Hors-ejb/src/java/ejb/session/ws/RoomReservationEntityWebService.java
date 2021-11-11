@@ -34,60 +34,70 @@ public class RoomReservationEntityWebService {
     @EJB
     private RoomReservationEntitySessionBeanLocal roomReservationEntitySessionBean;
 
-    
-    
     /**
      * This is a sample web service operation
      */
     @WebMethod(operationName = "viewAllMyReservations")
-    public List<RoomReservationEntity> viewAllMyReservations(@WebParam(name = "userId")Long userId) throws ReservationNotFoundException{
-    
+    public String viewAllMyReservations(@WebParam(name = "userId") Long userId) throws ReservationNotFoundException {
         List<RoomReservationEntity> myReservations = roomReservationEntitySessionBean.viewAllMyReservation(userId);
-        
-        for(RoomReservationEntity reservation : myReservations) {
+        String result = "";
+
+        for (RoomReservationEntity reservation : myReservations) {
             em.detach(reservation);
-            
+
             reservation.setBookingAccount(null);
-            for(RoomReservationLineItemEntity lineItem : reservation.getRoomReservationLineItems()) {
+            for (RoomReservationLineItemEntity lineItem : reservation.getRoomReservationLineItems()) {
                 em.detach(lineItem);
                 em.detach(lineItem.getRoomTypeEntity());
-                for(RoomEntity room : lineItem.getRoomTypeEntity().getRoomEntities()){
+                for (RoomEntity room : lineItem.getRoomTypeEntity().getRoomEntities()) {
                     em.detach(room);
                     room.setRoomType(null);
                 }
             }
 
+            if (!myReservations.isEmpty()) {
+                for (RoomReservationEntity roomReservation : myReservations) {
+                    result = result + roomReservation.toString() + "\n"
+                            + "--------------------------------------------------------------------------------------------------" + "\n";
+
+                }
+
+            } else {
+                
+                result = "No reservation has been made.";
+            }
         }
-        
-        return myReservations;
-        
+        return result;
+
     }
-    
-    
+
     @WebMethod(operationName = "viewReservationDetails")
-    public RoomReservationEntity viewReservationDetails(@WebParam(name = "reservationId")Long reservationId) throws ReservationNotFoundException{
-    
+    public String viewReservationDetails(@WebParam(name = "reservationId") Long reservationId) throws ReservationNotFoundException {
+
         RoomReservationEntity reservation = roomReservationEntitySessionBean.viewReservationDetails(reservationId);
-        
-        
+        String result = "";
+
         em.detach(reservation);
 
         reservation.setBookingAccount(null);
-        for(RoomReservationLineItemEntity lineItem : reservation.getRoomReservationLineItems()) {
-                em.detach(lineItem);
-                em.detach(lineItem.getRoomTypeEntity());
-                for(RoomEntity room : lineItem.getRoomTypeEntity().getRoomEntities()){
-                    em.detach(room);
-                    room.setRoomType(null);
-                }
+        for (RoomReservationLineItemEntity lineItem : reservation.getRoomReservationLineItems()) {
+            em.detach(lineItem);
+            em.detach(lineItem.getRoomTypeEntity());
+            for (RoomEntity room : lineItem.getRoomTypeEntity().getRoomEntities()) {
+                em.detach(room);
+                room.setRoomType(null);
             }
+        }
 
-        return reservation;
-        
+        if (reservation != null) {
+            List<RoomReservationLineItemEntity> listOfRooms = reservation.getRoomReservationLineItems();
+            for(RoomReservationLineItemEntity room: listOfRooms) {
+                result = result + room.toString() + "\n" + "***" + "\n";
+            }
+        }
+
+        return result;
+
     }
- 
+
 }
-
-
-    
-

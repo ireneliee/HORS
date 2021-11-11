@@ -4,11 +4,11 @@
     <service name="PartnerEntityWebService">
       <implementation-class>ejb.session.ws.PartnerEntityWebService</implementation-class>
     </service>
-    <service name="RoomReservationEntityWebService">
-      <implementation-class>ejb.session.ws.RoomReservationEntityWebService</implementation-class>
-    </service>
     <service name="SearchOperationWebService">
       <implementation-class>ejb.session.ws.SearchOperationWebService</implementation-class>
+    </service>
+    <service name="RoomReservationEntityWebService">
+      <implementation-class>ejb.session.ws.RoomReservationEntityWebService</implementation-class>
     </service>
   </services>
   <clients/>
