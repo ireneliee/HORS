@@ -215,7 +215,7 @@ public class ReserveOperationSessionBean implements ReserveOperationSessionBeanR
                 newReservation.getRoomReservationLineItems().add(newLineItem);
                 System.out.println("Reach B");
             }
-            return roomReservationEntitySessionBeanLocal.createNewRoomReservationEntity(user.getUserId(), newReservation);
+            return roomReservationEntitySessionBeanLocal.createNewRoomReservationEntity(user.getUserId(), newReservation).getRoomReservationId();
         }
          catch(PersistenceException ex)
             {

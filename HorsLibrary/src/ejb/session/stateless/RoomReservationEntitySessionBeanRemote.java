@@ -7,13 +7,19 @@ package ejb.session.stateless;
 
 import entity.RoomEntity;
 import entity.RoomReservationEntity;
+import entity.RoomTypeEntity;
+import entity.UserEntity;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import javax.ejb.Remote;
 import util.exception.GuestHasNotCheckedInException;
 import util.exception.InvalidRoomReservationEntityException;
+import util.exception.LineItemExistException;
 import util.exception.NoMoreRoomToAccomodateException;
 import util.exception.ReservationNotFoundException;
+import util.exception.RoomTypeNotFoundException;
+import util.exception.UnknownPersistenceException;
 import util.exception.WrongCheckInDate;
 import util.exception.WrongCheckoutDate;
 
@@ -24,7 +30,7 @@ import util.exception.WrongCheckoutDate;
 @Remote
 public interface RoomReservationEntitySessionBeanRemote {
 
-    public Long createNewRoomReservationEntity(Long userId, RoomReservationEntity newRoomReservationEntity) throws InvalidRoomReservationEntityException;
+    public RoomReservationEntity createNewRoomReservationEntity(Long userId, RoomReservationEntity newRoomReservationEntity) throws InvalidRoomReservationEntityException;
 
     public Long createNewRoomReservationEntity(RoomReservationEntity newRoomReservationEntity) throws InvalidRoomReservationEntityException;
     
@@ -37,6 +43,6 @@ public interface RoomReservationEntitySessionBeanRemote {
     
     public RoomReservationEntity viewReservationDetails(Long reservationId) throws ReservationNotFoundException;
     
-    
+    public RoomReservationEntity makeReservation(Long userId, String roomTypeName, double amount, int paymentType, int numberOfRooms, LocalDate checkinDate, LocalDate checkoutDate) throws RoomTypeNotFoundException, InvalidRoomReservationEntityException, LineItemExistException, UnknownPersistenceException;
 
 }
