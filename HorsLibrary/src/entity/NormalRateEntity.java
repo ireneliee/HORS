@@ -56,9 +56,10 @@ public class NormalRateEntity extends RoomRateEntity implements Serializable {
         return true;
     }
 
-    @Override
+   @Override
     public String toString() {
-        return super.toString();
+        return "Room rate name: " + this.getName() + ";\n" + "Rating at: " + this.getRate().toString() + ";\n" +
+                "Room type: " + this.getRoomType().getClass().getSimpleName() + ";\n";
     }
     
 }

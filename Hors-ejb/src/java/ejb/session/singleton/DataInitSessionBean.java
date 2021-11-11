@@ -21,7 +21,6 @@ import entity.RoomEntity;
 import entity.RoomTypeEntity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.Month;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
@@ -38,6 +37,7 @@ import util.exception.PromotionRateHasAlreadyExistedException;
 import util.exception.PublishedRateHasAlreadyExistedException;
 import util.exception.RoomNumberExistException;
 import util.exception.RoomTypeExistException;
+import util.exception.RoomTypeHasBeenDisabledException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UsernameExistException;
 
@@ -79,12 +79,6 @@ public class DataInitSessionBean {
         if (em.find(RoomTypeEntity.class, 1L) == null) {
             doDataInitialisationRoomTypeEntity();
         }
-
-        
-        if (em.find(GuestEntity.class, 1L) == null) {
-            doDataInitialisationGuestEntity();
-        } 
-        
         
          
     }
@@ -111,7 +105,7 @@ public class DataInitSessionBean {
         roomTypeOne.getRoomEntities().add(roomFour);
         roomTypeOne.getRoomEntities().add(roomFive);
 
-        RoomTypeEntity roomTypeTwo = new RoomTypeEntity("Premiere Room", "City view with luxurious amenities", "12x8", 2, 2, "bathtub, TV, shower, sofa", 2);
+        RoomTypeEntity roomTypeTwo = new RoomTypeEntity("Premier Room", "City view with luxurious amenities", "12x8", 2, 2, "bathtub, TV, shower, sofa", 2);
 
         RoomEntity roomSix = new RoomEntity("0102", RoomStatusEnum.AVAILABLE);
         RoomEntity roomSeven = new RoomEntity("0202", RoomStatusEnum.AVAILABLE);
@@ -209,8 +203,8 @@ public class DataInitSessionBean {
         PeakRateEntity rateEleven = new PeakRateEntity("DELUXE ROOM PEAK RATE", LocalDate.of(2021, 12, 24),LocalDate.of(2021, 12, 27), new BigDecimal(150), roomTypeOne);
         PromotionRateEntity rateTwelve = new PromotionRateEntity("DELUXE ROOM PROMOTION RATE", LocalDate.of(2021, 12, 27),LocalDate.of(2021, 12, 29), new BigDecimal(40), roomTypeOne);
         
-        PeakRateEntity rateThir = new PeakRateEntity("PREMIERE ROOM PEAK RATE", LocalDate.of(2021, 12, 24),LocalDate.of(2021, 12, 27), new BigDecimal(250), roomTypeTwo);
-        PromotionRateEntity rateFourt = new PromotionRateEntity("PREMIERE ROOM PROMOTION RATE", LocalDate.of(2021, 12, 27),LocalDate.of(2021, 12, 29), new BigDecimal(50), roomTypeTwo);
+        PeakRateEntity rateThir = new PeakRateEntity("PREMIER ROOM PEAK RATE", LocalDate.of(2021, 12, 24),LocalDate.of(2021, 12, 27), new BigDecimal(250), roomTypeTwo);
+        PromotionRateEntity rateFourt = new PromotionRateEntity("PREMIER ROOM PROMOTION RATE", LocalDate.of(2021, 12, 27),LocalDate.of(2021, 12, 29), new BigDecimal(50), roomTypeTwo);
         
         PeakRateEntity rateFift = new PeakRateEntity("FAMILY ROOM PEAK RATE", LocalDate.of(2021, 12, 24),LocalDate.of(2021, 12, 27), new BigDecimal(350), roomTypeThree);
         PromotionRateEntity rateSixt = new PromotionRateEntity("FAMILY ROOM PROMOTION RATE", LocalDate.of(2021, 12, 27),LocalDate.of(2021, 12, 29), new BigDecimal(100), roomTypeThree);
@@ -301,7 +295,7 @@ public class DataInitSessionBean {
             
         } catch (UnknownPersistenceException | RoomTypeExistException | PublishedRateHasAlreadyExistedException
                 | RoomNumberExistException | InputDataValidationException | NormalRateHasAlreadyExistedException 
-                | PeakRateHasAlreadyExistedException | PromotionRateHasAlreadyExistedException ex) {
+                | PeakRateHasAlreadyExistedException | PromotionRateHasAlreadyExistedException | RoomTypeHasBeenDisabledException ex) {
             System.out.println(ex.getMessage());
 
         }
@@ -331,26 +325,6 @@ public class DataInitSessionBean {
         }
     }
 
-
-
-
-    private void doDataInitialisationGuestEntity() {
-            try {   
-            
-            //Create guest
-            GuestEntity guestOne = new GuestEntity("Guest","One", "guestOne","password", "email1", "11111","1111");
-            guestEntitySessionBean.guestRegister(guestOne);
-            
-            GuestEntity guestTwo = new GuestEntity("Guest","Two", "guestTwo","password", "email2", "22222","2222");
-            guestEntitySessionBean.guestRegister(guestTwo);
-            
-            GuestEntity guestThree = new GuestEntity("Guest","Three", "guestThree","password", "email3", "33333","3333");
-            guestEntitySessionBean.guestRegister(guestThree);
-            
-            } catch (UsernameExistException | UnknownPersistenceException ex) {
-            System.out.println(ex.getMessage());
-        }
-    }
 }
      // room reservation created. 4 deluxe room, 2 premium room, all in the same check in and check out date :)
             // reservation 1

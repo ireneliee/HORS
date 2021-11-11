@@ -12,6 +12,7 @@ import javax.ejb.Local;
 import util.exception.InputDataValidationException;
 import util.exception.RoomNotFoundException;
 import util.exception.RoomNumberExistException;
+import util.exception.RoomTypeHasBeenDisabledException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UpdateRoomException;
 
@@ -22,7 +23,8 @@ import util.exception.UpdateRoomException;
 @Local
 public interface RoomEntitySessionBeanLocal {
 
-    public Long createNewRoom(RoomEntity newRoomEntity) throws RoomNumberExistException, UnknownPersistenceException, InputDataValidationException;
+    public Long createNewRoom(RoomEntity newRoomEntity) throws RoomNumberExistException,
+            UnknownPersistenceException, InputDataValidationException, RoomTypeHasBeenDisabledException;
     
     public void updateRoom(RoomEntity roomEntity) throws RoomNotFoundException, 
             UpdateRoomException, InputDataValidationException;

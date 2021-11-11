@@ -16,6 +16,9 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -30,19 +33,22 @@ public class RoomRateEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long roomRateId;
     
-    @Column(nullable = false, length = 600)
+    @Column(length = 600)
+    @Size(min = 1, max = 600)
     protected String name;
     
     @Column(nullable = false, precision = 11, scale = 2)
+    @Digits(integer = 9, fraction = 2)
+    @NotNull
     protected BigDecimal rate;
     
     @JoinColumn(nullable = false)
     protected RoomTypeEntity roomType;
     
-    @Column(nullable = false)
+    
     protected LocalDate startValidityDate;
     
-    @Column(nullable = false)
+    
     protected LocalDate endValidityDate;
     
     @Column(nullable = false)

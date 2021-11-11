@@ -45,7 +45,7 @@ public class SystemAdministrationModule {
             System.out.println("3: Create New Partner");
             System.out.println("4: View All Partners");
             System.out.println("-----------------------");
-            System.out.println("25: Back\n");
+            System.out.println("5: Back\n");
             response = 0;
             
             while(response < 1 || response > 25) {
@@ -60,14 +60,14 @@ public class SystemAdministrationModule {
                     doCreateNewPartner();
                 } else if(response == 4) {
                     doViewAllPartners();
-                }else if (response == 25) {
+                }else if (response == 5) {
                     break;
                 } else {
                     System.out.println("Invalid option, please try again!\n");
                 }
             }
             
-            if (response == 25) {
+            if (response == 5) {
                 break;
             }
         }
@@ -106,8 +106,9 @@ public class SystemAdministrationModule {
                     newEmployeeId = horsManagementControllerSessionBeanRemote.createNewEmployee(newEmployeeEntity);
                 } catch (UsernameExistException | UnknownPersistenceException ex) {
                     System.out.println(ex.getMessage());
+                    System.out.println("A new employee with employeeId " + newEmployeeId + " is created");
                 }
-                System.out.println("A new employee with employeeId " + newEmployeeId + " is created");
+                
                 
                 break;
             }

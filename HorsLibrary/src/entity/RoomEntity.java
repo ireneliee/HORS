@@ -6,17 +6,17 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import util.enumeration.RoomStatusEnum;
 
 
@@ -29,12 +29,13 @@ public class RoomEntity implements Serializable {
     private Long RoomEntityId;
     
     
-    //@NotNull
-    //@Size(min = 4, max = 4)
+    @NotNull
+    @Size(min = 4, max = 4)
     @Column(nullable = false, unique = true, length = 4)
     private String roomNumber;
     
-    //@NotNull
+    @NotNull
+    @Enumerated(EnumType.STRING)
     private RoomStatusEnum roomStatus;
     
     @ManyToOne(optional = false)
@@ -52,7 +53,6 @@ public class RoomEntity implements Serializable {
     }
 
     public RoomEntity(String roomNumber, RoomStatusEnum roomStatus, RoomTypeEntity roomType) {
-        this();
         this.roomType = roomType;
         this.roomNumber = roomNumber;
         this.roomStatus = roomStatus;

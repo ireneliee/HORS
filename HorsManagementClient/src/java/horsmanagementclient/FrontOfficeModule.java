@@ -93,86 +93,7 @@ public class FrontOfficeModule {
         }
     }
 
-    public void doSearchRoom() {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("*** POS System :: Front Office Module :: Search Room ***\n");
-        System.out.print("Enter your check-in date>");
-        String dateInStringOne = scanner.nextLine().trim();
-        LocalDate checkinDate = dateInput(dateInStringOne);
-
-        System.out.print("Enter your check-out date>");
-        String dateInStringTwo = scanner.nextLine().trim();
-        LocalDate checkoutDate = dateInput(dateInStringTwo);
-
-        System.out.println("*** Here are the number of available rooms for each room type: ***\n");
-        Map<RoomTypeEntity, Integer> numberOfRoomsAvailable
-                = horsManagementControllerSessionBeanRemote.findAvailableRoomTypes(checkinDate, checkoutDate);
-
-        numberOfRoomsAvailable
-                .forEach((k, v) -> formattingSearchRoom(k, v));
-
-        // copy for easy reference
-        List<String> listOfRoomTypes = new ArrayList<>();
-        numberOfRoomsAvailable
-                .forEach((k, v) -> listOfRoomTypes.add(k.getName()));
-
-        System.out.print("Enter the name of room types you would like to enquire more>");
-        String roomTypeName = scanner.nextLine().trim();
-        while (true) {
-
-            while (!listOfRoomTypes.contains(roomTypeName)) {
-                System.out.println("Room type is not available, please key in only available room type.");
-                numberOfRoomsAvailable
-                        .forEach((k, v) -> formattingSearchRoom(k, v));
-                roomTypeName = scanner.nextLine().trim();
-            }
-
-            try {
-                RoomTypeEntity roomType
-                        = horsManagementControllerSessionBeanRemote.retrieveRoomType(roomTypeName);
-                try {
-                    BigDecimal totalRate
-                            = horsManagementControllerSessionBeanRemote.calculatePublishedRate(checkinDate, checkoutDate, roomType);
-                    String priceInfo = "Room type: " + roomType.getName() + " for" + checkinDate + " to " + checkoutDate
-                            + " is priced at $" + totalRate.toString();
-                    System.out.println(priceInfo + "\n");
-                    Integer response = 0;
-                    while (true) {
-                        System.out.println("*** What do you want to do? ***\n");
-                        System.out.println("1: Enquire about another room type / back");
-                        System.out.println("2: Reserve this room type, for this range of date");
-
-
-                        response = 0;
-
-                        while (response < 1 || response > 2) {
-                            System.out.print("> ");
-                            response = scanner.nextInt();
-
-                            if (response == 1) {
-                                break;
-                            } else if (response == 2) {
-                                doReserve();
-                            } else {
-                                System.out.println("Invalid option, please try again!\n");
-                            }
-                        }
-
-                        if (response == 1) {
-                            break;
-                        }
-                    }
-                } catch (RateNotFoundException ex1) {
-                    System.out.println("An error occured: " + ex1.getMessage());
-                }
-            } catch (RoomTypeNotFoundException ex) {
-                System.out.println("An error occured: " + ex.getMessage());
-            }
-
-        }
-
-    }
+  
 
     private void doReserve() {
     }
@@ -269,7 +190,7 @@ public class FrontOfficeModule {
             LocalDate checkoutDate = LocalDate.of(coutYear, coutMonth, coutDay);
             
             List<Pair> availableRooms = 
-                    horsManagementControllerSessionBeanRemote.searchRoom(4, checkinDate, checkoutDate, numberOfRooms);
+                    horsManagementControllerSessionBeanRemote.searchRoom(1, checkinDate, checkoutDate, numberOfRooms);
             System.out.printf("\n%3s%10s%10s", "No", "Room Type", "Total Price");
             
             for(Pair pair: availableRooms)
@@ -296,14 +217,18 @@ public class FrontOfficeModule {
                         while(true)
                         {
                             System.out.println("The fee is $" + availableRooms.get(option - 1).getPrice() + ". Please choose the payment option");
-                            System.out.println("1: AMEX; 2:MASTERCARD; 3:VISA");
+                            System.out.println("1: AMEX");
+                            System.out.println("2: Mastercard");
+                            System.out.println("3: Visa");
+                            System.out.print(">");
+                            
                             Integer payment = scanner.nextInt();
 
                             if(payment >= 1 && payment <= 3)
                             {
                                 newPaymentEntity.setPaymentMethod(PaymentMethodEnum.values()[payment - 1]);
                                 newPaymentEntity.setAmountPaid(availableRooms.get(option - 1).getPrice());
-                                System.out.println("Reservation is successfully created.");
+                                
                                 break;
                             }
                             else
@@ -312,8 +237,10 @@ public class FrontOfficeModule {
                             }
                         }
 
-                        horsManagementControllerSessionBeanRemote.makeReservation(currentEmployeeEntity
+                        Long reservationId = horsManagementControllerSessionBeanRemote.makeReservation(currentEmployeeEntity
                                 , availableRooms, option-1, newPaymentEntity);
+                        System.out.println("Reservation is successfully created. Please take note of your reservation id to check in: " +
+                                reservationId);
                         break;
                     } else {
                         System.out.println("Invalid option, please try again!");

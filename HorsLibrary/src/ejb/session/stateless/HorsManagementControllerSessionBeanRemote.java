@@ -43,6 +43,7 @@ import util.exception.RoomNotFoundException;
 import util.exception.RoomNumberExistException;
 import util.exception.RoomRateEntityNotFoundException;
 import util.exception.RoomTypeExistException;
+import util.exception.RoomTypeHasBeenDisabledException;
 import util.exception.RoomTypeNotFoundException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UpdateRoomException;
@@ -80,7 +81,8 @@ public interface HorsManagementControllerSessionBeanRemote {
 
     public List<RoomTypeEntity> retrieveAllRoomType();
 
-    public Long createNewRoom(RoomEntity newRoomEntity) throws RoomNumberExistException, UnknownPersistenceException, InputDataValidationException;
+    public Long createNewRoom(RoomEntity newRoomEntity) throws RoomNumberExistException,
+            UnknownPersistenceException, InputDataValidationException, RoomTypeHasBeenDisabledException;
 
     public RoomEntity retrieveRoomByRoomNumber(String roomNumber) throws RoomNotFoundException;
 
@@ -117,12 +119,6 @@ public interface HorsManagementControllerSessionBeanRemote {
             GuestHasNotCheckedInException;
     
     public List<RoomEntity> checkIn(Long roomReservationId, LocalDate date) throws InvalidRoomReservationEntityException, WrongCheckInDate, NoMoreRoomToAccomodateException;
-    
-    public Map<RoomTypeEntity, Integer> findAvailableRoomTypes(LocalDate checkIn, LocalDate checkOut);
-    
-    public BigDecimal calculatePublishedRate(LocalDate checkIn, LocalDate checkOut, RoomTypeEntity roomType) throws RateNotFoundException;
-    
-    public BigDecimal calculateNonPublishedRate(LocalDate checkIn, LocalDate checkOut, RoomTypeEntity roomType) throws RateNotFoundException;
     
     public List<Pair> searchRoom(int reserveType, LocalDate checkinDate, LocalDate checkoutDate, Integer numberOfRooms) throws NoAvailableRoomOptionException;
     

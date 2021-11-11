@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.annotation.Resource;
+import javax.ejb.EJBContext;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -21,11 +23,15 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import util.enumeration.RoomStatusEnum;
 import util.exception.InputDataValidationException;
 import util.exception.RoomIsCurrentlyUsedException;
 import util.exception.RoomNotFoundException;
 import util.exception.RoomNumberExistException;
+import util.exception.RoomTypeHasBeenDisabledException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UpdateRoomException;
 
@@ -34,27 +40,41 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
 
     @PersistenceContext(unitName = "Hors-ejbPU")
     private EntityManager em;
-    //private final ValidatorFactory validatorFactory;
-    //private final Validator validator;
+
+    @Resource
+    private EJBContext eJBContext;
+
+    private final ValidatorFactory validatorFactory;
+    private final Validator validator;
 
     public RoomEntitySessionBean() {
-        //validatorFactory = Validation.buildDefaultValidatorFactory();
-        //validator = validatorFactory.getValidator();
+        validatorFactory = Validation.buildDefaultValidatorFactory();
+        validator = validatorFactory.getValidator();
     }
 
     @Override
     public Long createNewRoom(RoomEntity newRoomEntity) throws RoomNumberExistException,
-            UnknownPersistenceException, InputDataValidationException {
-        
+            UnknownPersistenceException, InputDataValidationException, RoomTypeHasBeenDisabledException {
+        Set<ConstraintViolation<RoomEntity>> constraintViolations = validator.validate(newRoomEntity);
+        if (!constraintViolations.isEmpty()) {
+            throw new InputDataValidationException("Input data is wrong.");
+        }
+
         em.persist(newRoomEntity);
         em.flush();
 
-        RoomTypeEntity roomTypeOfTheNewRoom = em.find(RoomTypeEntity.class, 
+        RoomTypeEntity roomTypeOfTheNewRoom = em.find(RoomTypeEntity.class,
                 newRoomEntity.getRoomType().getRoomTypeId());
+        if (roomTypeOfTheNewRoom.getDisabled()) {
+            eJBContext.setRollbackOnly();
+            throw new RoomTypeHasBeenDisabledException("Room type has been disabled.");
+
+        }
 
         try {
 
             roomTypeOfTheNewRoom.getRoomEntities().add(newRoomEntity);
+            newRoomEntity.setRoomType(roomTypeOfTheNewRoom);
 
             return newRoomEntity.getRoomEntityId();
         } catch (PersistenceException ex) {
@@ -69,15 +89,13 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
             }
         }
     }
-    
+
     // created for the purpose of data initialization
     @Override
     public void createNewRoom(RoomEntity newRoomEntity, List<RoomEntity> listOfRoomEntities) {
         listOfRoomEntities.add(newRoomEntity);
         em.persist(newRoomEntity);
     }
-    
-
 
     @Override
     public RoomEntity retrieveRoomByRoomNumber(String roomNumber) throws RoomNotFoundException {
@@ -126,6 +144,7 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
 
     @Override
     public Boolean checkIfTheRoomIsUsed(String roomNumber) {
+
         LocalDate now = LocalDate.now();
         String databaseQuery = "SELECT s FROM RoomReservationLineItemEntity s"
                 + " WHERE s.roomAllocation.roomNumber = :iRoomNumber ";
@@ -167,39 +186,29 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
 
     private void deleteUnusedRoom(String roomNumber) throws RoomIsCurrentlyUsedException,
             RoomNotFoundException {
-        RoomEntity roomToBeDeleted;
-        try {
-            roomToBeDeleted = retrieveRoomByRoomNumber(roomNumber);
-            if (roomToBeDeleted.getRoomStatus().equals(RoomStatusEnum.AVAILABLE)) {
-            }
-        } catch (RoomNotFoundException ex) {
-            throw new RoomNotFoundException(ex.getMessage());
-        }
+
         if (checkIfTheRoomIsUsed(roomNumber)) {
             throw new RoomIsCurrentlyUsedException("Room is currently allocated to a reservation. "
                     + " Hence, it can't be deleted.");
         }
 
-        roomToBeDeleted.getRoomType().getRoomEntities().remove(roomToBeDeleted);
+        try {
+            RoomEntity roomToBeDeleted = retrieveRoomByRoomNumber(roomNumber);
 
-        List<RoomReservationLineItemEntity> listOfReservationsUsingThatRoom
-                = findReservationUsingRoom(roomNumber);
+            roomToBeDeleted.getRoomType().getRoomEntities().remove(roomToBeDeleted);
 
-        listOfReservationsUsingThatRoom
-                .stream()
-                .forEach(x -> x.setRoomAllocation(null));
-        em.remove(roomToBeDeleted);
-    }
+            List<RoomReservationLineItemEntity> listOfReservationsUsingThatRoom
+                    = findReservationUsingRoom(roomNumber);
 
-    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<RoomEntity>> constraintViolations) {
-        String msg = "Input data validation error!:";
+            listOfReservationsUsingThatRoom
+                    .stream()
+                    .forEach(x -> x.setRoomAllocation(null));
+            em.remove(roomToBeDeleted);
 
-        for (ConstraintViolation constraintViolation : constraintViolations) {
-            msg += "\n\t" + constraintViolation.getPropertyPath() + " - " + constraintViolation.getInvalidValue() + "; "
-                    + constraintViolation.getMessage();
+        } catch (RoomNotFoundException ex) {
+            throw new RoomNotFoundException(ex.getMessage());
         }
 
-        return msg;
     }
 
 }

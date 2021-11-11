@@ -8,7 +8,6 @@ package ejb.session.stateful;
 import ejb.session.stateless.RoomEntitySessionBeanLocal;
 import ejb.session.stateless.RoomReservationEntitySessionBeanLocal;
 import ejb.session.stateless.RoomTypeEntitySessionBeanLocal;
-import ejb.session.stateless.SearchSessionBeanLocal;
 import entity.PaymentEntity;
 import entity.RoomRateEntity;
 import entity.RoomReservationEntity;
@@ -48,9 +47,6 @@ import util.reservation.Pair;
 public class ReserveOperationSessionBean implements ReserveOperationSessionBeanRemote, ReserveOperationSessionBeanLocal {
 
     @EJB
-    private SearchSessionBeanLocal searchSessionBeanLocal;
-    
-    @EJB
     private RoomReservationEntitySessionBeanLocal roomReservationEntitySessionBeanLocal;
 
     @EJB
@@ -58,143 +54,144 @@ public class ReserveOperationSessionBean implements ReserveOperationSessionBeanR
 
     @EJB(name = "RoomEntitySessionBeanLocal")
     private RoomEntitySessionBeanLocal roomEntitySessionBeanLocal;
-    
+
     @Resource
     private EJBContext eJBContext;
-    
+
     private List<Pair> roomResults;
     private LocalDate checkinDate;
-    private LocalDate checkoutDate; 
+    private LocalDate checkoutDate;
     private Integer numberOfRooms;
 
     public ReserveOperationSessionBean() {
-        
+
     }
 
     public ReserveOperationSessionBean(List<Pair> roomResults, LocalDate checkinDate, LocalDate checkoutDate, Integer numberOfRooms) {
-        
+
         this.checkinDate = checkinDate;
         this.checkoutDate = checkoutDate;
         this.numberOfRooms = numberOfRooms;
     }
-    
-    
-    
+
     @PersistenceContext(unitName = "Hors-ejbPU")
     private EntityManager em;
-    
-    
-    
-    
 
     @Override
-    public List<Pair> searchRoom(int reserveType, LocalDate checkinDate, LocalDate checkoutDate, Integer numberOfRooms) throws NoAvailableRoomOptionException{
-        
+    public List<Pair> searchRoom(int reserveType, LocalDate checkinDate, LocalDate checkoutDate, Integer numberOfRooms) throws NoAvailableRoomOptionException {
+
         this.checkinDate = checkinDate;
         this.checkoutDate = checkoutDate;
         this.numberOfRooms = numberOfRooms;
         this.roomResults = new ArrayList<>();
-        
+
         try {
-            String queryString = "SELECT DISTINCT rt FROM RoomTypeEntity rt WHERE rt.disabled = false";
+            String queryString = "SELECT rt FROM RoomTypeEntity rt WHERE rt.disabled = false";
             Query query = em.createQuery(queryString);
             List<RoomTypeEntity> allRoomTypesAvailable = query.getResultList();
+            //debugging
+            System.out.println("Numebr of room type is: " + allRoomTypesAvailable.size());
 
-            for(RoomTypeEntity roomType : allRoomTypesAvailable) {
+            for (RoomTypeEntity roomType : allRoomTypesAvailable) {
                 Integer lowestRoomAvailibity = 1000;
-                for(LocalDate date = checkinDate; date.isBefore(checkoutDate); date = date.plusDays(1)) {
-                    Integer roomAvailibility = calculateRoomAvailibility(roomType, date);
-                    lowestRoomAvailibity = Math.min(lowestRoomAvailibity, roomAvailibility);
+                for (LocalDate date = checkinDate; date.isBefore(checkoutDate); date = date.plusDays(1)) {
+                    Integer roomAvailability = calculateRoomAvailibility(roomType, date);
+                    lowestRoomAvailibity = Math.min(lowestRoomAvailibity, roomAvailability);
                 }
-                if(lowestRoomAvailibity >= numberOfRooms) {
+                System.out.println("Room type: " + roomType.getName() + lowestRoomAvailibity);
+
+                if (lowestRoomAvailibity >= numberOfRooms && checkIfRoomRateExist(roomType)) {
+                    System.out.println(roomType.getName() + " pass the test.");
                     BigDecimal totalFare = new BigDecimal(0);
-                    for(LocalDate date = checkinDate; date.isBefore(checkoutDate); date = date.plusDays(1)) {
-                        if(reserveType == 1) {
+                    for (LocalDate date = checkinDate; date.isBefore(checkoutDate); date = date.plusDays(1)) {
+                        if (reserveType == 1) {
                             totalFare = totalFare.add(computeFarePerNight(1, roomType, date));
                             System.out.println(totalFare);
-                        }
-                        else {
+                        } else {
                             totalFare = totalFare.add(computeFarePerNight(4, roomType, date));
                         }
                     }
                     this.getRoomResults().add(new Pair(roomType, totalFare.multiply(new BigDecimal(numberOfRooms))));
 
-
                 }
             }
 
-
-
             return this.getRoomResults();
-        } catch(NoResultException | NonUniqueResultException |ArrayIndexOutOfBoundsException ex) {
-            
+        } catch (NoResultException | NonUniqueResultException | ArrayIndexOutOfBoundsException ex) {
+
             throw new NoAvailableRoomOptionException("No available room that matches the input");
         }
     }
     
-    private Integer calculateRoomAvailibility(RoomTypeEntity roomType, LocalDate date) throws NoResultException, NonUniqueResultException{
-        
+    private boolean checkIfRoomRateExist(RoomTypeEntity roomType) {
         try {
-        String databaseQueryString = "SELECT rt FROM RoomEntity rt WHERE rt.roomType = :iRoomType AND rt.roomStatus = :iRoomStatus";
-        Query query = em.createQuery(databaseQueryString);
-        query.setParameter("iRoomType", roomType);
-        query.setParameter("iRoomStatus", RoomStatusEnum.AVAILABLE);
-        
-        Integer totalRoomAvailableOfType = query.getResultList().size();
-        
-        databaseQueryString = "SELECT rrl FROM RoomReservationLineItemEntity rrl WHERE rrl.roomTypeEntity = :iRoomType AND rrl.checkInDate <= :iDate AND rrl.checkoutDate > :iDate";
-        query = em.createQuery(databaseQueryString);
-        query.setParameter("iRoomType", roomType);
-        query.setParameter("iDate" , date);
-        
-        Integer totalRoomBooked = query.getResultList().size();
-        
-            
-        
-        return totalRoomAvailableOfType - totalRoomBooked;
-        }catch (NoResultException | NonUniqueResultException |ArrayIndexOutOfBoundsException ex) {
-            
-            throw ex;
+            String queryString2 = "SELECT rt FROM RoomRateEntity rt WHERE rt.roomType = :iRoomType";
+            Query query2 = em.createQuery(queryString2);
+            query2.setParameter("iRoomType", roomType);
+            List<RoomRateEntity> listOfRoomRates = query2.getResultList();
+            return  true;
+        } catch (NoResultException ex) {
+            return false;
         }
-    }
-    
-    
-    private BigDecimal computeFarePerNight(Integer highestRank, RoomTypeEntity roomType, LocalDate date) throws NoResultException, NonUniqueResultException, ArrayIndexOutOfBoundsException{
-        try {
-        if(highestRank == 1) {
-            String databaseQueryString = "SELECT rr FROM RoomRateEntity rr WHERE rr.roomRank = 1 AND rr.roomType.name = :iName AND rr.disabled = false ORDER BY rr.rate ASC";
-            Query query = em.createQuery(databaseQueryString);
-            query.setParameter("iName", roomType.getName());
-            
-            RoomRateEntity roomRate = (RoomRateEntity)query.getResultList().get(0);
-            return roomRate.getRate();
-            
-        } else {
-            String databaseQueryString = "SELECT rr FROM RoomRateEntity rr WHERE rr.roomRank = (SELECT max(r.roomRank) FROM RoomRateEntity r "
-                    + "WHERE r.startValidityDate <= :iDate AND r.endValidityDate > :iDate AND  r.roomType.name = :iName) "
-                    + "AND rr.roomType.name = :iName AND rr.startValidityDate <= :iDate AND rr.endValidityDate > :iDate ORDER BY rr.rate ASC" ;
-            Query query = em.createQuery(databaseQueryString);
-            query.setParameter("iName", roomType.getName());
-            query.setParameter("iDate" , date);
-            
-           
-            
-            RoomRateEntity roomRate = (RoomRateEntity)query.getResultList().get(0);
-           
-            return roomRate.getRate();
-        }
-        } catch (NoResultException | NonUniqueResultException | ArrayIndexOutOfBoundsException ex) {
-            
-            throw ex;
-        }
-        
     }
 
-    
+    private Integer calculateRoomAvailibility(RoomTypeEntity roomType, LocalDate date) throws NoResultException, NonUniqueResultException {
+
+        try {
+            String databaseQueryString = "SELECT rt FROM RoomEntity rt WHERE rt.roomType = :iRoomType AND rt.roomStatus = :iRoomStatus";
+            Query query = em.createQuery(databaseQueryString);
+            query.setParameter("iRoomType", roomType);
+            query.setParameter("iRoomStatus", RoomStatusEnum.AVAILABLE);
+
+            Integer totalRoomAvailableOfType = query.getResultList().size();
+
+            databaseQueryString = "SELECT rrl FROM RoomReservationLineItemEntity rrl WHERE rrl.roomTypeEntity = :iRoomType AND rrl.checkInDate <= :iDate AND rrl.checkoutDate > :iDate";
+            query = em.createQuery(databaseQueryString);
+            query.setParameter("iRoomType", roomType);
+            query.setParameter("iDate", date);
+
+            Integer totalRoomBooked = query.getResultList().size();
+
+            return totalRoomAvailableOfType - totalRoomBooked;
+        } catch (NoResultException | NonUniqueResultException | ArrayIndexOutOfBoundsException ex) {
+
+            throw ex;
+        }
+    }
+
+    private BigDecimal computeFarePerNight(Integer highestRank, RoomTypeEntity roomType, LocalDate date) throws NoResultException, NonUniqueResultException, ArrayIndexOutOfBoundsException {
+        try {
+            if (highestRank == 1) {
+                String databaseQueryString = "SELECT rr FROM RoomRateEntity rr WHERE rr.roomRank = 1 AND rr.roomType.name = :iName AND rr.disabled = false ORDER BY rr.rate ASC";
+                Query query = em.createQuery(databaseQueryString);
+                query.setParameter("iName", roomType.getName());
+
+                RoomRateEntity roomRate = (RoomRateEntity) query.getResultList().get(0);
+                return roomRate.getRate();
+
+            } else {
+                String databaseQueryString = "SELECT rr FROM RoomRateEntity rr WHERE rr.roomRank = (SELECT max(r.roomRank) FROM RoomRateEntity r "
+                        + "WHERE r.startValidityDate <= :iDate AND r.endValidityDate > :iDate AND  r.roomType.name = :iName) "
+                        + "AND rr.roomType.name = :iName AND rr.startValidityDate <= :iDate AND rr.endValidityDate > :iDate ORDER BY rr.rate ASC";
+                Query query = em.createQuery(databaseQueryString);
+                query.setParameter("iName", roomType.getName());
+                query.setParameter("iDate", date);
+
+                RoomRateEntity roomRate = (RoomRateEntity) query.getResultList().get(0);
+
+                return roomRate.getRate();
+            }
+        } catch (NoResultException | NonUniqueResultException | ArrayIndexOutOfBoundsException ex) {
+
+            throw ex;
+        }
+
+    }
+
     @Override
-    public Long makeReservation(UserEntity user,List<Pair> roomResults, int response, PaymentEntity payment) throws RoomTypeNotFoundException, InvalidRoomReservationEntityException,
-            LineItemExistException, UnknownPersistenceException{
-        
+    public Long makeReservation(UserEntity user, List<Pair> roomResults, int response, PaymentEntity payment) throws RoomTypeNotFoundException, InvalidRoomReservationEntityException,
+            LineItemExistException, UnknownPersistenceException {
+
         try {
             user = em.find(UserEntity.class, user.getUserId());
             RoomReservationEntity newReservation = new RoomReservationEntity();
@@ -204,16 +201,14 @@ public class ReserveOperationSessionBean implements ReserveOperationSessionBeanR
             newReservation.setReservationDate(LocalDate.now());
             newReservation.setBookingAccount(user);
 
-
             RoomTypeEntity roomType = this.getRoomResults().get(response).getRoomType();
             RoomTypeEntity roomTypeEntity = roomTypeEntitySessionBeanLocal.retrieveRoomType(roomType.getName());
 
+            for (int i = 0; i < numberOfRooms; i++) {
+                RoomReservationLineItemEntity newLineItem = new RoomReservationLineItemEntity(roomTypeEntity, new BigDecimal(10000), checkinDate, checkoutDate);
 
-            for(int i = 0; i < numberOfRooms; i++) {
-                RoomReservationLineItemEntity newLineItem = new RoomReservationLineItemEntity(roomTypeEntity, new BigDecimal(10000),checkinDate, checkoutDate);
-                System.out.println("Reach A");
                 newReservation.getRoomReservationLineItems().add(newLineItem);
-                System.out.println("Reach B");
+
             }
             return roomReservationEntitySessionBeanLocal.createNewRoomReservationEntity(user.getUserId(), newReservation).getRoomReservationId();
         }
@@ -231,17 +226,17 @@ public class ReserveOperationSessionBean implements ReserveOperationSessionBeanR
                     {
                         eJBContext.setRollbackOnly();
                         throw new UnknownPersistenceException("Unknown persist error");
-                }
-                }
-                else
-                {
-                    eJBContext.setRollbackOnly();
-                    throw new UnknownPersistenceException("Unknown persist error");
-                }
+                    }
+                
+                
+            } else {
+                eJBContext.setRollbackOnly();
+                throw new UnknownPersistenceException("Unknown persist error");
             }
+        }
 
     }
-    
+
     /**
      * @return the roomResults
      */
@@ -302,5 +297,3 @@ public class ReserveOperationSessionBean implements ReserveOperationSessionBeanR
         em.persist(object);
     }
 }
-
-

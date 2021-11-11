@@ -17,6 +17,7 @@ import entity.RoomRateEntity;
 import entity.RoomReservationLineItemEntity;
 import entity.RoomTypeEntity;
 import java.math.BigDecimal;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
@@ -37,6 +38,7 @@ import util.exception.RoomNotFoundException;
 import util.exception.RoomNumberExistException;
 import util.exception.RoomRateEntityNotFoundException;
 import util.exception.RoomTypeExistException;
+import util.exception.RoomTypeHasBeenDisabledException;
 import util.exception.RoomTypeNotFoundException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UpdateRoomException;
@@ -81,6 +83,7 @@ public class HotelOperationModule {
             System.out.println("7: View all rooms");
             System.out.println("8: View room allocation exception report");
             System.out.println("9: Allocate room now");
+            System.out.println("-----------------------");
             System.out.println("10: Back\n");
             response = 0;
 
@@ -153,6 +156,7 @@ public class HotelOperationModule {
             System.out.println("1: Create new room rate");
             System.out.println("2: View room rate details");
             System.out.println("3: View all room rate types");
+            System.out.println("-----------------------");
             System.out.println("4: Back\n");
             response = 0;
 
@@ -193,12 +197,16 @@ public class HotelOperationModule {
         System.out.println("*** HORS Management System :: Hotel Operation :: Operation Manager :: Allocate room now ***\n");
         System.out.print("Enter the date of check-in day you want to allocate of M/d/yyyy>");
         String allocateDateInString = scanner.nextLine().trim();
-        LocalDate allocateDate = dateInput(allocateDateInString);
         try {
-            horsManagementControllerSessionBeanRemote.allocateRoomGivenDate(allocateDate);
-            System.out.println("Rooms has been successfully allocated.");
-        } catch (RoomAllocationIsDoneException ex) {
-            System.out.println("An error has occured: " + ex.getMessage());
+            LocalDate allocateDate = dateInput(allocateDateInString);
+            try {
+                horsManagementControllerSessionBeanRemote.allocateRoomGivenDate(allocateDate);
+                System.out.println("Rooms has been successfully allocated.");
+            } catch (RoomAllocationIsDoneException ex) {
+                System.out.println("An error has occured: " + ex.getMessage());
+            }
+        } catch (DateTimeException ex) {
+            System.out.println("An error has occured: wrong input data.");
         }
 
     }
@@ -208,37 +216,42 @@ public class HotelOperationModule {
         System.out.println("*** HORS Management System :: Hotel Operation :: Operation Manager :: View room allocation exception report ***\n");
         System.out.print("Enter the date of the report you want to view in the form of M/d/yyyy>");
         String reportDateInString = scanner.nextLine().trim();
-        LocalDate reportDate = dateInput(reportDateInString);
-        RoomAllocationExceptionEntity reportRetrieved = new RoomAllocationExceptionEntity();
         try {
-            reportRetrieved = horsManagementControllerSessionBeanRemote.retrieveReportByDate(reportDate);
-        } catch (RoomAllocationExceptionReportDoesNotExistException ex) {
-            System.out.println("An error has occured: " + ex.getMessage());
-        }
+            LocalDate reportDate = dateInput(reportDateInString);
+            RoomAllocationExceptionEntity reportRetrieved = new RoomAllocationExceptionEntity();
+            try {
+                reportRetrieved = horsManagementControllerSessionBeanRemote.retrieveReportByDate(reportDate);
+            } catch (RoomAllocationExceptionReportDoesNotExistException ex) {
+                System.out.println("An error has occured: " + ex.getMessage());
+            }
 
-        System.out.println("*** HORS Management System :: Type One Exception***\n");
-        List<RoomReservationLineItemEntity> typeOneException = reportRetrieved.getTypeOneException();
+            System.out.println("*** HORS Management System :: Type One Exception***\n");
+            List<RoomReservationLineItemEntity> typeOneException = reportRetrieved.getTypeOneException();
 
-        for (RoomReservationLineItemEntity roomReservation : typeOneException) {
-            System.out.println("Room reservation line item: " + roomReservation.getRoomReservationLineItemId()
-                    + "\n" + "Room reserved: " + roomReservation.getRoomTypeEntity().getName());
-            System.out.println("Status: Room of higher rank has been allocated");
-        }
+            for (RoomReservationLineItemEntity roomReservation : typeOneException) {
+                System.out.println("Room reservation line item: " + roomReservation.getRoomReservationLineItemId()
+                        + "\n" + "Room reserved: " + roomReservation.getRoomTypeEntity().getName());
+                System.out.println("Status: Room of higher rank has been allocated");
+            }
 
-        if (reportRetrieved.getTypeOneException().isEmpty()) {
-            System.out.println("No exception.\n");
-        }
+            if (reportRetrieved.getTypeOneException().isEmpty()) {
+                System.out.println("No exception.\n");
+            }
+            System.out.println("********************************************************************************");
 
-        System.out.println("*** HORS Management System :: Type Two Exception***\n");
-        List<RoomReservationLineItemEntity> typeTwoException = reportRetrieved.getTypeTwoException();
-        for (RoomReservationLineItemEntity roomReservation : typeTwoException) {
-            System.out.println("Room reservation line item: " + roomReservation.getRoomReservationLineItemId()
-                    + "\n" + "Room reserved: " + roomReservation.getRoomTypeEntity().getName());
-            System.out.println("Status: Room has not been allocated. Please handle this manually.\n");
-        }
+            System.out.println("*** HORS Management System :: Type Two Exception***\n");
+            List<RoomReservationLineItemEntity> typeTwoException = reportRetrieved.getTypeTwoException();
+            for (RoomReservationLineItemEntity roomReservation : typeTwoException) {
+                System.out.println("Room reservation line item: " + roomReservation.getRoomReservationLineItemId()
+                        + "\n" + "Room reserved: " + roomReservation.getRoomTypeEntity().getName());
+                System.out.println("Status: Room has not been allocated. Please handle this manually.\n");
+            }
 
-        if (reportRetrieved.getTypeTwoException().isEmpty()) {
-            System.out.println("No exception.");
+            if (reportRetrieved.getTypeTwoException().isEmpty()) {
+                System.out.println("No exception.");
+            }
+        } catch (DateTimeException ex) {
+            System.out.println("An error has occured: wrong input data.");
         }
 
     }
@@ -246,7 +259,10 @@ public class HotelOperationModule {
     public void doRetrieveAllRoomRate() {
         horsManagementControllerSessionBeanRemote
                 .retrieveAllRoomRate()
-                .forEach(System.out::println);
+                .stream()
+                .forEach(x -> System.out.println("Name: " + x.getName() + " \n" + "Room type: " + x.getRoomType() + "\n"
+                + "Rate: $" + x.getRate()));
+
     }
 
     public void doViewParticularRoomRateDetails() {
@@ -319,22 +335,25 @@ public class HotelOperationModule {
         System.out.println("Do take note that you are only allowed to change the nominal rate and the validity of the room rate");
         System.out.print("Enter the new nominal rate >");
         BigDecimal rate = new BigDecimal(Double.parseDouble(scanner.nextLine()));
+        try {
+            System.out.print("Enter the starting validity date in the form of M/d/yyyy>");
+            String startDateInString = scanner.nextLine().trim();
 
-        System.out.print("Enter the starting validity date in the form of M/d/yyyy>");
-        String startDateInString = scanner.nextLine().trim();
+            System.out.print("Enter the ending validity date in the form of M/d/yyyy>");
+            String endDateInString = scanner.nextLine().trim();
 
-        System.out.print("Enter the ending validity date in the form of M/d/yyyy>");
-        String endDateInString = scanner.nextLine().trim();
+            LocalDate dateToPutStart = dateInput(startDateInString);
+            LocalDate dateToPutEnd = dateInput(endDateInString);
 
-        LocalDate dateToPutStart = dateInput(startDateInString);
-        LocalDate dateToPutEnd = dateInput(endDateInString);
+            currentRoomRate.setRate(rate);
+            currentRoomRate.setStartValidityDate(dateToPutStart);
+            currentRoomRate.setEndValidityDate(dateToPutEnd);
 
-        currentRoomRate.setRate(rate);
-        currentRoomRate.setStartValidityDate(dateToPutStart);
-        currentRoomRate.setEndValidityDate(dateToPutEnd);
-
-        horsManagementControllerSessionBeanRemote.updatePromotionAndPeakRate(currentRoomRate);
-        System.out.println("Room rate is successfully updated");
+            horsManagementControllerSessionBeanRemote.updatePromotionAndPeakRate(currentRoomRate);
+            System.out.println("Room rate is successfully updated");
+        } catch (DateTimeException ex) {
+            System.out.println("An error has occured: wrong input data.");
+        }
     }
 
     public void doUpdatePublishedOrNormalRate(RoomRateEntity currentRoomRate) {
@@ -385,6 +404,8 @@ public class HotelOperationModule {
                         PublishedRateEntity newPublishedRate = new PublishedRateEntity();
                         newPublishedRate.setRoomType(roomType);
                         newPublishedRate.setRate(rate);
+                        newPublishedRate.setStartValidityDate(LocalDate.now());
+                        newPublishedRate.setEndValidityDate(LocalDate.of(2100, 01, 01));
                         try {
                             Long roomRateId = horsManagementControllerSessionBeanRemote
                                     .createNewPublishedRateEntity(newPublishedRate);
@@ -398,10 +419,12 @@ public class HotelOperationModule {
                         NormalRateEntity newNormalRate = new NormalRateEntity();
                         newNormalRate.setRoomType(roomType);
                         newNormalRate.setRate(rate);
+                        newNormalRate.setStartValidityDate(LocalDate.now());
+                        newNormalRate.setEndValidityDate(LocalDate.of(2100, 01, 01));
                         try {
                             Long roomRateId = horsManagementControllerSessionBeanRemote
                                     .createNewNormalRateEntity(newNormalRate);
-                            System.out.println("A published room rate of " + roomRateId + " has been created");
+                            System.out.println("A normal room rate of " + roomRateId + " has been created");
                             break;
                         } catch (UnknownPersistenceException | NormalRateHasAlreadyExistedException ex) {
                             System.out.println("An error has occured in the creation of new room rate: " + ex.getMessage());
@@ -417,9 +440,10 @@ public class HotelOperationModule {
 
                         System.out.print("Enter the ending validity date in the form of M/d/yyyy>");
                         String endDateInString = scanner.nextLine().trim();
-
+                        
                         LocalDate dateToPutStart = dateInput(startDateInString);
                         LocalDate dateToPutEnd = dateInput(endDateInString);
+                        
 
                         newPromotionRate.setStartValidityDate(dateToPutStart);
                         newPromotionRate.setEndValidityDate(dateToPutEnd);
@@ -431,7 +455,7 @@ public class HotelOperationModule {
                         try {
                             Long roomRateId = horsManagementControllerSessionBeanRemote
                                     .createNewPromotionRateEntity(newPromotionRate);
-                            System.out.println("A published room rate of " + roomRateId + " has been created");
+                            System.out.println("A promotion room rate of " + roomRateId + " has been created");
                             break;
                         } catch (UnknownPersistenceException | PromotionRateHasAlreadyExistedException ex) {
                             System.out.println("An error has occured in the creation of new room rate: " + ex.getMessage());
@@ -455,14 +479,14 @@ public class HotelOperationModule {
                         newPeakRate.setStartValidityDate(dateToPutStart);
                         newPeakRate.setEndValidityDate(dateToPutEnd);
 
-                        System.out.print("Enter the name of the promotion rate>");
+                        System.out.print("Enter the name of the peak rate>");
                         String roomRateName = scanner.nextLine();
                         newPeakRate.setName(roomRateName);
 
                         try {
                             Long roomRateId = horsManagementControllerSessionBeanRemote
                                     .createNewPeakRateEntity(newPeakRate);
-                            System.out.println("A published room rate of " + roomRateId + " has been created");
+                            System.out.println("A peak room rate of " + roomRateId + " has been created");
                             break;
                         } catch (UnknownPersistenceException | PeakRateHasAlreadyExistedException ex) {
                             System.out.println("An error has occured in the creation of new room rate: " + ex.getMessage());
@@ -574,8 +598,9 @@ public class HotelOperationModule {
                         System.out.println("Room with room number of " + newRoomEntity.getRoomNumber()
                                 + " is successfully created");
                         break;
-                    } catch (RoomNumberExistException | UnknownPersistenceException | InputDataValidationException ex) {
+                    } catch (RoomNumberExistException | UnknownPersistenceException | InputDataValidationException | RoomTypeHasBeenDisabledException ex) {
                         System.out.println("Error occurs in the creation of room: " + ex.getMessage());
+                        break;
                     }
                 } else {
                     System.out.println("Invalid option, please try again!\n");
@@ -598,7 +623,7 @@ public class HotelOperationModule {
     public void doViewRoomTypeDetails() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("*** HORS Management System :: Hotel Operation :: Operation Manager :: View Room Type Details ***\n");
-        System.out.println("Enter the name of the room type you wish to view> ");
+        System.out.print("Enter the name of the room type you wish to view> ");
         String nameOfRoomType = scanner.nextLine();
 
         try {
@@ -606,7 +631,7 @@ public class HotelOperationModule {
             System.out.println(currentRoomType);
             updateOrDeleteRoomType(currentRoomType.getName());
         } catch (RoomTypeNotFoundException ex) {
-            System.out.print("Error in retrieving room details: " + ex.getMessage());
+            System.out.println("Error in retrieving room details: " + ex.getMessage());
         }
 
     }
@@ -738,8 +763,7 @@ public class HotelOperationModule {
             System.out.println("This will take some time. Please wait for a while.");
             Long newRoomTypeId = horsManagementControllerSessionBeanRemote.createRoomType(newRoomType);
             System.out.println("Room type with roomTypeId " + newRoomTypeId + " is created. ");
-            System.out.println("Please take note that the room type will only be available for 6 months. ");
-            System.out.println("After which, you will have to recreate the room type.");
+
         } catch (RoomTypeExistException | UnknownPersistenceException ex) {
             System.out.println("Creation of room type failed: " + ex.getMessage());
         }

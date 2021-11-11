@@ -8,29 +8,48 @@ package entity;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-
-
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 public class GuestEntity extends UserEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    @Column(nullable = false, length = 32)
+    @Size(min = 1, max = 32)
+    @NotNull
     private String firstName;
+    
+    @Column(nullable = false, length = 32)
+    @Size(min = 1, max = 32)
+    @NotNull
     private String lastName;
+    
     @Column(nullable = false, unique = true)
+    @Size(min = 1, max = 32)
+    @NotNull
     private String username;
+    
+    
     @Column(nullable = false)
+    @Size(min = 1, max = 32)
+    @NotNull
     private String password;
-    @Column(nullable = false)
+    
+    @Column(nullable = false, unique = true, length = 15)
+    @Size(min = 1, max = 15)
+    @NotNull
     private String mobileNo;
-    @Column(nullable = false)
+    
+    @Column(nullable = false, unique = true, length = 15)
+    @Size(min = 1, max = 15)
+    @NotNull
     private String passportNo;
 
     public GuestEntity() {
     }
-    
-    
-    public GuestEntity(String firstName, String lastName, String username, String password, String email, String mobileNo, String passportNo){
+
+    public GuestEntity(String firstName, String lastName, String username, String password, String email, String mobileNo, String passportNo) {
         super(email);
         this.firstName = firstName;
         this.lastName = lastName;
@@ -39,10 +58,10 @@ public class GuestEntity extends UserEntity implements Serializable {
         this.mobileNo = mobileNo;
         this.passportNo = passportNo;
     }
-    
+
     public GuestEntity(String email) {
         super(email);
-        
+
     }
 
     @Override
@@ -105,7 +124,7 @@ public class GuestEntity extends UserEntity implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-    
+
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -113,8 +132,8 @@ public class GuestEntity extends UserEntity implements Serializable {
             return false;
         }
         GuestEntity other = (GuestEntity) object;
-        if ((this.getUserId() == null && other.getUserId()!= null) || (this.getUserId() != null && 
-                !this.getUserId().equals(other.getUserId()))) {
+        if ((this.getUserId() == null && other.getUserId() != null) || (this.getUserId() != null
+                && !this.getUserId().equals(other.getUserId()))) {
             return false;
         }
         return true;
@@ -148,6 +167,4 @@ public class GuestEntity extends UserEntity implements Serializable {
         this.passportNo = passportNo;
     }
 
-   
-    
 }

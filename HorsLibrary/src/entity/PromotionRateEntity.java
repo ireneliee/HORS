@@ -56,8 +56,11 @@ public class PromotionRateEntity extends RoomRateEntity implements Serializable 
 
     @Override
     public String toString() {
-        return super.toString() + "Promotion rate name: " + this.getName() + ";\n" + "Start validity date: " + this.getStartValidityDate().toString() + ";\n" +
+        return "Room rate name: " + this.getName() + ";\n" + "Rating at: " + this.getRate().toString() + ";\n" +
+                "Room type: " + this.getRoomType().getClass().getSimpleName() + ";\n" + "Promotion rate name: " + this.getName() + ";\n" + "Start validity date: " + this.getStartValidityDate().toString() + ";\n" +
                 "End validity date: " + this.getEndValidityDate().toString() + ";\n";
     }
+    
+  
     
 }

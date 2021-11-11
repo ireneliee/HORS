@@ -5,7 +5,6 @@
  */
 package ejb.session.stateless;
 
-import ejb.session.stateful.ReserveOperationSessionBeanLocal;
 import entity.PaymentEntity;
 import entity.RoomEntity;
 import entity.RoomReservationEntity;
@@ -18,7 +17,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimeZone;
+import java.util.Set;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.EJBContext;
@@ -28,6 +27,10 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import util.enumeration.PaymentMethodEnum;
 import util.exception.GuestHasNotCheckedInException;
 import util.exception.InvalidRoomReservationEntityException;
@@ -53,8 +56,13 @@ public class RoomReservationEntitySessionBean implements RoomReservationEntitySe
 
     @PersistenceContext(unitName = "Hors-ejbPU")
     private EntityManager em;
+    
+    private final ValidatorFactory validatorFactory;
+    private final Validator validator;
 
     public RoomReservationEntitySessionBean() {
+        validatorFactory = Validation.buildDefaultValidatorFactory();
+        validator = validatorFactory.getValidator();
     }
 
     // for one that needs user entity, does not include guest
@@ -65,19 +73,25 @@ public class RoomReservationEntitySessionBean implements RoomReservationEntitySe
             RoomReservationEntity newRoomReservationEntity) throws InvalidRoomReservationEntityException {
 
         if (newRoomReservationEntity == null) {
-            System.out.println("Reach C");
+
             throw new InvalidRoomReservationEntityException("Room reservation information not provided.");
 
         }
+        
+        Set<ConstraintViolation<RoomReservationEntity>>constraintViolations = validator.validate(newRoomReservationEntity);
+        if(!constraintViolations.isEmpty()) {
+            throw new InvalidRoomReservationEntityException("Wrong data inpu.");
+        }
+        
         UserEntity user = em.find(UserEntity.class, userId);
 
         user.getRoomReservations().add(newRoomReservationEntity);
 
         newRoomReservationEntity.setBookingAccount(user);
-        System.out.println("Reach D");
+
 
         em.persist(newRoomReservationEntity);
-        System.out.println("Reach C");
+
 
         em.flush();
 
@@ -109,6 +123,14 @@ public class RoomReservationEntitySessionBean implements RoomReservationEntitySe
 
             throw new InvalidRoomReservationEntityException("Room reservation information not provided.");
 
+        }
+        
+         Set<ConstraintViolation<RoomReservationEntity>>constraintViolations = validator.validate(newRoomReservationEntity);
+         
+        if(!constraintViolations.isEmpty()) {
+            
+            throw new InvalidRoomReservationEntityException("Wrong data inpu.");
+            
         }
 
         em.persist(newRoomReservationEntity);

@@ -21,6 +21,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -38,6 +41,9 @@ public class RoomReservationEntity implements Serializable {
     private List<RoomReservationLineItemEntity> roomReservationLineItems;
     
     @Column(nullable = false, precision = 11, scale = 2)
+    @NotNull
+    @DecimalMin("0.00")
+    @Digits(integer = 9, fraction = 2) 
      private BigDecimal totalAmount;
 
     @ManyToOne
@@ -93,7 +99,7 @@ public class RoomReservationEntity implements Serializable {
         List<RoomReservationLineItemEntity> current = this.getRoomReservationLineItems();
         for (int i = 0; i < this.getRoomReservationLineItems().size(); i++) {
 
-            lineItems = lineItems + current.get(i);
+            lineItems = lineItems + current.get(i) + "\n" + "***\n";
         }
         return "Room reservation Id " + this.getRoomReservationId() + "\n" + "Total rooms reserved: " + this.getRoomReservationLineItems().size()
                 + "\n" + lineItems;
