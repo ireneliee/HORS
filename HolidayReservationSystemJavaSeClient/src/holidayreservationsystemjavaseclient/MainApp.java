@@ -5,10 +5,24 @@
  */
 package holidayreservationsystemjavaseclient;
 
+import java.time.DateTimeException;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Scanner;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 import ws.client.InvalidLoginCredentialException;
 import ws.client.InvalidLoginCredentialException_Exception;
 import ws.client.PartnerEntity;
+import ws.client.roomReservationEntityWebService.RoomReservationEntity;
+import ws.client.roomReservationEntityWebService.ReservationNotFoundException_Exception;
+import ws.client.searchOperation.InvalidRoomReservationEntityException_Exception;
+import ws.client.searchOperation.LineItemExistException_Exception;
+import ws.client.searchOperation.NoAvailableRoomOptionException_Exception;
+import ws.client.searchOperation.PairRemote;
+import ws.client.searchOperation.RoomTypeNotFoundException_Exception;
+import ws.client.searchOperation.UnknownPersistenceException_Exception;
 
 /**
  *
@@ -54,7 +68,7 @@ public class MainApp {
                 }
                 else if (response == 2)
                 {
-                   //search hotel
+                    doSearchHotelBeforeLogin();
                 }
                 else if (response == 3)
                 {
@@ -96,6 +110,68 @@ public class MainApp {
         }
     }
     
+    public void doSearchHotelBeforeLogin() {
+        Scanner scanner = new Scanner(System.in);
+        Integer cinDay = 0;
+        Integer cinMonth = 0;
+        Integer cinYear = 0;
+        Integer coutDay = 0;
+        Integer coutMonth = 0;
+        Integer coutYear = 0;
+        Integer numberOfRooms = 0;
+        Integer i = 0;
+       
+        
+        
+        System.out.println("*** HORS Reservation  :: Search Room ***\n");
+        System.out.print("Enter Day of Check In> ");
+        cinDay = scanner.nextInt();
+        System.out.print("Enter Month of Check In> ");
+        cinMonth = scanner.nextInt();
+        System.out.print("Enter Year of Check In> ");
+        cinYear = scanner.nextInt();
+        System.out.print("Enter Day of Check Out> ");
+        coutDay = scanner.nextInt();
+        System.out.print("Enter Month of Check Out> ");
+        coutMonth = scanner.nextInt();
+        System.out.print("Enter Year of Check Out> ");
+        coutYear = scanner.nextInt();
+        System.out.print("Enter number of room(s)> ");
+        numberOfRooms = scanner.nextInt();
+        scanner.nextLine();
+        
+        try {
+            
+            
+            if(cinDay > coutDay && cinMonth >= cinMonth && cinYear >= coutYear ||
+                    cinMonth > coutYear || cinYear > coutYear) {
+                throw new DateTimeException("Invalid Date Input");
+            }
+            
+            List<PairRemote> availableRooms = searchRoom(cinYear, cinMonth, cinDay, coutYear, coutMonth, coutDay, numberOfRooms);
+            System.out.printf("\n%3s%10s%10s", "No", "Room Type", "Total Price");
+            
+            for(PairRemote pair: availableRooms)
+            {
+                i++;
+                System.out.printf("\n%3s%10s%10s", i, pair.getRoomType().getName(), pair.getPrice());
+                
+            }            
+            
+            System.out.println("");
+            System.out.println("------------------------");
+           
+        }
+        catch (java.time.DateTimeException ex){
+            System.out.println("Invalid Date input");
+            
+        }
+        catch (NoAvailableRoomOptionException_Exception ex) {
+            System.out.println("No room available");
+        }
+           
+    }
+    
     private void menuMain()
     {
         Scanner scanner = new Scanner(System.in);
@@ -119,15 +195,15 @@ public class MainApp {
 
                 if(response == 1)
                 {
-                    //search hotel room//
+                    doSearchHotel();
                 }
                 else if(response == 2)
                 {
-                    //view details//
+                    doViewMyReservationDetails();
                 }
                 else if (response == 3)
                 {
-                    //view all
+                    doViewAllMyReservations();
                 }
                 else if (response == 4)
                 {
@@ -146,10 +222,239 @@ public class MainApp {
         }
     }
     
-    private static PartnerEntity partnerLogin(String username, String password) throws InvalidLoginCredentialException_Exception {
+    public void doSearchHotel() {
+        Scanner scanner = new Scanner(System.in);
+        Integer cinDay = 0;
+        Integer cinMonth = 0;
+        Integer cinYear = 0;
+        Integer coutDay = 0;
+        Integer coutMonth = 0;
+        Integer coutYear = 0;
+        Integer numberOfRooms = 0;
+        Integer i = 0;
+        String confirmReserve = "";
+        Integer option = 0;
+        Integer payment = 0;
+       
+        
+        
+        System.out.println("*** HORS Reservation  :: Search Room ***\n");
+        System.out.print("Enter Day of Check In> ");
+        cinDay = scanner.nextInt();
+        System.out.print("Enter Month of Check In> ");
+        cinMonth = scanner.nextInt();
+        System.out.print("Enter Year of Check In> ");
+        cinYear = scanner.nextInt();
+        System.out.print("Enter Day of Check Out> ");
+        coutDay = scanner.nextInt();
+        System.out.print("Enter Month of Check Out> ");
+        coutMonth = scanner.nextInt();
+        System.out.print("Enter Year of Check Out> ");
+        coutYear = scanner.nextInt();
+        System.out.print("Enter number of room(s)> ");
+        numberOfRooms = scanner.nextInt();
+        scanner.nextLine();
+        
+        try {
+            
+            
+            if(cinDay > coutDay && cinMonth >= cinMonth && cinYear >= coutYear ||
+                    cinMonth > coutYear || cinYear > coutYear) {
+                throw new DateTimeException("Invalid Date Input");
+            }
+            
+            List<PairRemote> availableRooms = searchRoom(cinYear, cinMonth, cinDay, coutYear, coutMonth, coutDay, numberOfRooms);
+            System.out.printf("\n%3s%10s%10s", "No", "Room Type", "Total Price");
+            
+            for(PairRemote pair: availableRooms)
+            {
+                i++;
+                System.out.printf("\n%3s%10s%10s", i, pair.getRoomType().getName(), pair.getPrice());
+                
+            }            
+            
+            System.out.println("");
+            System.out.println("------------------------");
+             System.out.print("Reserve Room(s)? (Enter 'Y' to reserve)> ");
+            confirmReserve = scanner.nextLine().trim();
+
+            if(confirmReserve.equals("Y"))
+            {
+                while(true) {
+
+                    System.out.print("Select the option>");
+                    option = scanner.nextInt();
+                    String roomTypeName = availableRooms.get(option-1).getRoomType().getName();
+                    Double totalAmount = availableRooms.get(option-1).getPrice().doubleValue();
+                    if(option >= 1 || option <= availableRooms.size()) {
+
+                        while(true)
+                        {
+                            System.out.println("The fee is $" + availableRooms.get(option - 1).getPrice() + ". Please choose the payment option");
+                            System.out.println("1: AMEX; 2:MASTERCARD; 3:VISA");
+                            payment = scanner.nextInt();
+
+                            if(payment >= 1 && payment <= 3)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                System.out.println("Invalid option, please try again!\n");
+                            }
+                        }
+                        
+
+                        makeReservation(cinYear, cinMonth, cinDay, coutYear, coutMonth, coutDay, numberOfRooms,currentPartnerEntity.getUserId(),roomTypeName, totalAmount, payment);
+                        System.out.println("Reservation is successfully created!");
+                        break;
+                    } else {
+                        System.out.println("Invalid option, please try again!");
+                    }
+                }
+
+            }
+           
+        }
+        catch (java.time.DateTimeException ex){
+            System.out.println("Invalid Date input");
+            
+        }
+        catch (NoAvailableRoomOptionException_Exception ex) {
+            System.out.println("No room available");
+        }
+        catch (RoomTypeNotFoundException_Exception ex){
+            System.out.println("Room type not available!");
+        }
+        catch (InvalidRoomReservationEntityException_Exception ex) {
+            System.out.println("Invalid Reservation!");
+        }
+        catch (LineItemExistException_Exception ex){
+            System.out.println("Invalid Reservation");
+        }
+        catch (UnknownPersistenceException_Exception ex) {
+            System.out.println("Reservation failed");
+        }
+           
+    }
+    
+    public void doViewMyReservationDetails() {
+        
+        Scanner scanner = new Scanner(System.in);
+        Long reservationId = 0L;
+       
+        System.out.println("*** HORS Reservation  :: View My Reservation Details ***\n");
+        System.out.print("Enter Reservation Id> ");
+        reservationId = scanner.nextLong();
+        
+        try
+        {
+            RoomReservationEntity roomReservation = viewReservationDetails(reservationId);
+            System.out.println("Reservation Id :" + roomReservation.getRoomReservationId());
+            System.out.println("Booking Account Id:" + currentPartnerEntity.getUserId());
+            System.out.println("Booking Account name:" + currentPartnerEntity.getPartnerName());
+            System.out.println("Reservation Date :" + roomReservation.getReservationDate());
+            /*
+            System.out.println("Number of Rooms :" + roomReservation.getRoomReservationLineItems().size());
+            System.out.println("Check-in Date :" + roomReservation.getRoomReservationLineItems().get(0).getCheckInDate());
+            System.out.println("Check-out Date :" + roomReservation.getRoomReservationLineItems().get(0).getCheckoutDate());
+            */
+            System.out.println("Total Amount :" + roomReservation.getTotalAmount());
+            
+                  
+        } catch (ReservationNotFoundException_Exception ex) {
+            System.out.println("Invalid Reservation Id");
+        }
+    }
+    
+    private void doViewAllMyReservations() {
+        
+        try 
+        {
+            List<RoomReservationEntity> reservations = viewAllMyReservations(currentPartnerEntity.getUserId());
+        
+            System.out.printf("%10s%10s%10s%10s%10s%10s\n", "Reservation Id", "Booking Account", "Reservation Date", "Number of Rooms", "Check-in Date", "Check-out Date");
+            if(reservations.isEmpty() == false) {
+                
+                for(RoomReservationEntity roomReservation : reservations) {
+                    XMLGregorianCalendar date = 
+                    DatatypeFactory.newInstance().newXMLGregorianCalendar(roomReservation.getReservationDate().toString());
+                     
+                    System.out.printf("%10s%10s%10s\n", roomReservation.getRoomReservationId(), currentPartnerEntity.getUserId(), date
+                                                                    /*,roomReservation.getRoomReservationLineItems().size(), roomReservation.getRoomReservationLineItems().get(0).getCheckInDate(),
+                                                                    roomReservation.getRoomReservationLineItems().get(0).getCheckoutDate()*/);
+                } 
+
+            }
+            else 
+            {
+                System.out.println("No reservation made");
+            }
+        } 
+        /*catch (GuestNotFoundException_Exception ex) {
+            System.out.println("Guest not found");
+        }*/
+        catch (ReservationNotFoundException_Exception ex) {
+            System.out.println("No reservation made");
+            
+        }
+        catch(DatatypeConfigurationException ex) {
+            System.out.println("Invalid Data Type");
+        }
+                
+    }
+    
+    private static PartnerEntity partnerLogin(java.lang.String username, java.lang.String password) throws ws.client.InvalidLoginCredentialException_Exception {
         ws.client.PartnerEntityWebService_Service service = new ws.client.PartnerEntityWebService_Service();
         ws.client.PartnerEntityWebService port = service.getPartnerEntityWebServicePort();
         return port.partnerLogin(username, password);
     }
+    
+    private static java.util.List<ws.client.roomReservationEntityWebService.RoomReservationEntity> viewAllMyReservations(java.lang.Long userId) throws ws.client.roomReservationEntityWebService.ReservationNotFoundException_Exception {
+        ws.client.roomReservationEntityWebService.RoomReservationEntityWebService_Service service = new ws.client.roomReservationEntityWebService.RoomReservationEntityWebService_Service();
+        ws.client.roomReservationEntityWebService.RoomReservationEntityWebService port = service.getRoomReservationEntityWebServicePort();
+        return port.viewAllMyReservations(userId);
+    }
+    
+    private static ws.client.roomReservationEntityWebService.RoomReservationEntity viewReservationDetails(java.lang.Long reservationId) throws ws.client.roomReservationEntityWebService.ReservationNotFoundException_Exception {
+        ws.client.roomReservationEntityWebService.RoomReservationEntityWebService_Service service = new ws.client.roomReservationEntityWebService.RoomReservationEntityWebService_Service();
+        ws.client.roomReservationEntityWebService.RoomReservationEntityWebService port = service.getRoomReservationEntityWebServicePort();
+        return port.viewReservationDetails(reservationId);
+    }
+    
+    private static java.util.List<PairRemote> searchRoom(java.lang.Integer cinYear,
+                                                            java.lang.Integer cinMonth,
+                                                            java.lang.Integer cinDay,
+                                                            java.lang.Integer coutYear,
+                                                            java.lang.Integer coutMonth,
+                                                            java.lang.Integer coutDay,
+                                                            java.lang.Integer numberOfRooms) throws ws.client.searchOperation.NoAvailableRoomOptionException_Exception{
+        
+        
+        ws.client.searchOperation.SearchOperationWebService_Service service = new ws.client.searchOperation.SearchOperationWebService_Service();
+        ws.client.searchOperation.SearchOperationWebService port = service.getSearchOperationWebServicePort();
+        return port.searchRoom(cinYear, cinMonth, cinDay, coutYear, coutMonth, coutDay, numberOfRooms);
+    }
+    
+    private static java.lang.Long makeReservation(java.lang.Integer cinYear,
+                                                    java.lang.Integer cinMonth,
+                                                    java.lang.Integer cinDay,
+                                                    java.lang.Integer coutYear,
+                                                    java.lang.Integer coutMonth,
+                                                    java.lang.Integer coutDay,
+                                                    java.lang.Integer numberOfRooms,
+                                                    java.lang.Long userId,
+                                                    java.lang.String roomTypeName,
+                                                    java.lang.Double totalAmount,
+                                                    java.lang.Integer paymentType) throws ws.client.searchOperation.RoomTypeNotFoundException_Exception, 
+                                                                                            ws.client.searchOperation.InvalidRoomReservationEntityException_Exception,
+                                                                                            ws.client.searchOperation.LineItemExistException_Exception, 
+                                                                                            ws.client.searchOperation.UnknownPersistenceException_Exception{
+     
+        ws.client.searchOperation.SearchOperationWebService_Service service = new ws.client.searchOperation.SearchOperationWebService_Service();
+        ws.client.searchOperation.SearchOperationWebService port = service.getSearchOperationWebServicePort();
+        return port.makeReservation(cinYear, cinMonth, cinDay, coutYear, coutMonth, coutDay, numberOfRooms, userId, roomTypeName, totalAmount, paymentType);
+    }
+     
     
 }

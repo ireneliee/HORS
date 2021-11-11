@@ -7,12 +7,15 @@ package ejb.session.ws;
 
 import ejb.session.stateless.PartnerEntitySessionBeanLocal;
 import entity.PartnerEntity;
+import entity.RoomEntity;
 import entity.RoomReservationEntity;
+import entity.RoomReservationLineItemEntity;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.ejb.Stateless;
+import javax.jws.WebParam;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
@@ -42,15 +45,11 @@ public class PartnerEntityWebService {
     /**
      * This is a sample web service operation
      */
-    @WebMethod
-    public Long createNewPartner(PartnerEntity newPartnerEntity) throws UsernameExistException,
-            UnknownPersistenceException {
-        
-        return partnerEntitySessionBean.createNewPartner(newPartnerEntity);
-        
-    }
     
-    public List<PartnerEntity> retrieveAllPartner() {
+    /*
+    public List<PartnerEntity> retrieveAllPartner(@WebParam(name = "username") String username,
+                                                    @WebParam(name = "password") String password) 
+    {
         
         List<PartnerEntity>  partners = partnerEntitySessionBean.retrieveAllPartner();
         
@@ -74,15 +73,27 @@ public class PartnerEntityWebService {
             reservation.setBookingAccount(null);
         }
         return partner;
-    }
+    }*/
     
-    public PartnerEntity partnerLogin(String username, String password) throws InvalidLoginCredentialException {
+    @WebMethod(operationName = "partnerLogin")
+    public PartnerEntity partnerLogin(@WebParam(name = "username") String username,
+                                        @WebParam(name = "password") String password) throws InvalidLoginCredentialException {
         
         PartnerEntity partner = partnerEntitySessionBean.partnerLogin(username, password);
+        
+        em.detach(partner);
         
         for(RoomReservationEntity reservation : partner.getRoomReservations()) {
             em.detach(reservation);
             reservation.setBookingAccount(null);
+            for(RoomReservationLineItemEntity lineItem : reservation.getRoomReservationLineItems()) {
+                em.detach(lineItem);
+                em.detach(lineItem.getRoomTypeEntity());
+                for(RoomEntity room : lineItem.getRoomTypeEntity().getRoomEntities()){
+                    em.detach(room);
+                    room.setRoomType(null);
+                }
+            }
         }
         return partner;
     }

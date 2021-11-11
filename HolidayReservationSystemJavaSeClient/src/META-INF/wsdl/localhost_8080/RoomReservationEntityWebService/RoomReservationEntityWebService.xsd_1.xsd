@@ -1,41 +1,24 @@
 <?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is Metro/2.4.3 (RELEASE-2.4.3-ad3323c; 2019-01-21T17:46:06+0000) JAXWS-RI/2.3.2 JAXWS-API/2.3.2 JAXB-RI/2.3.2 JAXB-API/2.3.2 git-revision#unknown. --><xs:schema xmlns:tns="http://ws.session.ejb/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://ws.session.ejb/">
 
-<xs:element name="InvalidLoginCredentialException" type="tns:InvalidLoginCredentialException"/>
+<xs:element name="ReservationNotFoundException" type="tns:ReservationNotFoundException"/>
 
-<xs:element name="partnerLogin" type="tns:partnerLogin"/>
+<xs:element name="viewAllMyReservations" type="tns:viewAllMyReservations"/>
 
-<xs:element name="partnerLoginResponse" type="tns:partnerLoginResponse"/>
+<xs:element name="viewAllMyReservationsResponse" type="tns:viewAllMyReservationsResponse"/>
 
-<xs:complexType name="partnerLogin">
+<xs:element name="viewReservationDetails" type="tns:viewReservationDetails"/>
+
+<xs:element name="viewReservationDetailsResponse" type="tns:viewReservationDetailsResponse"/>
+
+<xs:complexType name="viewAllMyReservations">
 <xs:sequence>
-<xs:element name="username" type="xs:string" minOccurs="0"/>
-<xs:element name="password" type="xs:string" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="partnerLoginResponse">
-<xs:sequence>
-<xs:element name="return" type="tns:partnerEntity" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="partnerEntity">
-<xs:complexContent>
-<xs:extension base="tns:userEntity">
-<xs:sequence>
-<xs:element name="partnerName" type="xs:string" minOccurs="0"/>
-<xs:element name="password" type="xs:string" minOccurs="0"/>
-<xs:element name="username" type="xs:string" minOccurs="0"/>
-</xs:sequence>
-</xs:extension>
-</xs:complexContent>
-</xs:complexType>
-
-<xs:complexType name="userEntity" abstract="true">
-<xs:sequence>
-<xs:element name="email" type="xs:string" minOccurs="0"/>
-<xs:element name="roomReservations" type="tns:roomReservationEntity" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
 <xs:element name="userId" type="xs:long" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="viewAllMyReservationsResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:roomReservationEntity" minOccurs="0" maxOccurs="unbounded"/>
 </xs:sequence>
 </xs:complexType>
 
@@ -47,6 +30,14 @@
 <xs:element name="roomReservationId" type="xs:long" minOccurs="0"/>
 <xs:element name="roomReservationLineItems" type="tns:roomReservationLineItemEntity" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
 <xs:element name="totalAmount" type="xs:decimal" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="userEntity" abstract="true">
+<xs:sequence>
+<xs:element name="email" type="xs:string" minOccurs="0"/>
+<xs:element name="roomReservations" type="tns:roomReservationEntity" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="userId" type="xs:long" minOccurs="0"/>
 </xs:sequence>
 </xs:complexType>
 
@@ -113,9 +104,21 @@
 </xs:sequence>
 </xs:complexType>
 
-<xs:complexType name="InvalidLoginCredentialException">
+<xs:complexType name="ReservationNotFoundException">
 <xs:sequence>
 <xs:element name="message" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="viewReservationDetails">
+<xs:sequence>
+<xs:element name="reservationId" type="xs:long" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="viewReservationDetailsResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:roomReservationEntity" minOccurs="0"/>
 </xs:sequence>
 </xs:complexType>
 

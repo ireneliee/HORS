@@ -210,17 +210,25 @@ public class ReserveOperationSessionBean implements ReserveOperationSessionBeanR
                 newReservation.getRoomReservationLineItems().add(newLineItem);
 
             }
-            return roomReservationEntitySessionBeanLocal.createNewRoomReservationEntity(user.getUserId(), newReservation);
-        } catch (PersistenceException ex) {
-            if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
-                if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
-                    eJBContext.setRollbackOnly();
-                    throw new LineItemExistException("Line item exist in the system");
-
-                } else {
-                    eJBContext.setRollbackOnly();
-                    throw new UnknownPersistenceException("Unknown persist error");
-                }
+            return roomReservationEntitySessionBeanLocal.createNewRoomReservationEntity(user.getUserId(), newReservation).getRoomReservationId();
+        }
+         catch(PersistenceException ex)
+            {
+                if(ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException"))
+                {
+                    if(ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException"))
+                    {
+                        eJBContext.setRollbackOnly();
+                        throw new LineItemExistException("Line item exist in the system");
+                        
+                    }
+                    else
+                    {
+                        eJBContext.setRollbackOnly();
+                        throw new UnknownPersistenceException("Unknown persist error");
+                    }
+                
+                
             } else {
                 eJBContext.setRollbackOnly();
                 throw new UnknownPersistenceException("Unknown persist error");

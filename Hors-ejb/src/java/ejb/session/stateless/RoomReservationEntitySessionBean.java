@@ -5,40 +5,54 @@
  */
 package ejb.session.stateless;
 
-import ejb.session.stateful.ReserveOperationSessionBeanLocal;
+import entity.PaymentEntity;
 import entity.RoomEntity;
 import entity.RoomReservationEntity;
 import entity.RoomReservationLineItemEntity;
+import entity.RoomTypeEntity;
 import entity.UserEntity;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.TimeZone;
+import javax.annotation.Resource;
 import javax.ejb.EJB;
+import javax.ejb.EJBContext;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import util.enumeration.PaymentMethodEnum;
 import util.exception.GuestHasNotCheckedInException;
 import util.exception.InvalidRoomReservationEntityException;
+import util.exception.LineItemExistException;
 import util.exception.NoMoreRoomToAccomodateException;
 import util.exception.ReservationNotFoundException;
+import util.exception.RoomTypeNotFoundException;
+import util.exception.UnknownPersistenceException;
 import util.exception.WrongCheckInDate;
 import util.exception.WrongCheckoutDate;
 
 @Stateless
 public class RoomReservationEntitySessionBean implements RoomReservationEntitySessionBeanRemote, RoomReservationEntitySessionBeanLocal {
 
+    @EJB(name = "RoomTypeEntitySessionBeanLocal")
+    private RoomTypeEntitySessionBeanLocal roomTypeEntitySessionBeanLocal;
+
     @EJB
     private RoomAllocationSessionBeanLocal roomAllocationSessionBean;
+    
+    @Resource
+    private EJBContext eJBContext;
 
     @PersistenceContext(unitName = "Hors-ejbPU")
     private EntityManager em;
@@ -55,7 +69,7 @@ public class RoomReservationEntitySessionBean implements RoomReservationEntitySe
     // payment must be added before -> then can create roomReservationEntity
     // roomReservationLineItemEntity must be added before too -> then can create room reservation entity
     @Override
-    public Long createNewRoomReservationEntity(Long userId,
+    public RoomReservationEntity createNewRoomReservationEntity(Long userId,
             RoomReservationEntity newRoomReservationEntity) throws InvalidRoomReservationEntityException {
 
         if (newRoomReservationEntity == null) {
@@ -83,7 +97,7 @@ public class RoomReservationEntitySessionBean implements RoomReservationEntitySe
 
         allocateRoomNow(newRoomReservationEntity);
 
-        return newRoomReservationEntity.getRoomReservationId();
+        return newRoomReservationEntity;
 
     }
 
@@ -186,15 +200,21 @@ public class RoomReservationEntitySessionBean implements RoomReservationEntitySe
     }
 
     @Override
-    public List<RoomReservationEntity> viewAllMyReservation(Long userId) {
+    public List<RoomReservationEntity> viewAllMyReservation(Long userId) throws ReservationNotFoundException{
 
         String databaseQueryString = "SELECT rr FROM RoomReservationEntity rr WHERE rr.bookingAccount.userId = :iUserId";
         Query query = em.createQuery(databaseQueryString);
         query.setParameter("iUserId", userId);
 
+        try{
         List<RoomReservationEntity> reservations = query.getResultList();
 
         return reservations;
+        }
+        catch(NoResultException ex) {
+            throw new ReservationNotFoundException("No reservation made");
+                    
+        }
     }
 
     @Override
@@ -208,5 +228,52 @@ public class RoomReservationEntitySessionBean implements RoomReservationEntitySe
             throw new ReservationNotFoundException(errorMessage);
         }
     }
+    
+    
+    public RoomReservationEntity makeReservation(Long userId, String roomTypeName, double amount,
+                                int paymentType, int numberOfRooms, LocalDate checkinDate, LocalDate checkoutDate) 
+                                    throws RoomTypeNotFoundException, InvalidRoomReservationEntityException,
+                                             LineItemExistException, UnknownPersistenceException{
+    try {
+            UserEntity user = em.find(UserEntity.class, userId);
+            RoomReservationEntity newReservation = new RoomReservationEntity();
+            BigDecimal totalAmount = BigDecimal.valueOf(amount);
+            PaymentEntity newPayment = new PaymentEntity(totalAmount, PaymentMethodEnum.values()[paymentType - 1]);
+            newReservation.setTotalAmount(totalAmount);
+            newReservation.setPayment(newPayment);
+            newReservation.setReservationDate(LocalDate.now());
+            newReservation.setBookingAccount(user);
 
+            
+            RoomTypeEntity roomTypeEntity = roomTypeEntitySessionBeanLocal.retrieveRoomType(roomTypeName);
+
+            for (int i = 0; i < numberOfRooms; i++) {
+                RoomReservationLineItemEntity newLineItem = new RoomReservationLineItemEntity(roomTypeEntity, new BigDecimal(10000), checkinDate, checkoutDate);
+
+                newReservation.getRoomReservationLineItems().add(newLineItem);
+
+            }
+            return this.createNewRoomReservationEntity(user.getUserId(), newReservation);
+        } catch (PersistenceException ex) {
+            if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
+                if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
+                    eJBContext.setRollbackOnly();
+                    throw new LineItemExistException("Line item exist in the system");
+
+                } else {
+                    eJBContext.setRollbackOnly();
+                    throw new UnknownPersistenceException("Unknown persist error");
+                }
+            } else {
+                eJBContext.setRollbackOnly();
+                throw new UnknownPersistenceException("Unknown persist error");
+            }
+        }
+
+    }
+
+    
 }
+
+
+

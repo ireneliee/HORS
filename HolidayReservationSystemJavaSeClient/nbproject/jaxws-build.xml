@@ -33,5 +33,39 @@
         <delete dir="${build.generated.dir}/jax-wsCache/PartnerEntityWebService"/>
         <delete dir="${build.generated.sources.dir}/jax-ws/ws/client"/>
     </target>
-    <target name="wsimport-client-generate" depends="wsimport-client-PartnerEntityWebService"/>
+    <target name="wsimport-client-RoomReservationEntityWebService" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/RoomReservationEntityWebService"/>
+        <property name="wsdl-RoomReservationEntityWebService" location="xml-resources/web-service-references/RoomReservationEntityWebService/wsdl/localhost_8080/RoomReservationEntityWebService/RoomReservationEntityWebService.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/RoomReservationEntityWebService" destdir="${build.generated.dir}/jax-wsCache/RoomReservationEntityWebService" wsdl="${wsdl-RoomReservationEntityWebService}" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://localhost:8080/RoomReservationEntityWebService/RoomReservationEntityWebService?wsdl" xnocompile="true" xendorsed="true" package="ws.client.roomReservationEntityWebService">
+            <depends file="${wsdl-RoomReservationEntityWebService}"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/RoomReservationEntityWebService"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/RoomReservationEntityWebService">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-RoomReservationEntityWebService" depends="-init-project">
+        <delete dir="${build.generated.dir}/jax-wsCache/RoomReservationEntityWebService"/>
+        <delete dir="${build.generated.sources.dir}/jax-ws/ws/client/roomReservationEntityWebService"/>
+    </target>
+    <target name="wsimport-client-SearchOperationWebService" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/SearchOperationWebService"/>
+        <property name="wsdl-SearchOperationWebService" location="xml-resources/web-service-references/SearchOperationWebService/wsdl/localhost_8080/SearchOperationWebService/SearchOperationWebService.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/SearchOperationWebService" destdir="${build.generated.dir}/jax-wsCache/SearchOperationWebService" wsdl="${wsdl-SearchOperationWebService}" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://localhost:8080/SearchOperationWebService/SearchOperationWebService?wsdl" xnocompile="true" xendorsed="true" package="ws.client.searchOperation">
+            <depends file="${wsdl-SearchOperationWebService}"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/SearchOperationWebService"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/SearchOperationWebService">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-SearchOperationWebService" depends="-init-project">
+        <delete dir="${build.generated.dir}/jax-wsCache/SearchOperationWebService"/>
+        <delete dir="${build.generated.sources.dir}/jax-ws/ws/client/searchOperation"/>
+    </target>
+    <target name="wsimport-client-generate" depends="wsimport-client-PartnerEntityWebService, wsimport-client-RoomReservationEntityWebService, wsimport-client-SearchOperationWebService"/>
 </project>
