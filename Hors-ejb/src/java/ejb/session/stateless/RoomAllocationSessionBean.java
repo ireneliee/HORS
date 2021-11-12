@@ -130,7 +130,7 @@ public class RoomAllocationSessionBean implements RoomAllocationSessionBeanRemot
         }
 
         // retrieve list of all room types. Allocation will be done one by one -> following the room type
-        String databaseQueryInString = "SELECT DISTINCT rt FROM RoomTypeEntity rt ";
+        String databaseQueryInString = "SELECT DISTINCT rt FROM RoomTypeEntity rt  ORDER BY rt.roomRanking ASC";
         Query query = em.createQuery(databaseQueryInString);
         List<RoomTypeEntity> listOfRoomTypes = query.getResultList();
 
