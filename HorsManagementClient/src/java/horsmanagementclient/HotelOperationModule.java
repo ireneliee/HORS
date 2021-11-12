@@ -751,12 +751,9 @@ public class HotelOperationModule {
         newRoomType.setAmenities(scanner.nextLine());
         System.out.println();
 
-        System.out.print("Enter the rank of the room (1 to 5) >");
+        System.out.print("Enter the rank of the room >");
         int rank = Integer.parseInt(scanner.nextLine());
-        while (rank < 1 || rank > 5) {
-            System.out.println("Rank is outside of the bound (1 - 5). Please enter another rank.");
-            rank = Integer.parseInt(scanner.nextLine());
-        }
+        
         newRoomType.setRoomRanking(rank);
 
         try {
