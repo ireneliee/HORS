@@ -64,8 +64,7 @@ public class DataInitSessionBean {
     @EJB
     private EmployeeEntitySessionBeanLocal employeeEntitySessionBean;
 
-    @EJB
-    private GuestEntitySessionBeanLocal guestEntitySessionBean;
+
 
     @PersistenceContext(unitName = "Hors-ejbPU")
     private EntityManager em;
@@ -226,16 +225,7 @@ public class DataInitSessionBean {
         rateNine.setRoomType(roomTypeFive);
         rateTen.setRoomType(roomTypeFive);
         
-        rateEleven.setRoomType(roomTypeOne);
-        rateTwelve.setRoomType(roomTypeOne);
-        rateThir.setRoomType(roomTypeTwo);
-        rateFourt.setRoomType(roomTypeTwo);
-        rateFift.setRoomType(roomTypeThree);
-        rateSixt.setRoomType(roomTypeThree);
-        rateSevent.setRoomType(roomTypeFour);
-        rateEighte.setRoomType(roomTypeFour);
-        rateNinet.setRoomType(roomTypeFive);
-        rateTwen.setRoomType(roomTypeFive);
+       
         try {
             roomTypeEntitySessionBean.createRoomType(roomTypeOne);
             roomTypeEntitySessionBean.createRoomType(roomTypeTwo);
@@ -280,22 +270,11 @@ public class DataInitSessionBean {
             roomRateEntitySessionBean.createNewNormalRateEntity(rateSix);
             roomRateEntitySessionBean.createNewNormalRateEntity(rateEight);
             roomRateEntitySessionBean.createNewNormalRateEntity(rateTen);
-            System.out.println("done D");
-            roomRateEntitySessionBean.createNewPeakRateEntity(rateEleven);
-            roomRateEntitySessionBean.createNewPeakRateEntity(rateThir);
-            roomRateEntitySessionBean.createNewPeakRateEntity(rateFift);
-            roomRateEntitySessionBean.createNewPeakRateEntity(rateSevent);
-            roomRateEntitySessionBean.createNewPeakRateEntity(rateNinet);
-            
-            roomRateEntitySessionBean.createNewPromotionRateEntity(rateTwelve);
-            roomRateEntitySessionBean.createNewPromotionRateEntity(rateFourt);
-            roomRateEntitySessionBean.createNewPromotionRateEntity(rateSixt);
-            roomRateEntitySessionBean.createNewPromotionRateEntity(rateEighte);
-            roomRateEntitySessionBean.createNewPromotionRateEntity(rateTwen);
+
             
         } catch (UnknownPersistenceException | RoomTypeExistException | PublishedRateHasAlreadyExistedException
                 | RoomNumberExistException | InputDataValidationException | NormalRateHasAlreadyExistedException 
-                | PeakRateHasAlreadyExistedException | PromotionRateHasAlreadyExistedException | RoomTypeHasBeenDisabledException ex) {
+                | RoomTypeHasBeenDisabledException ex) {
             System.out.println(ex.getMessage());
 
         }
