@@ -105,6 +105,7 @@ public class RoomTypeEntitySessionBean implements RoomTypeEntitySessionBeanRemot
     public void updateRoomType(String roomTypeName, RoomTypeEntity newRoomType) throws RoomTypeNotFoundException {
         try {
             RoomTypeEntity roomTypeToUpdate = retrieveRoomType(roomTypeName);
+            roomTypeToUpdate = em.find(RoomTypeEntity.class, roomTypeToUpdate.getRoomTypeId());
             roomTypeToUpdate.setName(newRoomType.getName());
             roomTypeToUpdate.setDescription(newRoomType.getDescription());
             roomTypeToUpdate.setRoomSize(newRoomType.getRoomSize());
