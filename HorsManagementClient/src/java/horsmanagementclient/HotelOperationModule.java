@@ -696,28 +696,30 @@ public class HotelOperationModule {
 
         System.out.println("*** HORS Management System :: Hotel Operation :: Operation Manager :: Update Room Type ***\n");
         Scanner scanner = new Scanner(System.in);
+        
 
         RoomTypeEntity newRoomType = new RoomTypeEntity();
+        
+         System.out.print("Enter the new name about the room> ");
+        newRoomType.setName(scanner.nextLine());
 
-        newRoomType.setName(roomTypeName);
-
-        System.out.print("Enter the description about the room> ");
+        System.out.print("Enter the new description about the room> ");
         newRoomType.setDescription(scanner.nextLine());
 
-        System.out.print("Enter the size of the room (eg. 10x8) > ");
+        System.out.print("Enter the new size of the room (eg. 10x8) > ");
         newRoomType.setRoomSize(scanner.nextLine().trim());
 
-        System.out.print("Enter the number of bed>");
+        System.out.print("Enter the new number of bed>");
         newRoomType.setBed(Integer.parseInt(scanner.nextLine()));
 
-        System.out.print("Enter capacity of the room (number of people the room can fit) >");
+        System.out.print("Enter the new capacity of the room (number of people the room can fit) >");
         newRoomType.setCapacity(Integer.parseInt(scanner.nextLine()));
 
-        System.out.print("Enter the amenities in the room> ");
+        System.out.print("Enter the new amenities in the room> ");
         newRoomType.setAmenities(scanner.nextLine());
         System.out.println();
         try {
-            horsManagementControllerSessionBeanRemote.updateRoomType(newRoomType);
+            horsManagementControllerSessionBeanRemote.updateRoomType(roomTypeName, newRoomType);
             System.out.println("Room type is successfully updated");
 
         } catch (RoomTypeNotFoundException ex) {

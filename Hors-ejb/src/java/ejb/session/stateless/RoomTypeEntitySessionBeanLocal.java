@@ -28,6 +28,6 @@ public interface RoomTypeEntitySessionBeanLocal {
 
     public void deleteRoomType(String name) throws RoomTypeNotFoundException;
 
-    public void updateRoomType(RoomTypeEntity roomType) throws RoomTypeNotFoundException;
+     public void updateRoomType(String roomTypeName, RoomTypeEntity newRoomType) throws RoomTypeNotFoundException;
     
 }

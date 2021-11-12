@@ -152,8 +152,8 @@ public class HorsManagementControllerSessionBean implements HorsManagementContro
     }
 
     @Override
-    public void updateRoomType(RoomTypeEntity roomType) throws RoomTypeNotFoundException {
-        roomTypeEntitySessionBean.updateRoomType(roomType);
+     public void updateRoomType(String roomTypeName, RoomTypeEntity newRoomType) throws RoomTypeNotFoundException {
+        roomTypeEntitySessionBean.updateRoomType(roomTypeName, newRoomType);
     }
 
     @Override
