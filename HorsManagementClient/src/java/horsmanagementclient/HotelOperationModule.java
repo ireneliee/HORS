@@ -260,8 +260,8 @@ public class HotelOperationModule {
         horsManagementControllerSessionBeanRemote
                 .retrieveAllRoomRate()
                 .stream()
-                .forEach(x -> System.out.println("Name: " + x.getName() + " \n" + "Room type: " + x.getRoomType() + "\n"
-                + "Rate: $" + x.getRate()));
+                .forEach(x -> System.out.println("Name: " + x.getName() + " \n" + "Room type: " + x.getRoomType().getName() + "\n"
+                + "Rate: $" + x.getRate() + "\n" + "xxx" + "\n"));
 
     }
 
@@ -400,8 +400,11 @@ public class HotelOperationModule {
                     System.out.print("Enter the rate>");
                     BigDecimal rate = new BigDecimal(Double.parseDouble(scanner.nextLine()));
                     System.out.println();
+                    System.out.print("Enter the name of the new rate>");
+                    String roomRateName = scanner.nextLine();
                     if (roomRateType == 1) {
                         PublishedRateEntity newPublishedRate = new PublishedRateEntity();
+                        newPublishedRate.setName(roomRateName);
                         newPublishedRate.setRoomType(roomType);
                         newPublishedRate.setRate(rate);
                         newPublishedRate.setStartValidityDate(LocalDate.now());
@@ -417,6 +420,7 @@ public class HotelOperationModule {
                         }
                     } else if (roomRateType == 2) {
                         NormalRateEntity newNormalRate = new NormalRateEntity();
+                        newNormalRate.setName(roomRateName);
                         newNormalRate.setRoomType(roomType);
                         newNormalRate.setRate(rate);
                         newNormalRate.setStartValidityDate(LocalDate.now());
@@ -440,16 +444,13 @@ public class HotelOperationModule {
 
                         System.out.print("Enter the ending validity date in the form of M/d/yyyy>");
                         String endDateInString = scanner.nextLine().trim();
-                        
+
                         LocalDate dateToPutStart = dateInput(startDateInString);
                         LocalDate dateToPutEnd = dateInput(endDateInString);
-                        
 
                         newPromotionRate.setStartValidityDate(dateToPutStart);
                         newPromotionRate.setEndValidityDate(dateToPutEnd);
 
-                        System.out.print("Enter the name of the promotion rate>");
-                        String roomRateName = scanner.nextLine();
                         newPromotionRate.setName(roomRateName);
 
                         try {
@@ -479,8 +480,8 @@ public class HotelOperationModule {
                         newPeakRate.setStartValidityDate(dateToPutStart);
                         newPeakRate.setEndValidityDate(dateToPutEnd);
 
-                        System.out.print("Enter the name of the peak rate>");
-                        String roomRateName = scanner.nextLine();
+
+
                         newPeakRate.setName(roomRateName);
 
                         try {
@@ -696,11 +697,10 @@ public class HotelOperationModule {
 
         System.out.println("*** HORS Management System :: Hotel Operation :: Operation Manager :: Update Room Type ***\n");
         Scanner scanner = new Scanner(System.in);
-        
 
         RoomTypeEntity newRoomType = new RoomTypeEntity();
-        
-         System.out.print("Enter the new name about the room> ");
+
+        System.out.print("Enter the new name about the room> ");
         newRoomType.setName(scanner.nextLine());
 
         System.out.print("Enter the new description about the room> ");
@@ -755,7 +755,7 @@ public class HotelOperationModule {
 
         System.out.print("Enter the rank of the room >");
         int rank = Integer.parseInt(scanner.nextLine());
-        
+
         newRoomType.setRoomRanking(rank);
 
         try {

@@ -217,7 +217,7 @@ public class MainApp {
             for(Pair pair: availableRooms)
             {
                 i++;
-                System.out.printf("\n%3s%10s%10s", i, pair.getRoomType().getName(), pair.getPrice());
+                System.out.printf("\n%3s. %10s %10s ", i, pair.getRoomType().getName(), pair.getPrice());
                 
             }            
             
@@ -324,12 +324,12 @@ public class MainApp {
             LocalDate checkoutDate = LocalDate.of(coutYear, coutMonth, coutDay);
             
             List<Pair> availableRooms = horsReservationClientController.searchRoom(4, checkinDate, checkoutDate, numberOfRooms);
-            System.out.printf("\n%3s%10s%10s", "No. ", "Room Type  ", "Total Price");
+            System.out.printf("\n%3s. %10s %10s ", "No. ", "Room Type  ", "Total Price");
             
             for(Pair pair: availableRooms)
             {
                 i++;
-                System.out.printf("\n%3s. %10s%10s", i, pair.getRoomType().getName(), pair.getPrice());
+                System.out.printf("\n%3s. %10s %10s ", i, pair.getRoomType().getName(), pair.getPrice());
                 
                 
             }            
@@ -367,8 +367,8 @@ public class MainApp {
                             }
                         }
 
-                        horsReservationClientController.makeReservation(currentGuestEntity, availableRooms, option-1, newPaymentEntity);
-                        System.out.println("Reservation is successfully created!");
+                        Long reservationid = horsReservationClientController.makeReservation(currentGuestEntity, availableRooms, option-1, newPaymentEntity);
+                        System.out.println("Reservation is successfully created! Reservation Id: " + reservationid);
                         break;
                     } else {
                         System.out.println("Invalid option, please try again!");
@@ -414,7 +414,6 @@ public class MainApp {
         try
         {
             RoomReservationEntity roomReservation = horsReservationClientController.viewReservationDetails(reservationId);
-            System.out.println("Reservation Id :" + roomReservation.getRoomReservationId());
             System.out.println("Booking Account Email :" + roomReservation.getBookingAccount().getEmail());
             System.out.println("Reservation Date :" + roomReservation.getReservationDate());
             /*
@@ -423,6 +422,9 @@ public class MainApp {
             System.out.println("Check-out Date :" + roomReservation.getRoomReservationLineItems().get(0).getCheckoutDate());
             */
             System.out.println("Total Amount :" + roomReservation.getTotalAmount());
+            System.out.println(roomReservation.getRoomReservationLineItems());
+            
+            System.out.println(roomReservation);
             
                   
         } catch (ReservationNotFoundException ex) {
