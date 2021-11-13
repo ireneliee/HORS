@@ -10,13 +10,13 @@
 
 <xs:element name="viewReservationDetailsResponse" type="tns:viewReservationDetailsResponse"/>
 
-<xs:complexType name="viewReservationDetails">
+<xs:complexType name="viewAllMyReservations">
 <xs:sequence>
-<xs:element name="reservationId" type="xs:long" minOccurs="0"/>
+<xs:element name="userId" type="xs:long" minOccurs="0"/>
 </xs:sequence>
 </xs:complexType>
 
-<xs:complexType name="viewReservationDetailsResponse">
+<xs:complexType name="viewAllMyReservationsResponse">
 <xs:sequence>
 <xs:element name="return" type="xs:string" minOccurs="0"/>
 </xs:sequence>
@@ -28,13 +28,13 @@
 </xs:sequence>
 </xs:complexType>
 
-<xs:complexType name="viewAllMyReservations">
+<xs:complexType name="viewReservationDetails">
 <xs:sequence>
-<xs:element name="userId" type="xs:long" minOccurs="0"/>
+<xs:element name="reservationId" type="xs:long" minOccurs="0"/>
 </xs:sequence>
 </xs:complexType>
 
-<xs:complexType name="viewAllMyReservationsResponse">
+<xs:complexType name="viewReservationDetailsResponse">
 <xs:sequence>
 <xs:element name="return" type="xs:string" minOccurs="0"/>
 </xs:sequence>

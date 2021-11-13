@@ -4,36 +4,36 @@
 <xsd:import namespace="http://ws.session.ejb/" schemaLocation="http://localhost:8080/RoomReservationEntityWebService/RoomReservationEntityWebService?xsd=1"/>
 </xsd:schema>
 </types>
-<message name="viewReservationDetails">
-<part name="parameters" element="tns:viewReservationDetails"/>
-</message>
-<message name="viewReservationDetailsResponse">
-<part name="parameters" element="tns:viewReservationDetailsResponse"/>
-</message>
-<message name="ReservationNotFoundException">
-<part name="fault" element="tns:ReservationNotFoundException"/>
-</message>
 <message name="viewAllMyReservations">
 <part name="parameters" element="tns:viewAllMyReservations"/>
 </message>
 <message name="viewAllMyReservationsResponse">
 <part name="parameters" element="tns:viewAllMyReservationsResponse"/>
 </message>
+<message name="ReservationNotFoundException">
+<part name="fault" element="tns:ReservationNotFoundException"/>
+</message>
+<message name="viewReservationDetails">
+<part name="parameters" element="tns:viewReservationDetails"/>
+</message>
+<message name="viewReservationDetailsResponse">
+<part name="parameters" element="tns:viewReservationDetailsResponse"/>
+</message>
 <portType name="RoomReservationEntityWebService">
-<operation name="viewReservationDetails">
-<input wsam:Action="http://ws.session.ejb/RoomReservationEntityWebService/viewReservationDetailsRequest" message="tns:viewReservationDetails"/>
-<output wsam:Action="http://ws.session.ejb/RoomReservationEntityWebService/viewReservationDetailsResponse" message="tns:viewReservationDetailsResponse"/>
-<fault message="tns:ReservationNotFoundException" name="ReservationNotFoundException" wsam:Action="http://ws.session.ejb/RoomReservationEntityWebService/viewReservationDetails/Fault/ReservationNotFoundException"/>
-</operation>
 <operation name="viewAllMyReservations">
 <input wsam:Action="http://ws.session.ejb/RoomReservationEntityWebService/viewAllMyReservationsRequest" message="tns:viewAllMyReservations"/>
 <output wsam:Action="http://ws.session.ejb/RoomReservationEntityWebService/viewAllMyReservationsResponse" message="tns:viewAllMyReservationsResponse"/>
 <fault message="tns:ReservationNotFoundException" name="ReservationNotFoundException" wsam:Action="http://ws.session.ejb/RoomReservationEntityWebService/viewAllMyReservations/Fault/ReservationNotFoundException"/>
 </operation>
+<operation name="viewReservationDetails">
+<input wsam:Action="http://ws.session.ejb/RoomReservationEntityWebService/viewReservationDetailsRequest" message="tns:viewReservationDetails"/>
+<output wsam:Action="http://ws.session.ejb/RoomReservationEntityWebService/viewReservationDetailsResponse" message="tns:viewReservationDetailsResponse"/>
+<fault message="tns:ReservationNotFoundException" name="ReservationNotFoundException" wsam:Action="http://ws.session.ejb/RoomReservationEntityWebService/viewReservationDetails/Fault/ReservationNotFoundException"/>
+</operation>
 </portType>
 <binding name="RoomReservationEntityWebServicePortBinding" type="tns:RoomReservationEntityWebService">
 <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
-<operation name="viewReservationDetails">
+<operation name="viewAllMyReservations">
 <soap:operation soapAction=""/>
 <input>
 <soap:body use="literal"/>
@@ -45,7 +45,7 @@
 <soap:fault name="ReservationNotFoundException" use="literal"/>
 </fault>
 </operation>
-<operation name="viewAllMyReservations">
+<operation name="viewReservationDetails">
 <soap:operation soapAction=""/>
 <input>
 <soap:body use="literal"/>

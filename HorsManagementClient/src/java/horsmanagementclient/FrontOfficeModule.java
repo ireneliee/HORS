@@ -196,7 +196,7 @@ public class FrontOfficeModule {
             for(Pair pair: availableRooms)
             {
                 i++;
-                System.out.printf("\n%3s%10s%10s", i, pair.getRoomType().getName(), pair.getPrice());
+                System.out.printf("\n%3s.%20s%10s", i, pair.getRoomType().getName(), pair.getPrice());
                 
             }            
             

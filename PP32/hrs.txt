@@ -1,0 +1,109 @@
+ant -f C:\\Users\\irene\\Desktop\\IS2103\\HORS\\Hors\\HolidayReservationSystemJavaSeClient -Dnb.internal.action.name=run run
+init:
+Deleting: C:\Users\irene\Desktop\IS2103\HORS\Hors\HolidayReservationSystemJavaSeClient\build\built-jar.properties
+deps-jar:
+Updating property file: C:\Users\irene\Desktop\IS2103\HORS\Hors\HolidayReservationSystemJavaSeClient\build\built-jar.properties
+wsimport-init:
+wsimport-client-PartnerEntityWebService:
+files are up to date
+wsimport-client-RoomReservationEntityWebService:
+files are up to date
+wsimport-client-SearchOperationWebService:
+files are up to date
+wsimport-client-generate:
+Compiling 53 source files to C:\Users\irene\Desktop\IS2103\HORS\Hors\HolidayReservationSystemJavaSeClient\build\classes
+Copying 6 files to C:\Users\irene\Desktop\IS2103\HORS\Hors\HolidayReservationSystemJavaSeClient\build\classes
+compile:
+run:
+*** Welcome Hors Reservation System ***
+
+1: Login
+2: Search Hotel
+3: Exit
+
+> 1
+*** HORS Reservation System :: Login ***
+
+Enter username> holiday.com
+Enter password> password
+Login successful!
+
+*** Hors Reservation System ***
+
+You are login as Holiday.com
+1: Search Hotel Room
+2: View My Reservation Details
+3: View All My Reservation
+4: Logout
+
+> 1
+*** HORS Reservation  :: Search Room ***
+
+Enter Day of Check In> 10
+Enter Month of Check In> 1
+Enter Year of Check In> 2022
+Enter Day of Check Out> 11
+Enter Month of Check Out> 1
+Enter Year of Check Out> 2022
+Enter number of room(s)> 1
+
+ No Room TypeTotal Price
+  1Deluxe Room     50.00
+  2Premier Room    100.00
+  3Family Room    150.00
+  4Junior Suite    200.00
+  5Grand Suite    250.00
+  6Presidential Penthouse    600.00
+------------------------
+Reserve Room(s)? (Enter 'Y' to reserve)> Y
+Select the option>5
+The fee is $250.00. Please choose the payment option
+1: AMEX
+2: MasterCard
+3: Visa
+1
+Reservation is successfully created!
+*** Hors Reservation System ***
+
+You are login as Holiday.com
+1: Search Hotel Room
+2: View My Reservation Details
+3: View All My Reservation
+4: Logout
+
+> 3
+Room reservation Id 6
+Total rooms reserved: 1
+RoomType: Grand Suite
+Check-in date: 2022-01-10 
+Check-out date: 2022-01-11
+***
+
+--------------------------------------------------------------------------------------------------
+
+*** Hors Reservation System ***
+
+You are login as Holiday.com
+1: Search Hotel Room
+2: View My Reservation Details
+3: View All My Reservation
+4: Logout
+
+> 2
+*** HORS Reservation  :: View My Reservation Details ***
+
+Enter Reservation Id> 6
+RoomType: Grand Suite
+Check-in date: 2022-01-10 
+Check-out date: 2022-01-11
+***
+
+*** Hors Reservation System ***
+
+You are login as Holiday.com
+1: Search Hotel Room
+2: View My Reservation Details
+3: View All My Reservation
+4: Logout
+
+> 

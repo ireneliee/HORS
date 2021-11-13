@@ -36,8 +36,6 @@ public class RoomReservationLineItemEntity implements Serializable {
     @OneToOne (optional = false)
     private RoomTypeEntity roomTypeEntity;
     
-    @OneToMany
-    private List<RoomRateEntity> roomRatesPerNight;
     
     @Column(nullable = false, precision = 11, scale = 2)
     @NotNull
@@ -58,7 +56,6 @@ public class RoomReservationLineItemEntity implements Serializable {
     private Boolean checkedOut;
     
     public RoomReservationLineItemEntity(){
-        this.roomRatesPerNight = new ArrayList<>();
         this.checkedIn = false;
         this.checkedOut = false;
     }
@@ -106,13 +103,6 @@ public class RoomReservationLineItemEntity implements Serializable {
         return "RoomType: " + this.getRoomTypeEntity().getName() + "\n" + "Check-in date: " + this.getCheckInDate() + " \nCheck-out date: " + this.getCheckoutDate();
     }
 
-    public List<RoomRateEntity> getRoomRatesPerNight() {
-        return roomRatesPerNight;
-    }
-
-    public void setRoomRatesPerNight(List<RoomRateEntity> roomRatesPerNight) {
-        this.roomRatesPerNight = roomRatesPerNight;
-    }
 
     public RoomTypeEntity getRoomTypeEntity() {
         return roomTypeEntity;

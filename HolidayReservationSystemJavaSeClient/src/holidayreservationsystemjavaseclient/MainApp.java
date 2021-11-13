@@ -124,11 +124,11 @@ public class MainApp {
             }
 
             List<PairRemote> availableRooms = searchRoom(cinYear, cinMonth, cinDay, coutYear, coutMonth, coutDay, numberOfRooms);
-            System.out.printf("\n%3s%10s%10s", "No", "Room Type", "Total Price");
+            System.out.printf("\n%3s. %10s%10s", "No", "Room Type", "Total Price");
 
             for (PairRemote pair : availableRooms) {
                 i++;
-                System.out.printf("\n%3s%10s%10s", i, pair.getRoomType().getName(), pair.getPrice());
+                System.out.printf("\n%3s. %20s%10s", i, pair.getRoomType().getName(), pair.getPrice());
 
             }
 

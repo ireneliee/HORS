@@ -35,7 +35,7 @@ public class MainApp {
         Integer response = 0;
 
         while (true) {
-            System.out.println("*** Welcome Hors Management System (v4.1) ***\n");
+            System.out.println("*** Welcome Hors Management System***\n");
             System.out.println("1: Login");
             System.out.println("2: Exit\n");
             response = 0;

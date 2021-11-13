@@ -142,28 +142,18 @@ public class RoomRateEntitySessionBean implements RoomRateEntitySessionBeanRemot
         return query.getResultList();
     }
 
+    @Override
     public void deleteRoomRateEntity(RoomRateEntity roomRate) throws DeleteRoomRateException {
         RoomRateEntity roomRateToBeRemoved = em.find(RoomRateEntity.class, roomRate.getRoomRateId());
-        String queryString = "SELECT s FROM RoomReservationLineItemEntity s ";
-        Query query = em.createQuery(queryString);
-        List<RoomReservationLineItemEntity> roomReservations = query.getResultList();
-        Boolean roomRateIsUsed = roomReservations
-                .stream()
-                .filter(x -> roomReservationLineItemEntityUsingRoomRate(x, roomRateToBeRemoved))
-                .findAny()
-                .isPresent();
-        if (roomRateIsUsed || roomRate instanceof PublishedRateEntity || roomRate instanceof NormalRateEntity) {
+ 
+        if (roomRate instanceof PublishedRateEntity || roomRate instanceof NormalRateEntity) {
             //roomRateToBeRemoved.setDisabled(true);
-            throw new DeleteRoomRateException("Published and Normal rate entity cannot be removed. ");
+            throw new DeleteRoomRateException("Published and Normal rate entity cannot be removed. Update room rate instead.");
         }
         em.remove(roomRateToBeRemoved);
 
     }
 
-    private Boolean roomReservationLineItemEntityUsingRoomRate(RoomReservationLineItemEntity roomReservation,
-            RoomRateEntity roomRate) {
-        return roomReservation.getRoomRatesPerNight().contains(roomRate);
-    }
 
     @Override
     public RoomRateEntity retrieveRoomRateDetails(Long roomRateId)

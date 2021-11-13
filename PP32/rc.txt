@@ -1,0 +1,476 @@
+ant -f C:\\Users\\irene\\Desktop\\IS2103\\HORS\\Hors\\HorsReservationClient -Dnb.internal.action.name=run -DforceRedeploy=false run
+init:
+HorsLibrary.init:
+HorsLibrary.deps-jar:
+Updating property file: C:\Users\irene\Desktop\IS2103\HORS\Hors\HorsLibrary\build\built-jar.properties
+HorsLibrary.compile:
+Created dir: C:\Users\irene\Desktop\IS2103\HORS\Hors\HorsLibrary\dist
+Building jar: C:\Users\irene\Desktop\IS2103\HORS\Hors\HorsLibrary\dist\HorsLibrary.jar
+HorsLibrary.deploy:
+HorsLibrary.jar:
+deps-jar:
+compile:
+library-inclusion-in-archive:
+dist:
+pre-run-deploy:
+Distributing C:\Users\irene\Desktop\IS2103\HORS\Hors\HorsReservationClient\dist\HorsReservationClient.jar
+post-run-deploy:
+run-deploy:
+Copying 1 file to C:\Users\irene\Desktop\IS2103\HORS\Hors\HorsReservationClient\dist
+Copying 2 files to C:\Users\irene\Desktop\IS2103\HORS\Hors\HorsReservationClient\dist\HorsReservationClientClient
+Warning: C:\Users\irene\Desktop\IS2103\HORS\Hors\HorsReservationClient\dist\gfdeploy\HorsReservationClient does not exist.
+*** Welcome Hors Reservation  ***
+
+1: Login
+2: Register
+3: Search Hotel Room
+4: Exit
+
+> 2
+*** HORS Reservation  :: Reservation***
+
+Enter First Name> Alice
+Enter Last Name> Alice
+Enter username>Alice
+Enter password>password
+Enter email>alice@gmail.com
+Enter mobileNo>96829583
+Enter passportNo>X583759
+
+Register successful!
+
+A new guest with guestId 7 is created
+Please login now!
+*** Welcome Hors Reservation  ***
+
+1: Login
+2: Register
+3: Search Hotel Room
+4: Exit
+
+> 1
+*** HORS Reservation  :: Login ***
+
+Enter username> Alice
+Enter password> password
+Login successful!
+
+*** Hors Reservation System ***
+
+You are login as Alice Alice
+1: Search Hotel Room
+2: View My Reservation Details
+3: View All My Reservation
+4: Logout
+
+> 1
+*** HORS Reservation  :: Search Room ***
+
+Enter Day of Check In> 3
+Enter Month of Check In> 1
+Enter Year of Check In> 2022
+Enter Day of Check Out> 4
+Enter Month of Check Out> 1
+Enter Year of Check Out> 2022
+Enter number of room(s)> 1
+
+No. . Room Type   Total Price 
+  1.          Deluxe Room      50.00 
+  2.         Premier Room     100.00 
+  3.          Family Room     150.00 
+  4.         Junior Suite     200.00 
+  5.          Grand Suite     250.00 
+  6. Presidential Penthouse        600 
+------------------------
+Reserve Room(s)? (Enter 'Y' to reserve)> 
+*** Hors Reservation System ***
+
+You are login as Alice Alice
+1: Search Hotel Room
+2: View My Reservation Details
+3: View All My Reservation
+4: Logout
+
+> 1
+*** HORS Reservation  :: Search Room ***
+
+Enter Day of Check In> 2
+Enter Month of Check In> 1
+Enter Year of Check In> 2022
+Enter Day of Check Out> 3
+Enter Month of Check Out> 1
+Enter Year of Check Out> 2022
+Enter number of room(s)> 1
+
+No. . Room Type   Total Price 
+  1.          Deluxe Room      50.00 
+  2.         Premier Room     100.00 
+  3.          Family Room     150.00 
+  4.         Junior Suite     200.00 
+  5.          Grand Suite     250.00 
+  6. Presidential Penthouse        500 
+------------------------
+Reserve Room(s)? (Enter 'Y' to reserve)> 
+*** Hors Reservation System ***
+
+You are login as Alice Alice
+1: Search Hotel Room
+2: View My Reservation Details
+3: View All My Reservation
+4: Logout
+
+> 1
+*** HORS Reservation  :: Search Room ***
+
+Enter Day of Check In> 1
+Enter Month of Check In> 1
+Enter Year of Check In> 2022
+Enter Day of Check Out> 2
+Enter Month of Check Out> 1
+Enter Year of Check Out> 2022
+Enter number of room(s)> 1
+
+No. . Room Type   Total Price 
+  1.          Deluxe Room      50.00 
+  2.         Premier Room     100.00 
+  3.          Family Room     150.00 
+  4.         Junior Suite     200.00 
+  5.          Grand Suite     250.00 
+  6. Presidential Penthouse        700 
+------------------------
+Reserve Room(s)? (Enter 'Y' to reserve)> 
+*** Hors Reservation System ***
+
+You are login as Alice Alice
+1: Search Hotel Room
+2: View My Reservation Details
+3: View All My Reservation
+4: Logout
+
+> 1
+*** HORS Reservation  :: Search Room ***
+
+Enter Day of Check In> 1
+Enter Month of Check In> 1
+Enter Year of Check In> 2022
+Enter Day of Check Out> 4
+Enter Month of Check Out> 1
+Enter Year of Check Out> 2022
+Enter number of room(s)> 1
+
+No. . Room Type   Total Price 
+  1.          Deluxe Room     150.00 
+  2.         Premier Room     300.00 
+  3.          Family Room     450.00 
+  4.         Junior Suite     600.00 
+  5.          Grand Suite     750.00 
+  6. Presidential Penthouse       1800 
+------------------------
+Reserve Room(s)? (Enter 'Y' to reserve)> Y
+Select the option>6
+The fee is $1800. Please choose the payment option
+1: AMEX
+2: MasterCard
+3: Visa
+1
+Reservation is successfully created! Reservation Id: 2
+*** Hors Reservation System ***
+
+You are login as Alice Alice
+1: Search Hotel Room
+2: View My Reservation Details
+3: View All My Reservation
+4: Logout
+
+> 3
+Room reservation Id 2
+Total rooms reserved: 1
+RoomType: Presidential Penthouse
+Check-in date: 2022-01-01 
+Check-out date: 2022-01-04
+***
+
+--------------------------------------------------------------------------------------------------
+*** Hors Reservation System ***
+
+You are login as Alice Alice
+1: Search Hotel Room
+2: View My Reservation Details
+3: View All My Reservation
+4: Logout
+
+> 2
+*** HORS Reservation  :: View My Reservation Details ***
+
+Enter Reservation Id> 2
+Booking Account Email :alice@gmail.com
+Reservation Date :2021-11-13
+Total Amount :1800
+[RoomType: Presidential Penthouse
+Check-in date: 2022-01-01 
+Check-out date: 2022-01-04]
+Room reservation Id 2
+Total rooms reserved: 1
+RoomType: Presidential Penthouse
+Check-in date: 2022-01-01 
+Check-out date: 2022-01-04
+***
+
+*** Hors Reservation System ***
+
+You are login as Alice Alice
+1: Search Hotel Room
+2: View My Reservation Details
+3: View All My Reservation
+4: Logout
+
+> 1
+*** HORS Reservation  :: Search Room ***
+
+Enter Day of Check In> 1
+Enter Month of Check In> 1
+Enter Year of Check In> 2022
+Enter Day of Check Out> 2
+Enter Month of Check Out> 1
+Enter Year of Check Out> 2022
+Enter number of room(s)> 1
+
+No. . Room Type   Total Price 
+  1.          Deluxe Room      50.00 
+  2.         Premier Room     100.00 
+  3.          Family Room     150.00 
+  4.         Junior Suite     200.00 
+  5.          Grand Suite     250.00 
+------------------------
+Reserve Room(s)? (Enter 'Y' to reserve)> 
+*** Hors Reservation System ***
+
+You are login as Alice Alice
+1: Search Hotel Room
+2: View My Reservation Details
+3: View All My Reservation
+4: Logout
+
+> 1
+*** HORS Reservation  :: Search Room ***
+
+Enter Day of Check In> 13
+Enter Month of Check In> 11
+Enter Year of Check In> 2021
+Enter Day of Check Out> 14
+Enter Month of Check Out> 11
+Enter Year of Check Out> 2021
+Enter number of room(s)> 2
+
+No. . Room Type   Total Price 
+  1.          Deluxe Room     100.00 
+  2.         Premier Room     200.00 
+  3.          Family Room     300.00 
+  4.         Junior Suite     400.00 
+  5.          Grand Suite     500.00 
+------------------------
+Reserve Room(s)? (Enter 'Y' to reserve)> Y
+Select the option>1
+The fee is $100.00. Please choose the payment option
+1: AMEX
+2: MasterCard
+3: Visa
+1
+Reservation is successfully created! Reservation Id: 3
+*** Hors Reservation System ***
+
+You are login as Alice Alice
+1: Search Hotel Room
+2: View My Reservation Details
+3: View All My Reservation
+4: Logout
+
+> 1
+*** HORS Reservation  :: Search Room ***
+
+Enter Day of Check In> 13
+Enter Month of Check In> 11
+Enter Year of Check In> 2021
+Enter Day of Check Out> 14
+Enter Month of Check Out> 11
+Enter Year of Check Out> 2021
+Enter number of room(s)> 2
+
+No. . Room Type   Total Price 
+  1.         Premier Room     200.00 
+  2.          Family Room     300.00 
+  3.         Junior Suite     400.00 
+  4.          Grand Suite     500.00 
+------------------------
+Reserve Room(s)? (Enter 'Y' to reserve)> Y
+Select the option>1
+The fee is $200.00. Please choose the payment option
+1: AMEX
+2: MasterCard
+3: Visa
+2
+Reservation is successfully created! Reservation Id: 4
+*** Hors Reservation System ***
+
+You are login as Alice Alice
+1: Search Hotel Room
+2: View My Reservation Details
+3: View All My Reservation
+4: Logout
+
+> 2
+*** HORS Reservation  :: View My Reservation Details ***
+
+Enter Reservation Id> 3
+Booking Account Email :alice@gmail.com
+Reservation Date :2021-11-13
+Total Amount :100.00
+[RoomType: Deluxe Room
+Check-in date: 2021-11-13 
+Check-out date: 2021-11-14, RoomType: Deluxe Room
+Check-in date: 2021-11-13 
+Check-out date: 2021-11-14]
+Room reservation Id 3
+Total rooms reserved: 2
+RoomType: Deluxe Room
+Check-in date: 2021-11-13 
+Check-out date: 2021-11-14
+***
+RoomType: Deluxe Room
+Check-in date: 2021-11-13 
+Check-out date: 2021-11-14
+***
+
+*** Hors Reservation System ***
+
+You are login as Alice Alice
+1: Search Hotel Room
+2: View My Reservation Details
+3: View All My Reservation
+4: Logout
+
+> 2
+*** HORS Reservation  :: View My Reservation Details ***
+
+Enter Reservation Id> 4
+Booking Account Email :alice@gmail.com
+Reservation Date :2021-11-13
+Total Amount :200.00
+[RoomType: Premier Room
+Check-in date: 2021-11-13 
+Check-out date: 2021-11-14, RoomType: Premier Room
+Check-in date: 2021-11-13 
+Check-out date: 2021-11-14]
+Room reservation Id 4
+Total rooms reserved: 2
+RoomType: Premier Room
+Check-in date: 2021-11-13 
+Check-out date: 2021-11-14
+***
+RoomType: Premier Room
+Check-in date: 2021-11-13 
+Check-out date: 2021-11-14
+***
+
+*** Hors Reservation System ***
+
+You are login as Alice Alice
+1: Search Hotel Room
+2: View My Reservation Details
+3: View All My Reservation
+4: Logout
+
+> 4
+*** Welcome Hors Reservation  ***
+
+1: Login
+2: Register
+3: Search Hotel Room
+4: Exit
+
+> 1
+*** HORS Reservation  :: Login ***
+
+Enter username> bOB
+Enter password> PASSWORD
+Invalid login credential: Username does not exist
+
+*** Welcome Hors Reservation  ***
+
+1: Login
+2: Register
+3: Search Hotel Room
+4: Exit
+
+> 2
+*** HORS Reservation  :: Reservation***
+
+Enter First Name> Bob
+Enter Last Name> Bob
+Enter username>Bob
+Enter password>password
+Enter email>bob@gmail.com
+Enter mobileNo>12345678
+Enter passportNo>x5738569
+
+Register successful!
+
+A new guest with guestId 8 is created
+Please login now!
+*** Welcome Hors Reservation  ***
+
+1: Login
+2: Register
+3: Search Hotel Room
+4: Exit
+
+> 1
+*** HORS Reservation  :: Login ***
+
+Enter username> Bob
+Enter password> password
+Login successful!
+
+*** Hors Reservation System ***
+
+You are login as Bob Bob
+1: Search Hotel Room
+2: View My Reservation Details
+3: View All My Reservation
+4: Logout
+
+> 1
+*** HORS Reservation  :: Search Room ***
+
+Enter Day of Check In> 1
+Enter Month of Check In> 1
+Enter Year of Check In> 2022
+Enter Day of Check Out> 2
+Enter Month of Check Out> 1
+Enter Year of Check Out> 2022
+Enter number of room(s)> 5
+
+No. . Room Type   Total Price 
+  1.          Deluxe Room     250.00 
+  2.         Premier Room     500.00 
+  3.          Family Room     750.00 
+  4.         Junior Suite    1000.00 
+  5.          Grand Suite    1250.00 
+------------------------
+Reserve Room(s)? (Enter 'Y' to reserve)> Y
+Select the option>3
+The fee is $750.00. Please choose the payment option
+1: AMEX
+2: MasterCard
+3: Visa
+2
+Reservation is successfully created! Reservation Id: 5
+*** Hors Reservation System ***
+
+You are login as Bob Bob
+1: Search Hotel Room
+2: View My Reservation Details
+3: View All My Reservation
+4: Logout
+
+> 

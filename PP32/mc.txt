@@ -1,0 +1,1602 @@
+ant -f C:\\Users\\irene\\Desktop\\IS2103\\HORS\\Hors\\HorsManagementClient -Dnb.internal.action.name=run -DforceRedeploy=false run
+init:
+HorsLibrary.init:
+HorsLibrary.deps-jar:
+Updating property file: C:\Users\irene\Desktop\IS2103\HORS\Hors\HorsLibrary\build\built-jar.properties
+HorsLibrary.init:
+HorsLibrary.deps-clean:
+Deleting directory C:\Users\irene\Desktop\IS2103\HORS\Hors\HorsLibrary\build
+HorsLibrary.clean:
+Created dir: C:\Users\irene\Desktop\IS2103\HORS\Hors\HorsLibrary\build\classes
+Created dir: C:\Users\irene\Desktop\IS2103\HORS\Hors\HorsLibrary\build\empty
+Created dir: C:\Users\irene\Desktop\IS2103\HORS\Hors\HorsLibrary\build\generated-sources\ap-source-output
+Compiling 67 source files to C:\Users\irene\Desktop\IS2103\HORS\Hors\HorsLibrary\build\classes
+HorsLibrary.compile:
+Building jar: C:\Users\irene\Desktop\IS2103\HORS\Hors\HorsLibrary\dist\HorsLibrary.jar
+HorsLibrary.deploy:
+HorsLibrary.jar:
+deps-jar:
+compile:
+library-inclusion-in-archive:
+dist:
+pre-run-deploy:
+Distributing C:\Users\irene\Desktop\IS2103\HORS\Hors\HorsManagementClient\dist\HorsManagementClient.jar
+post-run-deploy:
+run-deploy:
+Copying 1 file to C:\Users\irene\Desktop\IS2103\HORS\Hors\HorsManagementClient\dist
+Copying 2 files to C:\Users\irene\Desktop\IS2103\HORS\Hors\HorsManagementClient\dist\HorsManagementClientClient
+Warning: C:\Users\irene\Desktop\IS2103\HORS\Hors\HorsManagementClient\dist\gfdeploy\HorsManagementClient does not exist.
+*** Welcome Hors Management System***
+
+1: Login
+2: Exit
+
+> 1
+*** HORS Management :: Login ***
+
+Enter username> sysadmin
+Enter password> password
+Login successful!
+
+*** Hors Management System ***
+
+You are login as Employee One with SYSTEMADMINISTRATOR rights
+
+1: System Administration
+2: Operation Manager
+3: Sales Manager
+4: Guest Relation Officer
+5: Logout
+
+> 1
+*** HORS Management System :: System Administration ***
+
+1: Create New Staff
+2: View All Staffs
+3: Create New Partner
+4: View All Partners
+-----------------------
+5: Back
+
+> 1
+*** HORS Management System :: System Administration :: Create New Employee***
+
+Enter First Name> superadmin
+Enter Last Name> password
+Enter username>superadmin
+Enter password>password
+
+Select Access Right: 
+1: System administrator
+2: Operation Manager
+3: Sales Manager
+4. Guest Relation Officer
+
+>1
+A new employee with employeeId 5 is created
+*** HORS Management System :: System Administration ***
+
+1: Create New Staff
+2: View All Staffs
+3: Create New Partner
+4: View All Partners
+-----------------------
+5: Back
+
+> 2
+       1            Employee                 One                     SYSTEMADMINISTRATOR
+       2            Employee               Three                        OPERATIONMANAGER
+       3            Employee                Four                            SALESMANAGER
+       4            Employee                Five                    GUESTRELATIONOFFICER
+       5          superadmin            password                     SYSTEMADMINISTRATOR
+*** HORS Management System :: System Administration ***
+
+1: Create New Staff
+2: View All Staffs
+3: Create New Partner
+4: View All Partners
+-----------------------
+5: Back
+
+> 5
+*** Hors Management System ***
+
+You are login as Employee One with SYSTEMADMINISTRATOR rights
+
+1: System Administration
+2: Operation Manager
+3: Sales Manager
+4: Guest Relation Officer
+5: Logout
+
+> 5
+*** Welcome Hors Management System***
+
+1: Login
+2: Exit
+
+> 1
+*** HORS Management :: Login ***
+
+Enter username> sysadmin
+Enter password> password
+Login successful!
+
+*** Hors Management System ***
+
+You are login as Employee One with SYSTEMADMINISTRATOR rights
+
+1: System Administration
+2: Operation Manager
+3: Sales Manager
+4: Guest Relation Officer
+5: Logout
+
+> 5
+*** Welcome Hors Management System***
+
+1: Login
+2: Exit
+
+> 1
+*** HORS Management :: Login ***
+
+Enter username> superadmin
+Enter password> password
+Login successful!
+
+*** Hors Management System ***
+
+You are login as superadmin password with SYSTEMADMINISTRATOR rights
+
+1: System Administration
+2: Operation Manager
+3: Sales Manager
+4: Guest Relation Officer
+5: Logout
+
+> 1
+*** HORS Management System :: System Administration ***
+
+1: Create New Staff
+2: View All Staffs
+3: Create New Partner
+4: View All Partners
+-----------------------
+5: Back
+
+> 3
+*** POS System :: System Administration :: Create New Partner ***
+
+Enter Partner Name> Holiday.com
+Enter Username> holiday.com
+Enter Password> password
+New partner with partnerId of 6 is created.
+*** HORS Management System :: System Administration ***
+
+1: Create New Staff
+2: View All Staffs
+3: Create New Partner
+4: View All Partners
+-----------------------
+5: Back
+
+> 4
+       6         Holiday.com
+*** HORS Management System :: System Administration ***
+
+1: Create New Staff
+2: View All Staffs
+3: Create New Partner
+4: View All Partners
+-----------------------
+5: Back
+
+> 5
+*** Hors Management System ***
+
+You are login as superadmin password with SYSTEMADMINISTRATOR rights
+
+1: System Administration
+2: Operation Manager
+3: Sales Manager
+4: Guest Relation Officer
+5: Logout
+
+> 5
+*** Welcome Hors Management System***
+
+1: Login
+2: Exit
+
+> 1
+*** HORS Management :: Login ***
+
+Enter username> opmanager
+Enter password> password
+Login successful!
+
+*** Hors Management System ***
+
+You are login as Employee Three with OPERATIONMANAGER rights
+
+1: System Administration
+2: Operation Manager
+3: Sales Manager
+4: Guest Relation Officer
+5: Logout
+
+> 2
+*** HORS Management System :: Hotel Operation :: Operation Manager ***
+
+1: Create new room type
+2: View room type details
+3: View all room types
+4: Create new room
+5: Update room
+6: Delete room
+7: View all rooms
+8: View room allocation exception report
+9: Allocate room now
+-----------------------
+10: Back
+
+> 1
+*** HORS Management System :: Hotel Operation :: Operation Manager :: Create New Room Type ***
+
+Enter the name of the room type> Presidential Suite
+Enter the description about the room> big room
+Enter the size of the room (eg. 10x8) > 10x8
+Enter the number of bed>3
+Enter capacity of the room (number of people the room can fit) >5
+Enter the amenities in the room> big bed
+
+Enter the rank of the room >6
+This will take some time. Please wait for a while.
+Room type with roomTypeId 6 is created. 
+*** HORS Management System :: Hotel Operation :: Operation Manager ***
+
+1: Create new room type
+2: View room type details
+3: View all room types
+4: Create new room
+5: Update room
+6: Delete room
+7: View all rooms
+8: View room allocation exception report
+9: Allocate room now
+-----------------------
+10: Back
+
+> 1
+*** HORS Management System :: Hotel Operation :: Operation Manager :: Create New Room Type ***
+
+Enter the name of the room type> Standard Room
+Enter the description about the room> small room
+Enter the size of the room (eg. 10x8) > 10x8
+Enter the number of bed>2
+Enter capacity of the room (number of people the room can fit) >2
+Enter the amenities in the room> small bed
+
+Enter the rank of the room >0
+This will take some time. Please wait for a while.
+Room type with roomTypeId 7 is created. 
+*** HORS Management System :: Hotel Operation :: Operation Manager ***
+
+1: Create new room type
+2: View room type details
+3: View all room types
+4: Create new room
+5: Update room
+6: Delete room
+7: View all rooms
+8: View room allocation exception report
+9: Allocate room now
+-----------------------
+10: Back
+
+> 3
+Name: Deluxe Room
+Description: Ocean view with normal amenities
+Size: 10x8
+Bed: 2
+Capacity: 2
+Amenities: shower, TV, sofa
+Rank: 1
+
+Name: Premier Room
+Description: City view with luxurious amenities
+Size: 12x8
+Bed: 2
+Capacity: 2
+Amenities: bathtub, TV, shower, sofa
+Rank: 2
+
+Name: Family Room
+Description: Room suitable for a family
+Size: 14x12
+Bed: 4
+Capacity: 4
+Amenities: personal jacuzzi and a big sofa 
+Rank: 3
+
+Name: Junior Suite
+Description: Extra luxurious room with highest quality amenities imported from Italy
+Size: 18x16
+Bed: 2
+Capacity: 2
+Amenities: bathtub, sofa, personal jacuzzi and big bed
+Rank: 4
+
+Name: Grand Suite
+Description: A room with everything you ever dream of
+Size: 12x14
+Bed: 2
+Capacity: 2
+Amenities: personal swimming pool and sauna, free breakfast, dining room, and kitchen
+Rank: 5
+
+Name: Presidential Suite
+Description: big room
+Size: 10x8
+Bed: 3
+Capacity: 5
+Amenities: big bed
+Rank: 6
+
+Name: Standard Room
+Description: small room
+Size: 10x8
+Bed: 2
+Capacity: 2
+Amenities: small bed
+Rank: 0
+
+*** HORS Management System :: Hotel Operation :: Operation Manager ***
+
+1: Create new room type
+2: View room type details
+3: View all room types
+4: Create new room
+5: Update room
+6: Delete room
+7: View all rooms
+8: View room allocation exception report
+9: Allocate room now
+-----------------------
+10: Back
+
+> 2
+*** HORS Management System :: Hotel Operation :: Operation Manager :: View Room Type Details ***
+
+Enter the name of the room type you wish to view> Presidential Suite
+Name: Presidential Suite
+Description: big room
+Size: 10x8
+Bed: 3
+Capacity: 5
+Amenities: big bed
+Rank: 6
+
+*** HORS Management System :: Hotel Operation :: Operation Manager :: Update or Delete Room Type ***
+
+1: Update room type
+2: Delete room type
+3: Back
+
+> 1
+*** HORS Management System :: Hotel Operation :: Operation Manager :: Update Room Type ***
+
+Enter the new name about the room> Presidential Penthouse
+Enter the new description about the room> big room
+Enter the new size of the room (eg. 10x8) > 10x8
+Enter the new number of bed>3
+Enter the new capacity of the room (number of people the room can fit) >4
+Enter the new amenities in the room> super big bed
+
+Room type is successfully updated
+1: Update room type
+2: Delete room type
+3: Back
+
+> 3
+*** HORS Management System :: Hotel Operation :: Operation Manager ***
+
+1: Create new room type
+2: View room type details
+3: View all room types
+4: Create new room
+5: Update room
+6: Delete room
+7: View all rooms
+8: View room allocation exception report
+9: Allocate room now
+-----------------------
+10: Back
+
+> 2
+*** HORS Management System :: Hotel Operation :: Operation Manager :: View Room Type Details ***
+
+Enter the name of the room type you wish to view> Presidential Penthouse
+Name: Presidential Penthouse
+Description: big room
+Size: 10x8
+Bed: 3
+Capacity: 4
+Amenities: super big bed
+Rank: 6
+
+*** HORS Management System :: Hotel Operation :: Operation Manager :: Update or Delete Room Type ***
+
+1: Update room type
+2: Delete room type
+3: Back
+
+> 3
+*** HORS Management System :: Hotel Operation :: Operation Manager ***
+
+1: Create new room type
+2: View room type details
+3: View all room types
+4: Create new room
+5: Update room
+6: Delete room
+7: View all rooms
+8: View room allocation exception report
+9: Allocate room now
+-----------------------
+10: Back
+
+> 2
+*** HORS Management System :: Hotel Operation :: Operation Manager :: View Room Type Details ***
+
+Enter the name of the room type you wish to view> Standard Room
+Name: Standard Room
+Description: small room
+Size: 10x8
+Bed: 2
+Capacity: 2
+Amenities: small bed
+Rank: 0
+
+*** HORS Management System :: Hotel Operation :: Operation Manager :: Update or Delete Room Type ***
+
+1: Update room type
+2: Delete room type
+3: Back
+
+> 2
+*** HORS Management System :: Hotel Operation :: Operation Manager :: Delete Room Type ***
+
+Room type is successfully deleted.
+1: Update room type
+2: Delete room type
+3: Back
+
+> 3
+*** HORS Management System :: Hotel Operation :: Operation Manager ***
+
+1: Create new room type
+2: View room type details
+3: View all room types
+4: Create new room
+5: Update room
+6: Delete room
+7: View all rooms
+8: View room allocation exception report
+9: Allocate room now
+-----------------------
+10: Back
+
+> 3
+Name: Deluxe Room
+Description: Ocean view with normal amenities
+Size: 10x8
+Bed: 2
+Capacity: 2
+Amenities: shower, TV, sofa
+Rank: 1
+
+Name: Premier Room
+Description: City view with luxurious amenities
+Size: 12x8
+Bed: 2
+Capacity: 2
+Amenities: bathtub, TV, shower, sofa
+Rank: 2
+
+Name: Family Room
+Description: Room suitable for a family
+Size: 14x12
+Bed: 4
+Capacity: 4
+Amenities: personal jacuzzi and a big sofa 
+Rank: 3
+
+Name: Junior Suite
+Description: Extra luxurious room with highest quality amenities imported from Italy
+Size: 18x16
+Bed: 2
+Capacity: 2
+Amenities: bathtub, sofa, personal jacuzzi and big bed
+Rank: 4
+
+Name: Grand Suite
+Description: A room with everything you ever dream of
+Size: 12x14
+Bed: 2
+Capacity: 2
+Amenities: personal swimming pool and sauna, free breakfast, dining room, and kitchen
+Rank: 5
+
+Name: Presidential Penthouse
+Description: big room
+Size: 10x8
+Bed: 3
+Capacity: 4
+Amenities: super big bed
+Rank: 6
+
+*** HORS Management System :: Hotel Operation :: Operation Manager ***
+
+1: Create new room type
+2: View room type details
+3: View all room types
+4: Create new room
+5: Update room
+6: Delete room
+7: View all rooms
+8: View room allocation exception report
+9: Allocate room now
+-----------------------
+10: Back
+
+> 4
+*** HORS Management System :: Hotel Operation :: Operation Manager :: Create a new room ***
+
+Enter the room type of the new room>Presidential Penthouse
+Enter the 4 digits room number>8001
+Select availability of the room (1: Available, 2: Unavailable)> 1
+Room with room number of 8001 is successfully created
+*** HORS Management System :: Hotel Operation :: Operation Manager ***
+
+1: Create new room type
+2: View room type details
+3: View all room types
+4: Create new room
+5: Update room
+6: Delete room
+7: View all rooms
+8: View room allocation exception report
+9: Allocate room now
+-----------------------
+10: Back
+
+> 7
+Room number: 0501
+Room Type: Name: Deluxe Room
+Description: Ocean view with normal amenities
+Size: 10x8
+Bed: 2
+Capacity: 2
+Amenities: shower, TV, sofa
+Rank: 1
+
+Availability: AVAILABLE
+
+Room number: 0201
+Room Type: Name: Deluxe Room
+Description: Ocean view with normal amenities
+Size: 10x8
+Bed: 2
+Capacity: 2
+Amenities: shower, TV, sofa
+Rank: 1
+
+Availability: AVAILABLE
+
+Room number: 0401
+Room Type: Name: Deluxe Room
+Description: Ocean view with normal amenities
+Size: 10x8
+Bed: 2
+Capacity: 2
+Amenities: shower, TV, sofa
+Rank: 1
+
+Availability: AVAILABLE
+
+Room number: 0301
+Room Type: Name: Deluxe Room
+Description: Ocean view with normal amenities
+Size: 10x8
+Bed: 2
+Capacity: 2
+Amenities: shower, TV, sofa
+Rank: 1
+
+Availability: AVAILABLE
+
+Room number: 0101
+Room Type: Name: Deluxe Room
+Description: Ocean view with normal amenities
+Size: 10x8
+Bed: 2
+Capacity: 2
+Amenities: shower, TV, sofa
+Rank: 1
+
+Availability: AVAILABLE
+
+Room number: 0302
+Room Type: Name: Premier Room
+Description: City view with luxurious amenities
+Size: 12x8
+Bed: 2
+Capacity: 2
+Amenities: bathtub, TV, shower, sofa
+Rank: 2
+
+Availability: AVAILABLE
+
+Room number: 0102
+Room Type: Name: Premier Room
+Description: City view with luxurious amenities
+Size: 12x8
+Bed: 2
+Capacity: 2
+Amenities: bathtub, TV, shower, sofa
+Rank: 2
+
+Availability: AVAILABLE
+
+Room number: 0202
+Room Type: Name: Premier Room
+Description: City view with luxurious amenities
+Size: 12x8
+Bed: 2
+Capacity: 2
+Amenities: bathtub, TV, shower, sofa
+Rank: 2
+
+Availability: AVAILABLE
+
+Room number: 0402
+Room Type: Name: Premier Room
+Description: City view with luxurious amenities
+Size: 12x8
+Bed: 2
+Capacity: 2
+Amenities: bathtub, TV, shower, sofa
+Rank: 2
+
+Availability: AVAILABLE
+
+Room number: 0502
+Room Type: Name: Premier Room
+Description: City view with luxurious amenities
+Size: 12x8
+Bed: 2
+Capacity: 2
+Amenities: bathtub, TV, shower, sofa
+Rank: 2
+
+Availability: AVAILABLE
+
+Room number: 0103
+Room Type: Name: Family Room
+Description: Room suitable for a family
+Size: 14x12
+Bed: 4
+Capacity: 4
+Amenities: personal jacuzzi and a big sofa 
+Rank: 3
+
+Availability: AVAILABLE
+
+Room number: 0503
+Room Type: Name: Family Room
+Description: Room suitable for a family
+Size: 14x12
+Bed: 4
+Capacity: 4
+Amenities: personal jacuzzi and a big sofa 
+Rank: 3
+
+Availability: AVAILABLE
+
+Room number: 0203
+Room Type: Name: Family Room
+Description: Room suitable for a family
+Size: 14x12
+Bed: 4
+Capacity: 4
+Amenities: personal jacuzzi and a big sofa 
+Rank: 3
+
+Availability: AVAILABLE
+
+Room number: 0403
+Room Type: Name: Family Room
+Description: Room suitable for a family
+Size: 14x12
+Bed: 4
+Capacity: 4
+Amenities: personal jacuzzi and a big sofa 
+Rank: 3
+
+Availability: AVAILABLE
+
+Room number: 0303
+Room Type: Name: Family Room
+Description: Room suitable for a family
+Size: 14x12
+Bed: 4
+Capacity: 4
+Amenities: personal jacuzzi and a big sofa 
+Rank: 3
+
+Availability: AVAILABLE
+
+Room number: 0504
+Room Type: Name: Junior Suite
+Description: Extra luxurious room with highest quality amenities imported from Italy
+Size: 18x16
+Bed: 2
+Capacity: 2
+Amenities: bathtub, sofa, personal jacuzzi and big bed
+Rank: 4
+
+Availability: AVAILABLE
+
+Room number: 0304
+Room Type: Name: Junior Suite
+Description: Extra luxurious room with highest quality amenities imported from Italy
+Size: 18x16
+Bed: 2
+Capacity: 2
+Amenities: bathtub, sofa, personal jacuzzi and big bed
+Rank: 4
+
+Availability: AVAILABLE
+
+Room number: 0104
+Room Type: Name: Junior Suite
+Description: Extra luxurious room with highest quality amenities imported from Italy
+Size: 18x16
+Bed: 2
+Capacity: 2
+Amenities: bathtub, sofa, personal jacuzzi and big bed
+Rank: 4
+
+Availability: AVAILABLE
+
+Room number: 0204
+Room Type: Name: Junior Suite
+Description: Extra luxurious room with highest quality amenities imported from Italy
+Size: 18x16
+Bed: 2
+Capacity: 2
+Amenities: bathtub, sofa, personal jacuzzi and big bed
+Rank: 4
+
+Availability: AVAILABLE
+
+Room number: 0404
+Room Type: Name: Junior Suite
+Description: Extra luxurious room with highest quality amenities imported from Italy
+Size: 18x16
+Bed: 2
+Capacity: 2
+Amenities: bathtub, sofa, personal jacuzzi and big bed
+Rank: 4
+
+Availability: AVAILABLE
+
+Room number: 0405
+Room Type: Name: Grand Suite
+Description: A room with everything you ever dream of
+Size: 12x14
+Bed: 2
+Capacity: 2
+Amenities: personal swimming pool and sauna, free breakfast, dining room, and kitchen
+Rank: 5
+
+Availability: AVAILABLE
+
+Room number: 0505
+Room Type: Name: Grand Suite
+Description: A room with everything you ever dream of
+Size: 12x14
+Bed: 2
+Capacity: 2
+Amenities: personal swimming pool and sauna, free breakfast, dining room, and kitchen
+Rank: 5
+
+Availability: AVAILABLE
+
+Room number: 0205
+Room Type: Name: Grand Suite
+Description: A room with everything you ever dream of
+Size: 12x14
+Bed: 2
+Capacity: 2
+Amenities: personal swimming pool and sauna, free breakfast, dining room, and kitchen
+Rank: 5
+
+Availability: AVAILABLE
+
+Room number: 0105
+Room Type: Name: Grand Suite
+Description: A room with everything you ever dream of
+Size: 12x14
+Bed: 2
+Capacity: 2
+Amenities: personal swimming pool and sauna, free breakfast, dining room, and kitchen
+Rank: 5
+
+Availability: AVAILABLE
+
+Room number: 0305
+Room Type: Name: Grand Suite
+Description: A room with everything you ever dream of
+Size: 12x14
+Bed: 2
+Capacity: 2
+Amenities: personal swimming pool and sauna, free breakfast, dining room, and kitchen
+Rank: 5
+
+Availability: AVAILABLE
+
+Room number: 8001
+Room Type: Name: Presidential Penthouse
+Description: big room
+Size: 10x8
+Bed: 3
+Capacity: 4
+Amenities: super big bed
+Rank: 6
+
+Availability: AVAILABLE
+
+*** HORS Management System :: Hotel Operation :: Operation Manager ***
+
+1: Create new room type
+2: View room type details
+3: View all room types
+4: Create new room
+5: Update room
+6: Delete room
+7: View all rooms
+8: View room allocation exception report
+9: Allocate room now
+-----------------------
+10: Back
+
+> 10
+*** Hors Management System ***
+
+You are login as Employee Three with OPERATIONMANAGER rights
+
+1: System Administration
+2: Operation Manager
+3: Sales Manager
+4: Guest Relation Officer
+5: Logout
+
+> 5
+*** Welcome Hors Management System***
+
+1: Login
+2: Exit
+
+> 1
+*** HORS Management :: Login ***
+
+Enter username> salesmanager
+Enter password> password
+Login successful!
+
+*** Hors Management System ***
+
+You are login as Employee Four with SALESMANAGER rights
+
+1: System Administration
+2: Operation Manager
+3: Sales Manager
+4: Guest Relation Officer
+5: Logout
+
+> 3
+*** HORS Management System :: Hotel Operation :: Sales Manager ***
+
+1: Create new room rate
+2: View room rate details
+3: View all room rate types
+-----------------------
+4: Back
+
+> 1
+*** HORS Management System :: Hotel Operation :: Sales Manager :: Create a new room rate ***
+
+1: Published rate
+2: Normal rate
+3: Promotion rate
+4: Peak rate
+>1
+Enter the room type you would like to attach the new room rate to>Presidential Penthouse
+Enter the rate>1000
+
+Enter the name of the new rate>PRESIDENTIAL PENTHOUSE PUBLISHED RATE
+A published room rate of 11 has been created
+*** HORS Management System :: Hotel Operation :: Sales Manager ***
+
+1: Create new room rate
+2: View room rate details
+3: View all room rate types
+-----------------------
+4: Back
+
+> 1
+*** HORS Management System :: Hotel Operation :: Sales Manager :: Create a new room rate ***
+
+1: Published rate
+2: Normal rate
+3: Promotion rate
+4: Peak rate
+>2
+Enter the room type you would like to attach the new room rate to>Presidential Penthouse
+Enter the rate>600
+
+Enter the name of the new rate>PRESIDENTIAL PENTHOUSE NORMAL RATE
+A normal room rate of 12 has been created
+*** HORS Management System :: Hotel Operation :: Sales Manager ***
+
+1: Create new room rate
+2: View room rate details
+3: View all room rate types
+-----------------------
+4: Back
+
+> 1
+*** HORS Management System :: Hotel Operation :: Sales Manager :: Create a new room rate ***
+
+1: Published rate
+2: Normal rate
+3: Promotion rate
+4: Peak rate
+>4
+Enter the room type you would like to attach the new room rate to>Presidential Penthouse
+Enter the rate>700
+
+Enter the name of the new rate>PRESIDENTIAL PENTHOUSE PEAK RATE
+Now, enter the validity date: 
+Enter the starting validity date in the form of M/d/yyyy>1/1/2022
+Enter the ending validity date in the form of M/d/yyyy>1/2/2022
+A peak room rate of 13 has been created
+*** HORS Management System :: Hotel Operation :: Sales Manager ***
+
+1: Create new room rate
+2: View room rate details
+3: View all room rate types
+-----------------------
+4: Back
+
+> 1
+*** HORS Management System :: Hotel Operation :: Sales Manager :: Create a new room rate ***
+
+1: Published rate
+2: Normal rate
+3: Promotion rate
+4: Peak rate
+>3
+Enter the room type you would like to attach the new room rate to>Presidential Penthouse
+Enter the rate>500
+
+Enter the name of the new rate>PRESIDENTIAL PENTHOUSE PROMO RATE
+Enter the starting validity date in the form of M/d/yyyy>1/2/2022
+Enter the ending validity date in the form of M/d/yyyy>1/3/2022
+A promotion room rate of 14 has been created
+*** HORS Management System :: Hotel Operation :: Sales Manager ***
+
+1: Create new room rate
+2: View room rate details
+3: View all room rate types
+-----------------------
+4: Back
+
+> 3
+Name: DELUXE ROOM PUBLISHED RATE 
+Room type: Deluxe Room
+Rate: $100.00
+xxx
+
+Name: PREMIERE ROOM PUBLISHED RATE 
+Room type: Premier Room
+Rate: $200.00
+xxx
+
+Name: FAMILY ROOM PUBLISHED RATE 
+Room type: Family Room
+Rate: $300.00
+xxx
+
+Name: JUNIOR SUITE ROOM PUBLISHED RATE 
+Room type: Junior Suite
+Rate: $400.00
+xxx
+
+Name: GRAND SUITE ROOM PUBLISHED RATE 
+Room type: Grand Suite
+Rate: $500.00
+xxx
+
+Name: PRESIDENTIAL PENTHOUSE PUBLISHED RATE 
+Room type: Presidential Penthouse
+Rate: $1000
+xxx
+
+Name: DELUXE ROOM NORMAL RATE 
+Room type: Deluxe Room
+Rate: $50.00
+xxx
+
+Name: PREMIERE ROOM NORMAL RATE 
+Room type: Premier Room
+Rate: $100.00
+xxx
+
+Name: FAMILY ROOM NORMAL RATE 
+Room type: Family Room
+Rate: $150.00
+xxx
+
+Name: JUNIOR SUITE ROOM NORMAL RATE 
+Room type: Junior Suite
+Rate: $200.00
+xxx
+
+Name: GRAND SUITE ROOM NORMAL RATE 
+Room type: Grand Suite
+Rate: $250.00
+xxx
+
+Name: PRESIDENTIAL PENTHOUSE NORMAL RATE 
+Room type: Presidential Penthouse
+Rate: $600
+xxx
+
+Name: PRESIDENTIAL PENTHOUSE PEAK RATE 
+Room type: Presidential Penthouse
+Rate: $700
+xxx
+
+Name: PRESIDENTIAL PENTHOUSE PROMO RATE 
+Room type: Presidential Penthouse
+Rate: $500
+xxx
+
+*** HORS Management System :: Hotel Operation :: Sales Manager ***
+
+1: Create new room rate
+2: View room rate details
+3: View all room rate types
+-----------------------
+4: Back
+
+> 4
+*** Hors Management System ***
+
+You are login as Employee Four with SALESMANAGER rights
+
+1: System Administration
+2: Operation Manager
+3: Sales Manager
+4: Guest Relation Officer
+5: Logout
+
+> 5
+*** Welcome Hors Management System***
+
+1: Login
+2: Exit
+
+> 1
+*** HORS Management :: Login ***
+
+Enter username> guestrelo
+Enter password> password
+Login successful!
+
+*** Hors Management System ***
+
+You are login as Employee Five with GUESTRELATIONOFFICER rights
+
+1: System Administration
+2: Operation Manager
+3: Sales Manager
+4: Guest Relation Officer
+5: Logout
+
+> 4
+*** HORS Management System :: Front Office Module ***
+
+1: Walk-in search room
+2: Check-in guest
+3: Check-out guest
+4: Back
+> 1
+*** HORS Reservation  :: Search Room ***
+
+Enter Day of Check In> 13
+Enter Month of Check In> 11
+Enter Year of Check In> 2021
+Enter Day of Check Out> 15
+Enter Month of Check Out> 11
+Enter Year of Check Out> 2021
+Enter number of room(s)> 2
+
+ No Room TypeTotal Price
+  1.         Deluxe Room    400.00
+  2.        Premier Room    800.00
+  3.         Family Room   1200.00
+  4.        Junior Suite   1600.00
+  5.         Grand Suite   2000.00
+------------------------
+Reserve Room(s)? (Enter 'Y' to reserve)> Y
+Select the option>1
+The fee is $400.00. Please choose the payment option
+1: AMEX
+2: Mastercard
+3: Visa
+>1
+Reservation is successfully created. Please take note of your reservation id to check in: 1
+*** HORS Management System :: Front Office Module ***
+
+1: Walk-in search room
+2: Check-in guest
+3: Check-out guest
+4: Back
+> 1
+*** HORS Reservation  :: Search Room ***
+
+Enter Day of Check In> 1
+Enter Month of Check In> 12
+Enter Year of Check In> 2021
+Enter Day of Check Out> 2
+Enter Month of Check Out> 12
+Enter Year of Check Out> 2021
+Enter number of room(s)> 1
+
+ No Room TypeTotal Price
+  1.         Deluxe Room    100.00
+  2.        Premier Room    200.00
+  3.         Family Room    300.00
+  4.        Junior Suite    400.00
+  5.         Grand Suite    500.00
+  6.Presidential Penthouse      1000
+------------------------
+Reserve Room(s)? (Enter 'Y' to reserve)> 
+*** HORS Management System :: Front Office Module ***
+
+1: Walk-in search room
+2: Check-in guest
+3: Check-out guest
+4: Back
+> 2
+*** POS System :: Front Office Module :: Check-in ***
+
+Enter room reservation Id stated in the booking> 1
+Enter the date of today in the form of M/dd/yyyy>11/13/2021
+Here are your rooms: 
+Room number: 0501
+Room Type: Name: Deluxe Room
+Description: Ocean view with normal amenities
+Size: 10x8
+Bed: 2
+Capacity: 2
+Amenities: shower, TV, sofa
+Rank: 1
+
+Availability: AVAILABLE
+
+Room number: 0201
+Room Type: Name: Deluxe Room
+Description: Ocean view with normal amenities
+Size: 10x8
+Bed: 2
+Capacity: 2
+Amenities: shower, TV, sofa
+Rank: 1
+
+Availability: AVAILABLE
+
+*** HORS Management System :: Front Office Module ***
+
+1: Walk-in search room
+2: Check-in guest
+3: Check-out guest
+4: Back
+> 4
+*** Hors Management System ***
+
+You are login as Employee Five with GUESTRELATIONOFFICER rights
+
+1: System Administration
+2: Operation Manager
+3: Sales Manager
+4: Guest Relation Officer
+5: Logout
+
+> 5
+*** Welcome Hors Management System***
+
+1: Login
+2: Exit
+
+> 1
+*** HORS Management :: Login ***
+
+Enter username> opmanager
+Enter password> password
+Login successful!
+
+*** Hors Management System ***
+
+You are login as Employee Three with OPERATIONMANAGER rights
+
+1: System Administration
+2: Operation Manager
+3: Sales Manager
+4: Guest Relation Officer
+5: Logout
+
+> 2
+*** HORS Management System :: Hotel Operation :: Operation Manager ***
+
+1: Create new room type
+2: View room type details
+3: View all room types
+4: Create new room
+5: Update room
+6: Delete room
+7: View all rooms
+8: View room allocation exception report
+9: Allocate room now
+-----------------------
+10: Back
+
+> 5
+*** HORS Management System :: Hotel Operation :: Operation Manager :: Update a room ***
+
+Enter the 4 digits room number that you want to update>0103
+Enter the new room type: 
+Error in creating a new room: room type not found.
+Select availability of the room (1: Available, 2: Unavailable)> 2
+Room is successfully updated!
+*** HORS Management System :: Hotel Operation :: Operation Manager ***
+
+1: Create new room type
+2: View room type details
+3: View all room types
+4: Create new room
+5: Update room
+6: Delete room
+7: View all rooms
+8: View room allocation exception report
+9: Allocate room now
+-----------------------
+10: Back
+
+> 5
+*** HORS Management System :: Hotel Operation :: Operation Manager :: Update a room ***
+
+Enter the 4 digits room number that you want to update>0203
+Enter the new room type: 
+Error in creating a new room: room type not found.
+Select availability of the room (1: Available, 2: Unavailable)> 2
+Room is successfully updated!
+*** HORS Management System :: Hotel Operation :: Operation Manager ***
+
+1: Create new room type
+2: View room type details
+3: View all room types
+4: Create new room
+5: Update room
+6: Delete room
+7: View all rooms
+8: View room allocation exception report
+9: Allocate room now
+-----------------------
+10: Back
+
+> 5
+*** HORS Management System :: Hotel Operation :: Operation Manager :: Update a room ***
+
+Enter the 4 digits room number that you want to update>0303
+Enter the new room type: 
+Error in creating a new room: room type not found.
+Select availability of the room (1: Available, 2: Unavailable)> 2
+Room is successfully updated!
+*** HORS Management System :: Hotel Operation :: Operation Manager ***
+
+1: Create new room type
+2: View room type details
+3: View all room types
+4: Create new room
+5: Update room
+6: Delete room
+7: View all rooms
+8: View room allocation exception report
+9: Allocate room now
+-----------------------
+10: Back
+
+> 6
+*** HORS Management System :: Hotel Operation :: Operation Manager :: Delete a room ***
+
+Enter the 4 digits room number that you want to update>0304
+Room with room number 0304 has been deleted
+*** HORS Management System :: Hotel Operation :: Operation Manager ***
+
+1: Create new room type
+2: View room type details
+3: View all room types
+4: Create new room
+5: Update room
+6: Delete room
+7: View all rooms
+8: View room allocation exception report
+9: Allocate room now
+-----------------------
+10: Back
+
+> 6
+*** HORS Management System :: Hotel Operation :: Operation Manager :: Delete a room ***
+
+Enter the 4 digits room number that you want to update>0404
+Room with room number 0404 has been deleted
+*** HORS Management System :: Hotel Operation :: Operation Manager ***
+
+1: Create new room type
+2: View room type details
+3: View all room types
+4: Create new room
+5: Update room
+6: Delete room
+7: View all rooms
+8: View room allocation exception report
+9: Allocate room now
+-----------------------
+10: Back
+
+> 6
+*** HORS Management System :: Hotel Operation :: Operation Manager :: Delete a room ***
+
+Enter the 4 digits room number that you want to update>0504
+Room with room number 0504 has been deleted
+*** HORS Management System :: Hotel Operation :: Operation Manager ***
+
+1: Create new room type
+2: View room type details
+3: View all room types
+4: Create new room
+5: Update room
+6: Delete room
+7: View all rooms
+8: View room allocation exception report
+9: Allocate room now
+-----------------------
+10: Back
+
+> 10
+*** Hors Management System ***
+
+You are login as Employee Three with OPERATIONMANAGER rights
+
+1: System Administration
+2: Operation Manager
+3: Sales Manager
+4: Guest Relation Officer
+5: Logout
+
+> 5
+*** Welcome Hors Management System***
+
+1: Login
+2: Exit
+
+> 1
+*** HORS Management :: Login ***
+
+Enter username> opmanager
+Enter password> password
+Login successful!
+
+*** Hors Management System ***
+
+You are login as Employee Three with OPERATIONMANAGER rights
+
+1: System Administration
+2: Operation Manager
+3: Sales Manager
+4: Guest Relation Officer
+5: Logout
+
+> 2
+*** HORS Management System :: Hotel Operation :: Operation Manager ***
+
+1: Create new room type
+2: View room type details
+3: View all room types
+4: Create new room
+5: Update room
+6: Delete room
+7: View all rooms
+8: View room allocation exception report
+9: Allocate room now
+-----------------------
+10: Back
+
+> 9
+*** HORS Management System :: Hotel Operation :: Operation Manager :: Allocate room now ***
+
+Enter the date of check-in day you want to allocate of M/d/yyyy>1/1/2022
+Rooms has been successfully allocated.
+*** HORS Management System :: Hotel Operation :: Operation Manager ***
+
+1: Create new room type
+2: View room type details
+3: View all room types
+4: Create new room
+5: Update room
+6: Delete room
+7: View all rooms
+8: View room allocation exception report
+9: Allocate room now
+-----------------------
+10: Back
+
+> 8
+*** HORS Management System :: Hotel Operation :: Operation Manager :: View room allocation exception report ***
+
+Enter the date of the report you want to view in the form of M/d/yyyy>1/1/2022
+*** HORS Management System :: Type One Exception***
+
+Room reservation line item: 10
+Room reserved: Family Room
+Status: Room of higher rank has been allocated
+Room reservation line item: 11
+Room reserved: Family Room
+Status: Room of higher rank has been allocated
+********************************************************************************
+*** HORS Management System :: Type Two Exception***
+
+Room reservation line item: 12
+Room reserved: Family Room
+Status: Room has not been allocated. Please handle this manually.
+
+*** HORS Management System :: Hotel Operation :: Operation Manager ***
+
+1: Create new room type
+2: View room type details
+3: View all room types
+4: Create new room
+5: Update room
+6: Delete room
+7: View all rooms
+8: View room allocation exception report
+9: Allocate room now
+-----------------------
+10: Back
+
+> 10
+*** Hors Management System ***
+
+You are login as Employee Three with OPERATIONMANAGER rights
+
+1: System Administration
+2: Operation Manager
+3: Sales Manager
+4: Guest Relation Officer
+5: Logout
+
+> 5
+*** Welcome Hors Management System***
+
+1: Login
+2: Exit
+
+> 1
+*** HORS Management :: Login ***
+
+Enter username> guestrelo
+Enter password> password
+Login successful!
+
+*** Hors Management System ***
+
+You are login as Employee Five with GUESTRELATIONOFFICER rights
+
+1: System Administration
+2: Operation Manager
+3: Sales Manager
+4: Guest Relation Officer
+5: Logout
+
+> 4
+*** HORS Management System :: Front Office Module ***
+
+1: Walk-in search room
+2: Check-in guest
+3: Check-out guest
+4: Back
+> 2
+*** POS System :: Front Office Module :: Check-in ***
+
+Enter room reservation Id stated in the booking> 3
+Enter the date of today in the form of M/dd/yyyy>11/13/2021
+Here are your rooms: 
+Room number: 0401
+Room Type: Name: Deluxe Room
+Description: Ocean view with normal amenities
+Size: 10x8
+Bed: 2
+Capacity: 2
+Amenities: shower, TV, sofa
+Rank: 1
+
+Availability: AVAILABLE
+
+Room number: 0301
+Room Type: Name: Deluxe Room
+Description: Ocean view with normal amenities
+Size: 10x8
+Bed: 2
+Capacity: 2
+Amenities: shower, TV, sofa
+Rank: 1
+
+Availability: AVAILABLE
+
+*** HORS Management System :: Front Office Module ***
+
+1: Walk-in search room
+2: Check-in guest
+3: Check-out guest
+4: Back
+> 2
+*** POS System :: Front Office Module :: Check-in ***
+
+Enter room reservation Id stated in the booking> 4
+Enter the date of today in the form of M/dd/yyyy>11/13/2021
+Here are your rooms: 
+Room number: 0302
+Room Type: Name: Premier Room
+Description: City view with luxurious amenities
+Size: 12x8
+Bed: 2
+Capacity: 2
+Amenities: bathtub, TV, shower, sofa
+Rank: 2
+
+Availability: AVAILABLE
+
+Room number: 0102
+Room Type: Name: Premier Room
+Description: City view with luxurious amenities
+Size: 12x8
+Bed: 2
+Capacity: 2
+Amenities: bathtub, TV, shower, sofa
+Rank: 2
+
+Availability: AVAILABLE
+
+*** HORS Management System :: Front Office Module ***
+
+1: Walk-in search room
+2: Check-in guest
+3: Check-out guest
+4: Back
+> 
